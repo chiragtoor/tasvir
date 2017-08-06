@@ -1,5 +1,5 @@
-import * as Actions from '../../js/actions/preview_reel';
-import reducer from '../../js/reducers/preview_reel';
+import * as Actions from '../../js/actions/reel';
+import reducer from '../../js/reducers/reel';
 
 import {BASE_REEL, POST_ACTION_SCROLL} from '../../js/constants';
 

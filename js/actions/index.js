@@ -4,13 +4,13 @@ import { AsyncStorage } from 'react-native';
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
          AUTO_SHARE_STORAGE } from '../constants';
 
-import * as PreviewReel from './preview_reel';
+import * as Reel from './reel';
 import * as Album from './album';
 import * as Settings from './settings';
 
 import * as Storage from '../storage';
 
-export {PreviewReel as PreviewReel,
+export {Reel as Reel,
         Album as Album,
         Settings as Settings};
 

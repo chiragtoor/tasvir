@@ -17,7 +17,8 @@ import { StackNavigator, addNavigationHelpers } from 'react-navigation';
  *  level in the reducer.
  */
 import album from './reducers/album';
-import previewReel from './reducers/preview_reel';
+import albumForm from './reducers/album_form';
+import reel from './reducers/reel';
 import settings from './reducers/settings';
 
 import Splash from './screens/Splash';
@@ -58,8 +59,9 @@ const navReducer = (state = initialNavState, action) => {
 
 const appReducer = combineReducers({
   nav: navReducer,
-  previewReel: previewReel,
+  reel: reel,
   album: album,
+  albumForm: albumForm,
   settings: settings
 });
 
@@ -95,7 +97,7 @@ const store = configureStore({});
 // in order to persist the reel to state since actions fire before the change
 //   and reducers are meant to be pure, no side-effects
 store.subscribe(() => {
-  const previewReel = store.getState().previewReel.previewReel;
+  const previewReel = store.getState().reel.previewReel;
   Storage.savePreviewReel(previewReel);
 })
 

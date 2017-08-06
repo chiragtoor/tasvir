@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import * as Reel from '../../js/actions/preview_reel';
+import * as Reel from '../../js/actions/reel';
 import { BASE_REEL, POST_ACTION_SCROLL, REEL, CAMERA_PAGE, MENU_PAGE } from '../../js/constants';
 
 const middlewares = [ thunk ];
@@ -268,35 +268,22 @@ describe('settings_actions', () => {
   });
 
   it('removing all preview images and going back to camera unlocks the swiper', () => {
-    let currentIndex = 3;
+    let currentIndex = 1;
     scrollCallback = (index) => {
       currentIndex = index;
     }
     const existingReel = [
-      {
-        key: 0,
-        isImage: true,
-        image: 'TEST_0',
-        postAction: POST_ACTION_SCROLL.RIGHT
-      },
-      {
-        key: 1,
-        isImage: true,
-        image: 'TEST_1',
-        postAction: POST_ACTION_SCROLL.LEFT
-      },
       BASE_REEL,
       {
-        key: 4,
+        key: 2,
         isImage: true,
-        image: 'TEST_4',
+        image: 'TEST_2',
         postAction: POST_ACTION_SCROLL.LEFT
-      },
+      }
     ];
     const store = mockStore({
       reel: {
         previewReel: existingReel,
-        cameraIndex: 2,
         currentIndex: currentIndex,
         swiperLocked: true,
         viewPagerLocked: false,
@@ -304,12 +291,12 @@ describe('settings_actions', () => {
       }
     });
     const expectedActions = [
-      { type: Reel.REEL_REMOVE_IMAGE, index: currentIndex },
-      { type: Reel.UPDATE_CURRENT_INDEX, currentIndex: 2 },
+      { type: Reel.REEL_REMOVE_IMAGE_RIGHT_EDGE, index: currentIndex },
+      { type: Reel.UPDATE_CURRENT_INDEX, currentIndex: 0 },
       { type: Reel.UNLOCK_SWIPER }
     ];
     store.dispatch(Reel.removeFromReel(currentIndex, scrollCallback))
     expect(store.getActions()).toEqual(expectedActions);
-    expect(currentIndex).toEqual(2);
+    expect(currentIndex).toEqual(0);
   });
 });

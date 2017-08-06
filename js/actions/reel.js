@@ -1,19 +1,19 @@
 import { POST_ACTION_SCROLL, CAMERA_PAGE, MENU_PAGE } from '../constants';
 
-export const LOAD_PREVIEW_REEL = 'preview_reel/LOAD_PREVIEW_REEL';
-export const REEL_ADD_IMAGE = 'preview_reel/REEL_ADD_IMAGE';
-export const REEL_REMOVE_IMAGE = 'preview_reel/REEL_REMOVE_IMAGE';
-export const REEL_REMOVE_IMAGE_LEFT_EDGE = 'preview_reel/REEL_REMOVE_IMAGE_LEFT_EDGE';
-export const REEL_REMOVE_IMAGE_RIGHT_EDGE = 'preview_reel/REEL_REMOVE_IMAGE_RIGHT_EDGE';
+export const LOAD_PREVIEW_REEL = 'reel/LOAD_PREVIEW_REEL';
+export const REEL_ADD_IMAGE = 'reel/REEL_ADD_IMAGE';
+export const REEL_REMOVE_IMAGE = 'reel/REEL_REMOVE_IMAGE';
+export const REEL_REMOVE_IMAGE_LEFT_EDGE = 'reel/REEL_REMOVE_IMAGE_LEFT_EDGE';
+export const REEL_REMOVE_IMAGE_RIGHT_EDGE = 'reel/REEL_REMOVE_IMAGE_RIGHT_EDGE';
 
-export const UPDATE_CURRENT_INDEX = 'preview_reel/UPDATE_CURRENT_INDEX';
-export const LOCK_VIEW_PAGER = 'preview_reel/LOCK_VIEW_PAGER';
-export const UNLOCK_VIEW_PAGER = 'preview_reel/UNLOCK_VIEW_PAGER';
-export const LOCK_SWIPER = 'preview_reel/LOCK_SWIPER';
-export const UNLOCK_SWIPER = 'preview_reel/UNLOCK_SWIPER';
+export const UPDATE_CURRENT_INDEX = 'reel/UPDATE_CURRENT_INDEX';
+export const LOCK_VIEW_PAGER = 'reel/LOCK_VIEW_PAGER';
+export const UNLOCK_VIEW_PAGER = 'reel/UNLOCK_VIEW_PAGER';
+export const LOCK_SWIPER = 'reel/LOCK_SWIPER';
+export const UNLOCK_SWIPER = 'reel/UNLOCK_SWIPER';
 
-export const UPDATE_MAIN_PAGE_CAMERA = 'preview_reel/UPDATE_MAIN_PAGE_CAMERA';
-export const UPDATE_MAIN_PAGE_MENU = 'preview_reel/UPDATE_MAIN_PAGE_MENU';
+export const UPDATE_MAIN_PAGE_CAMERA = 'reel/UPDATE_MAIN_PAGE_CAMERA';
+export const UPDATE_MAIN_PAGE_MENU = 'reel/UPDATE_MAIN_PAGE_MENU';
 
 export function updateMainPage(page) {
   return (dispatch, getState) => {
@@ -51,11 +51,11 @@ export function unlockSwiper() {
 
 export function updateCurrentIndex(currentIndex) {
   return (dispatch, getState) => {
-    const { reel: { cameraIndex, swiperLocked } } = getState();
+    const { reel: { swiperLocked } } = getState();
     dispatch({type: UPDATE_CURRENT_INDEX, currentIndex});
-    if(swiperLocked && currentIndex == cameraIndex) {
+    if(swiperLocked && currentIndex == 0) {
       dispatch(unlockSwiper());
-    } else if(!swiperLocked && currentIndex != cameraIndex) {
+    } else if(!swiperLocked && currentIndex != 0) {
       dispatch(lockSwiper());
     }
   }
@@ -83,7 +83,7 @@ function getUniqueKey() {
 
 export function addToReel(image) {
   return (dispatch, getState) => {
-    const { reel: { cameraIndex, previewReel } } = getState();
+    const { reel: { previewReel } } = getState();
     let scrollDirection = POST_ACTION_SCROLL.LEFT;
     // change to a post action right scroll if conditions are met
     if(previewReel.length > 1) {
@@ -97,14 +97,14 @@ export function addToReel(image) {
       postAction: scrollDirection
     }
 
-    dispatch(addImage(imagePack, (cameraIndex + 1)));
+    dispatch(addImage(imagePack, 1));
   }
 }
 
 export function removeFromReel(index, scrollCallback) {
   return (dispatch, getState) => {
     const {reel: {currentIndex, cameraIndex, previewReel}} = getState();
-    if(index == (previewReel.length - 1) && cameraIndex < (previewReel.length - 2)) {
+    if(index == (previewReel.length - 1)) {
       dispatch(removeImageRightEdge(index));
     } else {
       dispatch(removeImage(index));

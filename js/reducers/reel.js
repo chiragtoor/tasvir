@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import * as Actions from '../actions/preview_reel';
+import * as Actions from '../actions/reel';
 
 import { BASE_REEL, POST_ACTION_SCROLL, CAMERA_PAGE, MENU_PAGE } from '../constants';
 
