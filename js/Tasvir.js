@@ -23,6 +23,7 @@ import settings from './reducers/settings';
 
 import Splash from './screens/Splash';
 import App from './screens/App';
+import CloseAlbum from './screens/CloseAlbum';
 
 import { loadAndDispatchState } from './actions';
 import * as Storage from './storage';
@@ -33,7 +34,8 @@ const loggerMiddleware = createLogger({
 
 const TasvirNavigator = StackNavigator({
   App: {screen: App },
-  Splash: {screen: Splash}
+  Splash: {screen: Splash},
+  CloseAlbum: {screen: CloseAlbum}
 }, {
   // on iOS screens coming from bottom up look better, no effect on Android
   mode: 'modal',

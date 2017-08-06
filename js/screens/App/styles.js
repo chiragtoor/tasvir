@@ -28,6 +28,10 @@ export default styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  margin: {
+    height: 50,
+    width: 50
+  },
   userName: {
     color: '#FFFFFF',
     fontSize: 25,

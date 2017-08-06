@@ -9,6 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Linking,
   Share
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -33,28 +34,43 @@ const w = Dimensions.get('window').width;
 
 class App extends Component {
 
-  connectSocket = (albumId) => {
-    // connect to gorup web socket
-    let socket = new Socket((URL_BASE + "socket"), {
-      logger: ((kind, msg, data) => { console.log(`${kind}: ${msg}`, data) })
-    });
-
-    socket.connect();
-
-    var chan = socket.channel("album:" + albumId, {});
-    chan.join();
-
-    chan.on("new:photo", msg => {
-      const photo = msg.photo;
-      this.addGroupImage(photo);
-    });
-  }
+  // connectSocket = (albumId) => {
+  //   // connect to gorup web socket
+  //   let socket = new Socket((URL_BASE + "socket"), {
+  //     logger: ((kind, msg, data) => { console.log(`${kind}: ${msg}`, data) })
+  //   });
+  //
+  //   socket.connect({});
+  //
+  //   var chan = socket.channel("album:" + albumId, {});
+  //   chan.join();
+  //
+  //   chan.on("new:photo", msg => {
+  //     const photo = msg.photo;
+  //     this.addGroupImage(photo);
+  //   });
+  // }
 
   componentDidMount() {
+    Linking.addEventListener('url', this.handleOpenURL);
     this.scrollTo(0);
     if(this.props.albumId) {
-      this.connectSocket(this.props.albumId);
+      // this.connectSocket(this.props.albumId);
     }
+  }
+
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this.handleOpenURL);
+  }
+
+  handleOpenURL = (event) => { // D
+    const path = event.url.replace(/.*?:\/\//g, '').match(/\/([^\/]+)\/?$/)[1];
+    const parts = path.split('?name=');
+    const albumId = parts[0];
+    const albumName = parts[1];
+
+    console.log("albumId: ", albumId);
+    console.log("albumName: ", albumName);
   }
 
   scrollTo = (page, animated = true) => {
@@ -138,7 +154,7 @@ class App extends Component {
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.groupNameInput}
-              onChangeText={(text) => this.props.groupFormUpdateName(text)}
+              onChangeText={(text) => this.props.albumFormUpdateName(text)}
               placeholder={'Enter a name for the album'}
               value={this.props.albumFormName} />
             <Button
@@ -161,11 +177,21 @@ class App extends Component {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <TasvirButton
-          onPress={() => this.props.createAlbum()}
+          onPress={() => this.shareAlbum()}
           disabled={this.props.groupFormName === ""}
           text={'Share Album'} />
+        <View style={styles.margin} />
+        <TasvirButton
+          danger={true}
+          onPress={() => this.props.attemptCloseAlbum()}
+          disabled={false}
+          text={'Close Album'} />
       </View>
     )
+  }
+
+  shareAlbum = () => {
+    Share.share({url: ("https://localhost:4000/albums/" + this.props.albumId), title: this.props.albumName}, {});
   }
 
   render() {
@@ -246,7 +272,11 @@ const mapDispatchToProps = (dispatch) => {
     toggleAutoShare: (boolean) => dispatch(Actions.Settings.updateAutoShare(boolean)),
     updateMainPage: (page) => dispatch(Actions.Reel.updateMainPage(page)),
     lockViewPager: () => dispatch(Actions.Reel.lockViewPager()),
-    unlockViewPager: () => dispatch(Actions.Reel.unlockViewPager())
+    unlockViewPager: () => dispatch(Actions.Reel.unlockViewPager()),
+    albumFormUpdateName: (name) => dispatch(Actions.AlbumForm.updateName(name)),
+    resetAlbumForm: () => dispatch(Actions.AlbumForm.reset()),
+    createAlbum: () => dispatch(Actions.TasvirApi.createAlbum()),
+    attemptCloseAlbum: () => dispatch(Actions.Album.attemptCloseAlbum())
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -6,13 +6,17 @@ import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
 
 import * as Reel from './reel';
 import * as Album from './album';
+import * as AlbumForm from './album_form';
 import * as Settings from './settings';
+import * as TasvirApi from './tasvir_api';
 
 import * as Storage from '../storage';
 
 export {Reel as Reel,
         Album as Album,
-        Settings as Settings};
+        AlbumForm as AlbumForm,
+        Settings as Settings,
+        TasvirApi as TasvirApi};
 
 export const NAVIGATE = 'Navigation/NAVIGATE';
 
@@ -35,9 +39,9 @@ export function loadAndDispatchState() {
       if(albumId) {
         dispatch(Album.updateId(albumId));
         dispatch(Album.updateName(getValue(value, ALBUM_NAME_STORAGE)));
-        dispatch(PreviewReel.loadPreviewReel(getValue(value, PREVIEW_REEL_STORAGE)));
+        dispatch(Reel.loadPreviewReel(getValue(value, PREVIEW_REEL_STORAGE)));
         if (autoShare) dispatch(Settings.updateAutoShare(autoShare));
-        dispatch(PreviewReel.updateCurrentIndex(0));
+        dispatch(Reel.updateCurrentIndex(0));
       }
 
       dispatch(NavigationActions.navigate({routeName: 'App'}));
