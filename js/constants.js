@@ -1,5 +1,3 @@
-export const AUTO_SHARE_STORAGE = 'autoShare';
-
 export const CAMERA_PAGE = 0;
 export const MENU_PAGE = 1;
 
@@ -8,6 +6,11 @@ export const POST_ACTION_SCROLL = {
   RIGHT: 1,
   NONE: 3
 }
+
+export const PREVIEW_REEL_STORAGE = 'previewReel';
+export const ALBUM_ID_STORAGE = 'albumId';
+export const ALBUM_NAME_STORAGE = 'albumName';
+export const AUTO_SHARE_STORAGE = 'autoShare';
 
 export const BASE_REEL = {
   key: 0,
