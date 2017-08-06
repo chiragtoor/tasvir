@@ -7,6 +7,9 @@ export const POST_ACTION_SCROLL = {
   NONE: 3
 }
 
+export const URL = 'http://localhost:4000/api';
+export const ALBUMS_ENDPOINT = '/albums';
+
 export const PREVIEW_REEL_STORAGE = 'previewReel';
 export const ALBUM_ID_STORAGE = 'albumId';
 export const ALBUM_NAME_STORAGE = 'albumName';
