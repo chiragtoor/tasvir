@@ -57,6 +57,7 @@ const navReducer = (state = initialNavState, action) => {
 };
 
 const appReducer = combineReducers({
+  nav: navReducer,
   previewReel: previewReel,
   album: album,
   settings: settings
@@ -94,7 +95,7 @@ const store = configureStore({});
 // in order to persist the reel to state since actions fire before the change
 //   and reducers are meant to be pure, no side-effects
 store.subscribe(() => {
-  const previewReel = store.getState().reel.previewReel;
+  const previewReel = store.getState().previewReel.previewReel;
   Storage.savePreviewReel(previewReel);
 })
 

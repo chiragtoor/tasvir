@@ -38,9 +38,9 @@ export function loadAndDispatchState() {
         dispatch(PreviewReel.loadPreviewReel(getValue(value, PREVIEW_REEL_STORAGE)));
         if (autoShare) dispatch(Settings.updateAutoShare(autoShare));
         dispatch(PreviewReel.updateCurrentIndex(0));
-
-        dispatch(NavigationActions.navigate({routeName: 'App'}));
       }
+
+      dispatch(NavigationActions.navigate({routeName: 'App'}));
     }).catch((error) => {
       console.error(error);
     });
