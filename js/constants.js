@@ -7,13 +7,16 @@ export const POST_ACTION_SCROLL = {
   NONE: 3
 }
 
-export const URL = 'http://localhost:4000/api';
+export const URL_BASE = __DEV__ ? 'https://7472c4a5.ngrok.io/' : 'https://stormy-stream-34151.herokuapp.com/';
+export const URL = URL_BASE + 'api';
 export const ALBUMS_ENDPOINT = '/albums';
 
 export const PREVIEW_REEL_STORAGE = 'previewReel';
 export const ALBUM_ID_STORAGE = 'albumId';
 export const ALBUM_NAME_STORAGE = 'albumName';
 export const AUTO_SHARE_STORAGE = 'autoShare';
+export const WALKTHROUGH_FLAG_STORAGE = 'walkthrough';
+export const DOWNLOADED_PHOTOS_STORAGE = 'downloadedPhotos';
 
 export const BASE_REEL = {
   key: 0,

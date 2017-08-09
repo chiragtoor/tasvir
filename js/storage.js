@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native';
 
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
-         AUTO_SHARE_STORAGE } from './constants';
+         AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, DOWNLOADED_PHOTOS_STORAGE } from './constants';
 
 function persist(key, value) {
   AsyncStorage.setItem(key, JSON.stringify(value));
@@ -21,4 +21,12 @@ export function saveAlbumId(albumId) {
 
 export function saveAlbumName(albumName) {
   persist(ALBUM_NAME_STORAGE, albumName);
+}
+
+export function walkthroughCompleted() {
+  persist(WALKTHROUGH_FLAG_STORAGE, true);
+}
+
+export function saveDownloadedPhotos(downloadedPhotos) {
+  persist(DOWNLOADED_PHOTOS_STORAGE, downloadedPhotos);
 }

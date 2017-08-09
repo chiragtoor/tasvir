@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Linking } from 'react-native';
 import { Provider, connect } from 'react-redux';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -18,12 +19,15 @@ import { StackNavigator, addNavigationHelpers } from 'react-navigation';
  */
 import album from './reducers/album';
 import albumForm from './reducers/album_form';
+import joinAlbumForm from './reducers/join_album_form';
 import reel from './reducers/reel';
 import settings from './reducers/settings';
 
 import Splash from './screens/Splash';
 import App from './screens/App';
 import CloseAlbum from './screens/CloseAlbum';
+import JoinAlbum from './screens/JoinAlbum';
+import Walkthrough from './screens/Walkthrough';
 
 import { loadAndDispatchState } from './actions';
 import * as Storage from './storage';
@@ -35,7 +39,9 @@ const loggerMiddleware = createLogger({
 const TasvirNavigator = StackNavigator({
   App: {screen: App },
   Splash: {screen: Splash},
-  CloseAlbum: {screen: CloseAlbum}
+  CloseAlbum: {screen: CloseAlbum},
+  JoinAlbum: {screen: JoinAlbum},
+  Walkthrough: {screen: Walkthrough}
 }, {
   // on iOS screens coming from bottom up look better, no effect on Android
   mode: 'modal',
@@ -64,10 +70,37 @@ const appReducer = combineReducers({
   reel: reel,
   album: album,
   albumForm: albumForm,
+  joinAlbumForm: joinAlbumForm,
   settings: settings
 });
 
 class NavWrapper extends React.Component {
+
+  // componentDidMount() {
+  //   Linking.addEventListener('url', this.handleOpenURL);
+  // }
+  //
+  // componentWillUnmount() {
+  //   Linking.removeEventListener('url', this.handleOpenURL);
+  // }
+  //
+  // handleOpenURL = (event) => {
+  //   const path = event.url.replace(/.*?:\/\//g, '').match(/\/([^\/]+)\/?$/)[1];
+  //   const parts = path.split('?name=');
+  //   const albumId = parts[0];
+  //   const albumName = parts[1];
+  //
+  //   console.log("HANDLE OPEN URL");
+  //   console.log("albumId: ", albumId);
+  //   console.log("albumName: ", albumName);
+  //
+  //   console.log("DISPATCH");
+  //
+  //   this.props.joinAlbumUpdateId(albumId);
+  //   this.props.joinAlbumUpdateName(albumName);
+  //   this.props.attemptJoinAlbum();
+  // }
+
   render() {
     return (
       <TasvirNavigator navigation={addNavigationHelpers({
@@ -101,6 +134,8 @@ const store = configureStore({});
 store.subscribe(() => {
   const previewReel = store.getState().reel.previewReel;
   Storage.savePreviewReel(previewReel);
+  const savedPhotos = store.getState().album.savedPhotos;
+  Storage.saveDownloadedPhotos(savedPhotos);
 })
 
 store.dispatch(loadAndDispatchState());

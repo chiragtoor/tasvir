@@ -59,7 +59,6 @@ export function uploadImage(image) {
 
     request.post(URL + ALBUMS_ENDPOINT + '/' + id + '/photo')
       .attach('photo', file)
-      .set('Authorization', 'Bearer ' + jwt)
       .end((err, res) => {
         if(err == null) {
           console.log("UPLOADED")

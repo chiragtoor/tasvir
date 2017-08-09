@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import * as Actions from '../actions/album';
+import * as Actions from '../actions/join_album_form';
 
 function id(state = null, action) {
   switch(action.type) {
@@ -19,21 +19,9 @@ function name(state = null, action) {
   }
 }
 
-function savedPhotos(state = [], action) {
-  switch(action.type) {
-    case Actions.LOAD_SAVED_PHOTOS:
-      return action.savedPhotos;
-    case Actions.ADD_SAVED_PHOTO:
-      return [...state, action.savedPhoto];
-    default:
-      return state;
-  }
-}
-
-const album = combineReducers({
+const joinAlbumForm = combineReducers({
   id,
-  name,
-  savedPhotos
+  name
 });
 
-export default album;
+export default joinAlbumForm;

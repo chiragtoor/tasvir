@@ -34,28 +34,33 @@ const w = Dimensions.get('window').width;
 
 class App extends Component {
 
-  // connectSocket = (albumId) => {
-  //   // connect to gorup web socket
-  //   let socket = new Socket((URL_BASE + "socket"), {
-  //     logger: ((kind, msg, data) => { console.log(`${kind}: ${msg}`, data) })
-  //   });
-  //
-  //   socket.connect({});
-  //
-  //   var chan = socket.channel("album:" + albumId, {});
-  //   chan.join();
-  //
-  //   chan.on("new:photo", msg => {
-  //     const photo = msg.photo;
-  //     this.addGroupImage(photo);
-  //   });
-  // }
+  connectSocket = (albumId) => {
+    // connect to album web socket
+    let socket = new Socket((URL_BASE + "socket"), {
+      logger: ((kind, msg, data) => { console.log(`${kind}: ${msg}`, data) })
+    });
+
+    socket.connect();
+
+    var chan = socket.channel("album:" + albumId, {});
+    chan.join();
+
+    chan.on("new:photo", msg => {
+      console.log("GOT NEW PHOTO");
+      const photo = msg.photo;
+      console.log(photo);
+      const photoId = msg.id;
+      console.log(photoId);
+      Actions.saveImage(photo);
+      this.props.addSavedPhoto(photoId);
+    });
+  }
 
   componentDidMount() {
     Linking.addEventListener('url', this.handleOpenURL);
     this.scrollTo(0);
     if(this.props.albumId) {
-      // this.connectSocket(this.props.albumId);
+      this.connectSocket(this.props.albumId);
     }
   }
 
@@ -63,14 +68,15 @@ class App extends Component {
     Linking.removeEventListener('url', this.handleOpenURL);
   }
 
-  handleOpenURL = (event) => { // D
+  handleOpenURL = (event) => {
     const path = event.url.replace(/.*?:\/\//g, '').match(/\/([^\/]+)\/?$/)[1];
     const parts = path.split('?name=');
     const albumId = parts[0];
     const albumName = parts[1];
 
-    console.log("albumId: ", albumId);
-    console.log("albumName: ", albumName);
+    this.props.joinAlbumUpdateId(albumId);
+    this.props.joinAlbumUpdateName(albumName);
+    this.props.attemptJoinAlbum();
   }
 
   scrollTo = (page, animated = true) => {
@@ -78,7 +84,11 @@ class App extends Component {
   }
 
   addImage = (image) => {
-    this.props.addToReel(image);
+    if(this.props.autoShare) {
+      this.props.uploadImage(image);
+    } else {
+      this.props.addToReel(image);
+    }
   }
 
   takePicture = () => {
@@ -98,7 +108,7 @@ class App extends Component {
             onSwipeEnd={() => this.props.unlockViewPager()}
             onFinish={(action) => {
               if(action) {
-                // this.props.uploadImage(data.image);
+                this.props.uploadImage(data.image);
               }
               this.scrollPageProg = () => {
                 this.props.removeFromReel(index, (index) => {
@@ -125,7 +135,6 @@ class App extends Component {
               captureTarget={Camera.constants.CaptureTarget.disk}
               captureAudio={false}
               aspect={Camera.constants.Aspect.fill}>
-              <Text style={{backgroundColor: '#fff', color: '#000', padding: 10, margin: 40}} onPress={this.addGroupImage}>[REMOVE]</Text>
               <TouchableOpacity onPress={this.takePicture} style={{marginBottom: 30}}>
                 <View style={styles.captureBorder}>
                   <View style={styles.captureButton} />
@@ -146,7 +155,7 @@ class App extends Component {
     }
   }
 
-  createAlbumMenu = () => {
+  createAlbumForm = () => {
     return (
       <View style={styles.createGroupMenu}>
         <View style={styles.menuDivider} />
@@ -167,7 +176,20 @@ class App extends Component {
         <TasvirButton
           onPress={() => this.props.createAlbum()}
           disabled={this.props.groupFormName === ""}
-          text={'Create Album'} />
+          text={'Done'} />
+        <View style={styles.menuDivider} />
+      </View>
+    );
+  }
+
+  createAlbumMenu = () => {
+    return (
+      <View style={styles.createGroupMenu}>
+        <View style={styles.menuDivider} />
+        <TasvirButton
+          onPress={() => this.props.startAlbumForm()}
+          disabled={false}
+          text={'Create New Album'} />
         <View style={styles.menuDivider} />
       </View>
     );
@@ -191,7 +213,8 @@ class App extends Component {
   }
 
   shareAlbum = () => {
-    Share.share({url: ("https://localhost:4000/albums/" + this.props.albumId), title: this.props.albumName}, {});
+    Share.share({url: (URL_BASE + "albums/" + this.props.albumId + "?name=" + this.props.albumName),
+      title: ("Get pictures for: " + this.props.albumName)}, {});
   }
 
   render() {
@@ -239,7 +262,7 @@ class App extends Component {
             </View>
             <View style={styles.menuDivider} />
             {this.props.albumId == null ?
-              this.createAlbumMenu()
+              this.props.formState == Actions.AlbumForm.INIT_STATE ? this.createAlbumMenu() : this.createAlbumForm()
             :
               this.albumMenu()
             }
@@ -261,7 +284,9 @@ const mapStateToProps = (state) => {
     previewReel: state.reel.previewReel,
     viewPagerLocked: state.reel.viewPagerLocked,
     swiperLocked: state.reel.swiperLocked,
-    currentIndex: state.reel.currentIndex
+    currentIndex: state.reel.currentIndex,
+    // album form state
+    formState: state.albumForm.formState
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -276,7 +301,13 @@ const mapDispatchToProps = (dispatch) => {
     albumFormUpdateName: (name) => dispatch(Actions.AlbumForm.updateName(name)),
     resetAlbumForm: () => dispatch(Actions.AlbumForm.reset()),
     createAlbum: () => dispatch(Actions.TasvirApi.createAlbum()),
-    attemptCloseAlbum: () => dispatch(Actions.Album.attemptCloseAlbum())
+    attemptCloseAlbum: () => dispatch(Actions.Album.attemptCloseAlbum()),
+    uploadImage: (image) => dispatch(Actions.TasvirApi.uploadImage(image)),
+    joinAlbumUpdateName: (name) => dispatch(Actions.JoinAlbumForm.updateName(name)),
+    joinAlbumUpdateId: (id) => dispatch(Actions.JoinAlbumForm.updateId(id)),
+    attemptJoinAlbum: () => dispatch(Actions.JoinAlbumForm.attemptJoinAlbum()),
+    startAlbumForm: () => dispatch(Actions.AlbumForm.initAlbumForm()),
+    addSavedPhoto: (photoId) => dispatch(Actions.Album.addSavedPhoto(photoId))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);
