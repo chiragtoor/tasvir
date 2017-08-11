@@ -73,6 +73,8 @@ class App extends Component {
     const parts = path.split('?name=');
     const albumId = parts[0];
     const albumName = parts[1];
+    console.log("albumId: ", albumId);
+    console.log("albumName: ", albumName);
 
     this.props.joinAlbumUpdateId(albumId);
     this.props.joinAlbumUpdateName(albumName);
@@ -198,6 +200,8 @@ class App extends Component {
   albumMenu = () => {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <TasvirDirections directions={"Current Album: " + this.props.albumName} />
+        <View style={styles.margin} />
         <TasvirButton
           onPress={() => this.shareAlbum()}
           disabled={this.props.groupFormName === ""}
@@ -224,6 +228,7 @@ class App extends Component {
           style={styles.swiper}
           horizontal={false}
           loop={false}
+          vertical={true}
           showsPagination={false}
           index={0}
           scrollEnabled={!this.props.swiperLocked}
@@ -249,9 +254,8 @@ class App extends Component {
           </ScrollView>
           <View style={styles.menu}>
             <View style={styles.menuHeader}>
-              <Text style={styles.userName}>
-                {this.props.userName}
-              </Text>
+              <Image style={{width: 200, resizeMode: 'contain', marginTop: 10}}
+                source={require('../../../img/tasvir_logo.png')}/>
             </View>
             <View style={styles.menuOptions}>
               <TasvirToggle

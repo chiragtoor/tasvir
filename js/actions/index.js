@@ -69,21 +69,23 @@ export function loadAndDispatchState() {
         dispatch(NavigationActions.navigate({routeName: 'Walkthrough'}));
       }
 
-      fetch(URL + ALBUMS_ENDPOINT + "/" +  albumId)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if(responseJson.success) {
-          for(var i = 0; i < responseJson.photos.length; i++) {
-            const photo = responseJson.photos[i];
-            if(!(savedPhotos.includes(photo.id))) {
-              saveImage(photo.photo);
-              savedPhotos.push(photo.id);
+      if(albumId){
+        fetch(URL + ALBUMS_ENDPOINT + "/" +  albumId)
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if(responseJson.success) {
+            for(var i = 0; i < responseJson.photos.length; i++) {
+              const photo = responseJson.photos[i];
+              if(!(savedPhotos.includes(photo.id))) {
+                saveImage(photo.photo);
+                savedPhotos.push(photo.id);
+              }
             }
+            Storage.saveDownloadedPhotos(savedPhotos);
+            dispatch(Album.loadSavedPhotos(savedPhotos));
           }
-          Storage.saveDownloadedPhotos(savedPhotos);
-          dispatch(Album.loadSavedPhotos(savedPhotos));
-        }
-      });
+        });
+      }
     }).catch((error) => {
       console.error(error);
     });

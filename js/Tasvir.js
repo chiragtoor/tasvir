@@ -96,7 +96,7 @@ class NavWrapper extends React.Component {
   //
   //   console.log("DISPATCH");
   //
-  //   this.props.joinAlbumUpdateId(albumId);
+  //   this.props.dispatch(joinAlbumUpdateId(albumId);
   //   this.props.joinAlbumUpdateName(albumName);
   //   this.props.attemptJoinAlbum();
   // }

@@ -61,7 +61,8 @@ export function uploadImage(image) {
       .attach('photo', file)
       .end((err, res) => {
         if(err == null) {
-          console.log("UPLOADED")
+          console.log("UPLOADED");
+          console.log(res);
         } else {
           console.log(err);
           console.log(res);
