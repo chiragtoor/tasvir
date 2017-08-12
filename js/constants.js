@@ -8,7 +8,7 @@ export const POST_ACTION_SCROLL = {
 }
 
 // export const URL_BASE = __DEV__ ? 'https://7472c4a5.ngrok.io/' : 'https://stormy-stream-34151.herokuapp.com/';
-export const URL_BASE = 'https://stormy-stream-34151.herokuapp.com/';
+export const URL_BASE = 'https://www.tasvirapp.com/';
 export const URL = URL_BASE + 'api';
 export const ALBUMS_ENDPOINT = '/albums';
 
