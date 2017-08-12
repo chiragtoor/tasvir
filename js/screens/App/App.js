@@ -71,7 +71,13 @@ class App extends Component {
 
   takePicture = () => {
     this.camera.capture()
-      .then((data) => this.addImage(data.path))
+      .then((data) => {
+        if(this.props.albumId) {
+          this.addImage(data.path);
+        } else {
+          this.props.saveImage(data.path, -1);
+        }
+      })
       .catch(err => console.error(err));
   }
 

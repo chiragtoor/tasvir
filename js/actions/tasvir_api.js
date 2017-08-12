@@ -8,6 +8,8 @@ import * as Reel from './reel';
 import * as Storage from '../storage';
 import { URL, ALBUMS_ENDPOINT } from '../../js/constants';
 
+import { saveImage } from '../actions';
+
 function getHeaders() {
   return {
     'Accept': 'application/json',
@@ -59,14 +61,13 @@ export function uploadImage(image) {
 
     request.post(URL + ALBUMS_ENDPOINT + '/' + id + '/photo')
       .attach('photo', file)
-      .end((err, res) => {
-        if(err == null) {
-          console.log("UPLOADED");
-          console.log(res);
+      .then((response) => response.body)
+      .then((responseJson) => {
+        if(responseJson.success) {
+          dispatch(saveImage(image, responseJson.id));
         } else {
-          console.log(err);
-          console.log(res);
+          console.error("ERROR UPLOADING IMAGE");
         }
-      });
+      })
   }
 }
