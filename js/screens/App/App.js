@@ -46,39 +46,18 @@ class App extends Component {
     chan.join();
 
     chan.on("new:photo", msg => {
-      console.log("GOT NEW PHOTO");
       const photo = msg.photo;
-      console.log(photo);
       const photoId = msg.id;
-      console.log(photoId);
       Actions.saveImage(photo);
       this.props.addSavedPhoto(photoId);
     });
   }
 
   componentDidMount() {
-    Linking.addEventListener('url', this.handleOpenURL);
     this.scrollTo(0);
     if(this.props.albumId) {
       this.connectSocket(this.props.albumId);
     }
-  }
-
-  componentWillUnmount() {
-    Linking.removeEventListener('url', this.handleOpenURL);
-  }
-
-  handleOpenURL = (event) => {
-    const path = event.url.replace(/.*?:\/\//g, '').match(/\/([^\/]+)\/?$/)[1];
-    const parts = path.split('?name=');
-    const albumId = parts[0];
-    const albumName = parts[1];
-    console.log("albumId: ", albumId);
-    console.log("albumName: ", albumName);
-
-    this.props.joinAlbumUpdateId(albumId);
-    this.props.joinAlbumUpdateName(albumName);
-    this.props.attemptJoinAlbum();
   }
 
   scrollTo = (page, animated = true) => {
