@@ -28,9 +28,14 @@ export function completeWalkthrough() {
   }
 }
 
-export function saveImage(imageUrl) {
-  CameraRoll.saveToCameraRoll(imageUrl)
-        .then(console.log("SAVED TO CAMERA ROLL"))
+export function saveImage(imageUrl, photoId) {
+  return (dispatch, getState) => {
+    const {album: {savedPhotos}} = getState();
+    if(!(savedPhotos.includes(photoId))) {
+      CameraRoll.saveToCameraRoll(imageUrl);
+      dispatch(Album.addSavedPhoto(photoId));
+    }
+  }
 }
 
 export function loadAndDispatchState() {
@@ -76,13 +81,8 @@ export function loadAndDispatchState() {
           if(responseJson.success) {
             for(var i = 0; i < responseJson.photos.length; i++) {
               const photo = responseJson.photos[i];
-              if(!(savedPhotos.includes(photo.id))) {
-                saveImage(photo.photo);
-                savedPhotos.push(photo.id);
-              }
+              dispatch(saveImage(photo.photo, photo.id));
             }
-            Storage.saveDownloadedPhotos(savedPhotos);
-            dispatch(Album.loadSavedPhotos(savedPhotos));
           }
         });
       }

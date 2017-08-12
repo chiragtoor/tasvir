@@ -46,10 +46,7 @@ class App extends Component {
     chan.join();
 
     chan.on("new:photo", msg => {
-      const photo = msg.photo;
-      const photoId = msg.id;
-      Actions.saveImage(photo);
-      this.props.addSavedPhoto(photoId);
+      this.props.saveImage(msg.photo, msg.id);
     });
   }
 
@@ -290,7 +287,7 @@ const mapDispatchToProps = (dispatch) => {
     joinAlbumUpdateId: (id) => dispatch(Actions.JoinAlbumForm.updateId(id)),
     attemptJoinAlbum: () => dispatch(Actions.JoinAlbumForm.attemptJoinAlbum()),
     startAlbumForm: () => dispatch(Actions.AlbumForm.initAlbumForm()),
-    addSavedPhoto: (photoId) => dispatch(Actions.Album.addSavedPhoto(photoId))
+    saveImage: (photo, photoId) => dispatch(Actions.saveImage(photo, photoId))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);
