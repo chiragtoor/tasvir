@@ -114,6 +114,7 @@ class App extends Component {
           <OtherScreen
             key={data.key}
             data={data.image}
+            goToCamera={() => this.scrollTo(0)}
             onSwipeStart={() => this.props.lockViewPager()}
             onSwipeEnd={() => this.props.unlockViewPager()}
             onFinish={(action) => {
