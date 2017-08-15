@@ -107,6 +107,22 @@ export default styles = StyleSheet.create({
     width: 50,
     backgroundColor: "#48B2E2"
   },
+  onPreviewButtonBorder: {
+    borderRadius: 19,
+    height: 38,
+    width: 38,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "#FFFFFF"
+  },
+  onPreviewButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 16,
+    height: 32,
+    width: 32,
+    backgroundColor: "#48B2E2"
+  },
   groupName: {
     fontSize: 20,
     color: '#4A4A4A'

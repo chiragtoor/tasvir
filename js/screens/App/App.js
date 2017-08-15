@@ -39,7 +39,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      captureFadeAnim: new Animated.Value(0)
+      captureFadeAnim: new Animated.Value(0),
+      cameraType: Camera.constants.Type.back
     }
   }
 
@@ -91,10 +92,18 @@ class App extends Component {
         if(this.props.albumId) {
           this.addImage(data.path);
         } else {
-          this.props.saveImage(data.path, -1);
+          this.props.saveImage(data.path, "NO_ALBUM");
         }
       })
       .catch(err => console.error(err));
+  }
+
+  flipCamera = () => {
+    if(this.state.cameraType === Camera.constants.Type.back) {
+      this.setState({cameraType: Camera.constants.Type.front});
+    } else {
+      this.setState({cameraType: Camera.constants.Type.back});
+    }
   }
 
   renderPages = () => {
@@ -124,6 +133,7 @@ class App extends Component {
         );
       } else {
         console.log("RE-RENDER");
+        const previewCount = this.props.previewReel.length - 1;
         return (
           <View
             key={data.key}
@@ -132,19 +142,46 @@ class App extends Component {
               ref={(cam) => {
                 this.camera = cam;
               }}
+              type={this.state.cameraType}
               style={styles.preview}
               captureTarget={Camera.constants.CaptureTarget.disk}
               captureAudio={false}
               aspect={Camera.constants.Aspect.fill}>
-              <TouchableOpacity onPress={this.takePicture} style={{marginBottom: 30}}>
-                <View style={styles.captureBorder}>
-                  <View style={styles.captureButton} />
+              <View style={{flexDirection: 'row', marginBottom: 30, alignItems: 'center'}}>
+                <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
+                  <TouchableOpacity onPress={() => this.flipCamera()}>
+                    <View style={styles.onPreviewButtonBorder}>
+                      <View style={styles.onPreviewButton}>
+                        <Image style={{flex: 1, width: 20, resizeMode: 'contain'}} source={require('../../../img/camera_flip_icon.png')}/>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
+                <View style={{flex: 1, alignItems: 'center'}}>
+                  <TouchableOpacity onPress={this.takePicture}>
+                    <View style={styles.captureBorder}>
+                      <View style={styles.captureButton} />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
+                  {previewCount > 0 ?
+                    <TouchableOpacity onPress={() => this.scrollTo(1)}>
+                      <View style={styles.onPreviewButtonBorder}>
+                        <View style={styles.onPreviewButton}>
+                          <Text style={{color: '#FFFFFF'}}>{previewCount}</Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  :
+                    null
+                  }
+                </View>
+              </View>
             </Camera>
             <Animated.View
               pointerEvents="none"
-              style={{opacity: this.state.captureFadeAnim, position: 'absolute', width: Dimensions.get('window').width, height: Dimensions.get('window').height, borderWidth: 7, borderColor: "#48B2E2"}}/>
+              style={{opacity: this.state.captureFadeAnim, position: 'absolute', width: Dimensions.get('window').width, height: Dimensions.get('window').height, borderWidth: 7, borderColor: "#48B2E2"}} />
           </View>
         );
       }

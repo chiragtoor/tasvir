@@ -30,10 +30,12 @@ export function completeWalkthrough() {
 
 export function saveImage(imageUrl, photoId) {
   return (dispatch, getState) => {
-    const {album: {savedPhotos}} = getState();
-    if(!(savedPhotos.includes(photoId))) {
+    const {album: {savedPhotos, id}} = getState();
+    if(id && !(savedPhotos.includes(photoId))) {
       CameraRoll.saveToCameraRoll(imageUrl);
       dispatch(Album.addSavedPhoto(photoId));
+    } else {
+      CameraRoll.saveToCameraRoll(imageUrl);
     }
   }
 }
