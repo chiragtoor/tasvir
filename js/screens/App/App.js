@@ -20,6 +20,7 @@ import Swiper from 'react-native-swiper';
 import { Socket } from 'phoenix';
 
 import ImageScreen from './ImageScreen';
+import OtherScreen from './OtherScreen';
 import { URL_BASE, POST_ACTION_SCROLL } from '../../constants';
 
 import TasvirToggle from '../../common/components/TasvirToggle';
@@ -110,7 +111,7 @@ class App extends Component {
     return this.props.previewReel.map((data, index) => {
       if(data.isImage) {
         return (
-          <ImageScreen
+          <OtherScreen
             key={data.key}
             data={data.image}
             onSwipeStart={() => this.props.lockViewPager()}
@@ -132,7 +133,6 @@ class App extends Component {
             }}/>
         );
       } else {
-        console.log("RE-RENDER");
         const previewCount = this.props.previewReel.length - 1;
         return (
           <View
