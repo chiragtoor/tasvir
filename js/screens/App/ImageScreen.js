@@ -8,7 +8,7 @@ import {
   Animated
 } from 'react-native';
 
-const ACTION_LIMIT = 200;
+const ACTION_LIMIT = 50;
 
 export default class ImageScreen extends Component {
 
@@ -22,16 +22,18 @@ export default class ImageScreen extends Component {
   }
 
   isMovingVertically = (e, gestureState) => {
-    if(
-      (Math.abs(gestureState.dy) > Math.abs(gestureState.dx * 3)) &&
-      (Math.abs(gestureState.vy) > Math.abs(gestureState.vx * 3))
-    ) {
+    const {vy, dx} = gestureState;
+    if(Math.abs(vy) > 0.3 && Math.abs(dx) < 80) {
       // notify of swiper start
       this.props.onSwipeStart();
       return true;
     } else {
       return false;
     }
+  }
+
+  _handleShouldSetPanResponder(evt, gestureState) {
+    return evt.nativeEvent.touches.length === 1 && !(Math.abs(gestureState.dx) < 5  && Math.abs(gestureState.dy) < 5);
   }
 
   componentWillMount() {

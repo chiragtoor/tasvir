@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Linking,
+  Animated,
   Share
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -33,6 +34,14 @@ import Button from 'react-native-button';
 const w = Dimensions.get('window').width;
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      captureFadeAnim: new Animated.Value(0)
+    }
+  }
 
   connectSocket = (albumId) => {
     // connect to album web socket
@@ -70,6 +79,13 @@ class App extends Component {
   }
 
   takePicture = () => {
+    Animated.timing(
+      this.state.captureFadeAnim, { toValue: 1, duration: 100 }
+    ).start(() => {
+      Animated.timing(
+        this.state.captureFadeAnim, { toValue: 0, duration: 100 }
+      ).start();
+    });
     this.camera.capture()
       .then((data) => {
         if(this.props.albumId) {
@@ -107,6 +123,7 @@ class App extends Component {
             }}/>
         );
       } else {
+        console.log("RE-RENDER");
         return (
           <View
             key={data.key}
@@ -125,6 +142,9 @@ class App extends Component {
                 </View>
               </TouchableOpacity>
             </Camera>
+            <Animated.View
+              pointerEvents="none"
+              style={{opacity: this.state.captureFadeAnim, position: 'absolute', width: Dimensions.get('window').width, height: Dimensions.get('window').height, borderWidth: 7, borderColor: "#48B2E2"}}/>
           </View>
         );
       }
@@ -222,6 +242,7 @@ class App extends Component {
             pagingEnabled={true}
             contentOffset={{x: 0, y: 0}}
             showHorizontalScrollIndicator={false}
+            onScroll={() => console.log("SCROLLING TEST")}
             scrollEnabled={!this.props.viewPagerLocked}
             onMomentumScrollEnd={(event) => {
               if(this.scrollPageProg) {

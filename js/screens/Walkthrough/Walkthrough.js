@@ -8,6 +8,7 @@ import {
   Text
 } from 'react-native';
 import { connect } from 'react-redux';
+const Permissions = require('react-native-permissions');
 
 import * as Actions from '../../actions';
 
@@ -59,17 +60,48 @@ class Walkthrough extends Component {
         </Text>
         <TasvirButton
           danger={true}
-          onPress={() => this.props.completeWalkthrough()}
+          onPress={() => this.setState({page: 3})}
+          disabled={false}
+          text={'Okay'} />
+      </View>
+    );
+  }
+
+  renderPageThree() {
+    return (
+      <View style={styles.page}>
+        <Text style={{textAlign: 'center', fontSize: 20, color: '#FFFFFF'}}>
+          Please allow access to your camera and pictures to manage your albums.
+        </Text>
+        <TasvirButton
+          danger={true}
+          onPress={() => this.done()}
           disabled={false}
           text={'Done'} />
       </View>
     );
   }
 
+  done = () => {
+    Permissions.request('photo')
+    .then(response => {
+      if(response === 'authorized') {
+        Permissions.request('camera')
+        .then(response => {
+          if(response === 'authorized') {
+            this.props.completeWalkthrough();
+          }
+        });
+      }
+    });
+  }
+
   render() {
     let content = this.renderPageOne();
     if(this.state.page == 2) {
       content = this.renderPageTwo();
+    } else if(this.state.page == 3) {
+      content = this.renderPageThree();
     }
     return (
       <View style={styles.container}>
