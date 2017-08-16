@@ -55,12 +55,13 @@ export function loadAndDispatchState() {
 
       const albumId = getValue(value, ALBUM_ID_STORAGE);
       const autoShare = getValue(value, AUTO_SHARE_STORAGE);
+      const previewReel = getValue(value, PREVIEW_REEL_STORAGE);
       let savedPhotos = getValue(value, DOWNLOADED_PHOTOS_STORAGE);
 
       if(albumId) {
         dispatch(Album.updateId(albumId));
         dispatch(Album.updateName(getValue(value, ALBUM_NAME_STORAGE)));
-        dispatch(Reel.loadPreviewReel(getValue(value, PREVIEW_REEL_STORAGE)));
+        if(previewReel) dispatch(Reel.loadPreviewReel(previewReel));
         if (autoShare) dispatch(Settings.updateAutoShare(autoShare));
         dispatch(Reel.updateCurrentIndex(0));
       }

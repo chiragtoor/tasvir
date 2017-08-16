@@ -13,6 +13,7 @@ import {
   Animated,
   Share
 } from 'react-native';
+var RNFS = require('react-native-fs');
 import { connect } from 'react-redux';
 import Camera from 'react-native-camera';
 import Swiper from 'react-native-swiper';
@@ -20,7 +21,6 @@ import Swiper from 'react-native-swiper';
 import { Socket } from 'phoenix';
 
 import ImageScreen from './ImageScreen';
-import OtherScreen from './OtherScreen';
 import { URL_BASE, POST_ACTION_SCROLL } from '../../constants';
 
 import TasvirToggle from '../../common/components/TasvirToggle';
@@ -91,7 +91,8 @@ class App extends Component {
     this.camera.capture()
       .then((data) => {
         if(this.props.albumId) {
-          this.addImage(data.path);
+          const path = data.path.split('/Documents/');
+          this.addImage(path[1]);
         } else {
           this.props.saveImage(data.path, "NO_ALBUM");
         }
@@ -111,7 +112,7 @@ class App extends Component {
     return this.props.previewReel.map((data, index) => {
       if(data.isImage) {
         return (
-          <OtherScreen
+          <ImageScreen
             key={data.key}
             data={data.image}
             goToCamera={() => this.scrollTo(0)}
@@ -119,7 +120,7 @@ class App extends Component {
             onSwipeEnd={() => this.props.unlockViewPager()}
             onFinish={(action) => {
               if(action) {
-                this.props.uploadImage(data.image);
+                this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + data.image);
               }
               this.scrollPageProg = () => {
                 this.props.removeFromReel(index, (index) => {
@@ -150,13 +151,13 @@ class App extends Component {
               aspect={Camera.constants.Aspect.fill}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
-                  {/*<TouchableOpacity onPress={() => this.flipCamera()}>
+                  <TouchableOpacity onPress={() => this.flipCamera()}>
                     <View style={styles.onPreviewButtonBorder}>
                       <View style={styles.onPreviewButton}>
                         <Image style={{flex: 1, width: 20, resizeMode: 'contain'}} source={require('../../../img/camera_flip_icon.png')}/>
                       </View>
                     </View>
-                  </TouchableOpacity>*/}
+                  </TouchableOpacity>
                 </View>
                 <View style={{flex: 1, alignItems: 'center', marginBottom: 30}}>
                   <TouchableOpacity onPress={this.takePicture}>
@@ -280,7 +281,6 @@ class App extends Component {
             pagingEnabled={true}
             contentOffset={{x: 0, y: 0}}
             showHorizontalScrollIndicator={false}
-            onScroll={() => console.log("SCROLLING TEST")}
             scrollEnabled={!this.props.viewPagerLocked}
             onMomentumScrollEnd={(event) => {
               if(this.scrollPageProg) {
