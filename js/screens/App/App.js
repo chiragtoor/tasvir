@@ -160,11 +160,11 @@ class App extends Component {
                   </TouchableOpacity>
                 </View>
                 <View style={{flex: 1, alignItems: 'center', marginBottom: 30}}>
-                  <TouchableOpacity onPress={this.takePicture}>
+                  {/*<TouchableOpacity onPress={this.takePicture}>
                     <View style={styles.captureBorder}>
                       <View style={styles.captureButton} />
                     </View>
-                  </TouchableOpacity>
+                  </TouchableOpacity>*/}
                 </View>
                 <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
                   {previewCount > 0 ?
