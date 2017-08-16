@@ -5,6 +5,7 @@ import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { StackNavigator, addNavigationHelpers } from 'react-navigation';
+import codePush from "react-native-code-push";
 
 /*
  * in order to be able to navigate from actions we need to hook
@@ -140,7 +141,7 @@ store.subscribe(() => {
 
 store.dispatch(loadAndDispatchState());
 
-export default class Tasvir extends React.Component {
+class Tasvir extends React.Component {
   render() {
     return (
       <Provider store={store}>
@@ -149,3 +150,6 @@ export default class Tasvir extends React.Component {
     );
   }
 }
+
+Tasvir = codePush(Tasvir);
+export default Tasvir;

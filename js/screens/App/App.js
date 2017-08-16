@@ -148,7 +148,7 @@ class App extends Component {
               captureTarget={Camera.constants.CaptureTarget.disk}
               captureAudio={false}
               aspect={Camera.constants.Aspect.fill}>
-              <View style={{flexDirection: 'row', marginBottom: 30, alignItems: 'center'}}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
                   <TouchableOpacity onPress={() => this.flipCamera()}>
                     <View style={styles.onPreviewButtonBorder}>
@@ -158,7 +158,7 @@ class App extends Component {
                     </View>
                   </TouchableOpacity>
                 </View>
-                <View style={{flex: 1, alignItems: 'center'}}>
+                <View style={{flex: 1, alignItems: 'center', marginBottom: 30}}>
                   <TouchableOpacity onPress={this.takePicture}>
                     <View style={styles.captureBorder}>
                       <View style={styles.captureButton} />
