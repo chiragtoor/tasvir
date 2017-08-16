@@ -150,13 +150,13 @@ class App extends Component {
               aspect={Camera.constants.Aspect.fill}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
-                  <TouchableOpacity onPress={() => this.flipCamera()}>
+                  {/*<TouchableOpacity onPress={() => this.flipCamera()}>
                     <View style={styles.onPreviewButtonBorder}>
                       <View style={styles.onPreviewButton}>
                         <Image style={{flex: 1, width: 20, resizeMode: 'contain'}} source={require('../../../img/camera_flip_icon.png')}/>
                       </View>
                     </View>
-                  </TouchableOpacity>
+                  </TouchableOpacity>*/}
                 </View>
                 <View style={{flex: 1, alignItems: 'center', marginBottom: 30}}>
                   <TouchableOpacity onPress={this.takePicture}>
