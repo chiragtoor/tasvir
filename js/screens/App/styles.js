@@ -123,6 +123,20 @@ export default styles = StyleSheet.create({
     width: 32,
     backgroundColor: "#48B2E2"
   },
+  imageButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 16,
+    height: 32,
+    width: 32
+  },
+  imageButtonText: {
+    height: 32,
+    width: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0)'
+  },
   groupName: {
     fontSize: 20,
     color: '#4A4A4A'

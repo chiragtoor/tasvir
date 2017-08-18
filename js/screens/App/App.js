@@ -170,9 +170,13 @@ class App extends Component {
                   {previewCount > 0 ?
                     <TouchableOpacity onPress={() => this.scrollTo(1)}>
                       <View style={styles.onPreviewButtonBorder}>
-                        <View style={styles.onPreviewButton}>
-                          <Text style={{color: '#FFFFFF'}}>{previewCount}</Text>
-                        </View>
+                        <Image
+                          style={styles.imageButton}
+                          source={{uri: (RNFS.DocumentDirectoryPath + '/' + this.props.previewReel[1].image)}}>
+                          <View style={styles.imageButtonText}>
+                            <Text style={{color: '#FFFFFF', fontWeight: 'bold'}}>{previewCount}</Text>
+                          </View>
+                        </Image>
                       </View>
                     </TouchableOpacity>
                   :
