@@ -57,6 +57,8 @@ class App extends Component {
     chan.join();
 
     chan.on("new:photo", msg => {
+      console.log("WEBSOCKET NEW PHOTO");
+      console.log(msg.id);
       this.props.saveImage(msg.photo, msg.id);
     });
   }
@@ -148,6 +150,10 @@ class App extends Component {
               style={styles.preview}
               captureTarget={Camera.constants.CaptureTarget.disk}
               captureAudio={false}
+              keepAwake={true}
+              mirrorImage={true}
+              onFocusChanged={() => null}
+              zoomChanged={() => null}
               aspect={Camera.constants.Aspect.fill}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>

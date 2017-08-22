@@ -31,9 +31,13 @@ export function completeWalkthrough() {
 export function saveImage(imageUrl, photoId) {
   return (dispatch, getState) => {
     const {album: {savedPhotos, id}} = getState();
-    if(id && !(savedPhotos.includes(photoId))) {
-      CameraRoll.saveToCameraRoll(imageUrl);
-      dispatch(Album.addSavedPhoto(photoId));
+    console.log("SAVING IMAGE");
+    console.log(!(savedPhotos.includes(photoId)));
+    if(id) {
+      if(!(savedPhotos.includes(photoId))) {
+        CameraRoll.saveToCameraRoll(imageUrl);
+        dispatch(Album.addSavedPhoto(photoId));
+      }
     } else {
       CameraRoll.saveToCameraRoll(imageUrl);
     }
@@ -56,7 +60,7 @@ export function loadAndDispatchState() {
       const albumId = getValue(value, ALBUM_ID_STORAGE);
       const autoShare = getValue(value, AUTO_SHARE_STORAGE);
       const previewReel = getValue(value, PREVIEW_REEL_STORAGE);
-      let savedPhotos = getValue(value, DOWNLOADED_PHOTOS_STORAGE);
+      const savedPhotos = getValue(value, DOWNLOADED_PHOTOS_STORAGE);
 
       if(albumId) {
         dispatch(Album.updateId(albumId));
@@ -84,7 +88,9 @@ export function loadAndDispatchState() {
           if(responseJson.success) {
             for(var i = 0; i < responseJson.photos.length; i++) {
               const photo = responseJson.photos[i];
-              dispatch(saveImage(photo.photo, photo.id));
+              if(!(savedPhotos.includes(photo.id))) {
+                dispatch(saveImage(photo.photo, photo.id));
+              }
             }
           }
         });
