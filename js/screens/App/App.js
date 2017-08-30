@@ -26,6 +26,7 @@ import { URL_BASE, POST_ACTION_SCROLL } from '../../constants';
 import TasvirToggle from '../../common/components/TasvirToggle';
 import TasvirButton from '../../common/components/TasvirButton';
 import TasvirDirections from '../../common/components/TasvirDirections';
+import TasvirIconButton from '../../common/components/TasvirIconButton';
 
 import * as Actions from '../../actions';
 
@@ -116,6 +117,19 @@ class App extends Component {
             key={data.key}
             data={data.image}
             goToCamera={() => this.scrollTo(0)}
+            saveToDevice={() => {
+              this.props.saveImage(data.image, "NO_ALBUM");
+              this.scrollPageProg = () => {
+                this.props.removeFromReel(index, (index) => {
+                  this.scrollTo(index, false);
+                });
+              };
+              if(data.postAction == POST_ACTION_SCROLL.LEFT) {
+                this.scrollTo(index - 1);
+              } else {
+                this.scrollTo(index + 1);
+              }
+            }}
             onSwipeStart={() => this.props.lockViewPager()}
             onSwipeEnd={() => this.props.unlockViewPager()}
             onFinish={(action) => {
@@ -164,25 +178,22 @@ class App extends Component {
                   </TouchableOpacity>
                 </View>
                 <View style={{flex: 1, alignItems: 'center', marginBottom: 30}}>
-                  <TouchableOpacity onPress={this.takePicture}>
-                    <View style={styles.captureBorder}>
-                      <View style={styles.captureButton} />
-                    </View>
-                  </TouchableOpacity>
+                  <TasvirIconButton
+                    onPress={this.takePicture}
+                    content={null}
+                    sizeLarge={true} />
                 </View>
                 <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
                   {previewCount > 0 ?
-                    <TouchableOpacity onPress={() => this.scrollTo(1)}>
-                      <View style={styles.onPreviewButtonBorder}>
-                        <Image
-                          style={styles.imageButton}
-                          source={{uri: (RNFS.DocumentDirectoryPath + '/' + this.props.previewReel[1].image)}}>
-                          <View style={styles.imageButtonText}>
-                            <Text style={{color: '#FFFFFF', fontWeight: 'bold'}}>{previewCount}</Text>
-                          </View>
-                        </Image>
-                      </View>
-                    </TouchableOpacity>
+                    <TasvirIconButton
+                      onPress={() => this.scrollTo(1)}
+                      content={<Image
+                                  style={styles.imageButton}
+                                  source={{uri: (RNFS.DocumentDirectoryPath + '/' + this.props.previewReel[1].image)}}>
+                                  <View style={styles.imageButtonText}>
+                                    <Text style={{color: '#FFFFFF', fontWeight: 'bold'}}>{previewCount}</Text>
+                                  </View>
+                                </Image>} />
                   :
                     null
                   }

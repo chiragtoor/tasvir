@@ -54,7 +54,7 @@ class Walkthrough extends Component {
     return (
       <View style={styles.page}>
         <Text style={{textAlign: 'center', fontSize: 20, color: '#FFFFFF'}}>
-          Preview your picturs to the right of the camera, from there share (<FontAwesome style={{color: "#FFFFFF"}}>{Icons.cloudUpload}</FontAwesome>) or delete (<FontAwesome style={{color: "#FFFFFF"}}>{Icons.trash}</FontAwesome>) them.
+          Preview your picturs to the right of the camera, from there share (<FontAwesome style={{color: "#FFFFFF"}}>{Icons.cloudUpload}</FontAwesome>), keep to yourself (<FontAwesome style={{color: "#FFFFFF"}}>{Icons.download}</FontAwesome>), or delete (<FontAwesome style={{color: "#FFFFFF"}}>{Icons.trash}</FontAwesome>).
         </Text>
         <Text style={{textAlign: 'center', fontSize: 20, color: '#FFFFFF'}}>
           Swipe the camera up to get to the menu.

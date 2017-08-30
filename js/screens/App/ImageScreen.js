@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, Dimensions, StyleSheet, Image, Animated, TouchableOpacity} from 'react-native';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 var RNFS = require('react-native-fs');
+import TasvirIconButton from '../../common/components/TasvirIconButton';
 
 export default class ImageScreen extends Component {
 
@@ -10,11 +11,15 @@ export default class ImageScreen extends Component {
 
     this.state = {
       pan: new Animated.ValueXY(),
-      scale: new Animated.Value(1)
+      scale: new Animated.Value(1),
+      backIcon: null
     }
   }
 
   shareAction = () => {
+    this.setState({
+      backIcon: <FontAwesome style={{color: "#FFFFFF", fontSize: 60}}>{Icons.cloudUpload}</FontAwesome>
+    });
     Animated.timing(
       this.state.pan,
       {toValue: {x:0, y: -1 * Dimensions.get('window').height}, duration: 250}
@@ -24,11 +29,26 @@ export default class ImageScreen extends Component {
   }
 
   deleteAction = () => {
+    this.setState({
+      backIcon: <FontAwesome style={{color: "#FFFFFF", fontSize: 60}}>{Icons.trash}</FontAwesome>
+    });
     Animated.timing(
       this.state.pan,
       {toValue: {x:0, y: Dimensions.get('window').height}, duration: 250}
     ).start(() => {
       this.props.onFinish(false);
+    });
+  }
+
+  downloadAction = () => {
+    this.setState({
+      backIcon: <FontAwesome style={{color: "#FFFFFF", fontSize: 60}}>{Icons.download}</FontAwesome>
+    });
+    Animated.timing(
+      this.state.scale,
+      {toValue: 0, duration: 250}
+    ).start(() => {
+      this.props.saveToDevice();
     });
   }
 
@@ -40,37 +60,35 @@ export default class ImageScreen extends Component {
 
     return (
       <View style={styles.container}>
+        <View style={{position: 'absolute', flex: 1, width: Dimensions.get('window').width, height: Dimensions.get('window').height, justifyContent: 'center', alignItems: 'center'}}>
+          {this.state.backIcon}
+        </View>
         <Animated.View style={imageStyle}>
           <Image source={{uri: (RNFS.DocumentDirectoryPath + '/' + this.props.data)}} style={styles.page} resizeMode='contain' />
         </Animated.View>
-        <View style={{position: 'absolute', flex: 1, width: Dimensions.get('window').width, height: Dimensions.get('window').height, justifyContent: 'flex-end', paddingLeft: 20, paddingBottom: 20}}>
+        <View style={{position: 'absolute', flex: 1, width: Dimensions.get('window').width, height: Dimensions.get('window').height, justifyContent: 'space-between', paddingTop: 20, paddingBottom: 20}}>
+          <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
+            <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
+              <TasvirIconButton
+                onPress={this.props.goToCamera}
+                content={<FontAwesome style={{color: "#FFFFFF"}}>{Icons.camera}</FontAwesome>} />
+            </View>
+          </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
-              <TouchableOpacity onPress={() => this.deleteAction()}>
-                <View style={styles.onPreviewButtonBorder}>
-                  <View style={styles.deleteButton}>
-                    <FontAwesome style={{color: "#FFFFFF"}}>{Icons.trash}</FontAwesome>
-                  </View>
-                </View>
-              </TouchableOpacity>
+              <TasvirIconButton
+                onPress={this.deleteAction}
+                content={<FontAwesome style={{color: "#FFFFFF"}}>{Icons.trash}</FontAwesome>} />
             </View>
             <View style={{flex: 1, alignItems: 'center'}}>
-              <TouchableOpacity onPress={() => this.props.goToCamera()}>
-                <View style={styles.onPreviewButtonBorder}>
-                  <View style={styles.onPreviewButton}>
-                    <FontAwesome style={{color: "#FFFFFF"}}>{Icons.camera}</FontAwesome>
-                  </View>
-                </View>
-              </TouchableOpacity>
+              <TasvirIconButton
+                onPress={this.downloadAction}
+                content={<FontAwesome style={{color: "#FFFFFF"}}>{Icons.download}</FontAwesome>} />
             </View>
             <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
-              <TouchableOpacity onPress={() => this.shareAction()}>
-                <View style={styles.onPreviewButtonBorder}>
-                  <View style={styles.onPreviewButton}>
-                    <FontAwesome style={{color: "#FFFFFF"}}>{Icons.cloudUpload}</FontAwesome>
-                  </View>
-                </View>
-              </TouchableOpacity>
+              <TasvirIconButton
+                onPress={this.shareAction}
+                content={<FontAwesome style={{color: "#FFFFFF"}}>{Icons.cloudUpload}</FontAwesome>} />
             </View>
           </View>
         </View>
