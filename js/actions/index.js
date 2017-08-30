@@ -24,20 +24,32 @@ export {Reel as Reel,
 export const NAVIGATE = 'Navigation/NAVIGATE';
 
 export function completeWalkthrough() {
-  return (dispatch) => {
-    dispatch(NavigationActions.navigate({routeName: 'App'}));
+  return (dispatch, getState) => {
+    const { joinAlbumForm: { id, name } } = getState();
+    if(id && name) {
+      dispatch(NavigationActions.navigate({routeName: 'JoinAlbum'}));
+    } else {
+      dispatch(NavigationActions.navigate({routeName: 'App'}));
+    }
   }
 }
 
 export function saveImage(imageUrl, photoId) {
   return (dispatch, getState) => {
     const {album: {savedPhotos, id}} = getState();
+    console.log("SAVE IMAGE CALLED");
     if(id) {
-      if(!(savedPhotos.includes(photoId))) {
+      console.log("IN ALBUM: ", photoId);
+      if(photoId === "NO_ALBUM") {
+        console.log("IN ALBUM, SAVE TO DEVICE HIT");
+        CameraRoll.saveToCameraRoll(imageUrl);
+      } else if(!(savedPhotos.includes(photoId))) {
+        console.log("PHOTO NOT IN ALBUMS, SAVING AND ADDING TO ALBUM");
         CameraRoll.saveToCameraRoll(imageUrl);
         dispatch(Album.addSavedPhoto(photoId));
       }
     } else {
+      console.log("NOT IN ALBUM, SAVING");
       CameraRoll.saveToCameraRoll(imageUrl);
     }
   }
@@ -90,6 +102,14 @@ export function loadAndDispatchState() {
       } else {
         Storage.walkthroughCompleted();
         dispatch(NavigationActions.navigate({routeName: 'Walkthrough'}));
+        branch.getFirstReferringParams().then(params => {
+          const albumId = params['album_id'];
+          const albumName = params['album_name'];
+          if(albumId && albumName) {
+            dispatch(JoinAlbumForm.updateId(albumId));
+            dispatch(JoinAlbumForm.updateName(albumName));
+          }
+        });
       }
 
       if(albumId) {

@@ -118,7 +118,7 @@ class App extends Component {
             data={data.image}
             goToCamera={() => this.scrollTo(0)}
             saveToDevice={() => {
-              this.props.saveImage(data.image, "NO_ALBUM");
+              this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + data.image, "NO_ALBUM");
               this.scrollPageProg = () => {
                 this.props.removeFromReel(index, (index) => {
                   this.scrollTo(index, false);

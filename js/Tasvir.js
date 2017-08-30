@@ -33,8 +33,6 @@ import Walkthrough from './screens/Walkthrough';
 import { loadAndDispatchState } from './actions';
 import * as Storage from './storage';
 
-console.log("HERE IN MAIN APPLICATION");
-
 const loggerMiddleware = createLogger({
   predicate: (getState, action) => __DEV__
 });
