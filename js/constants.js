@@ -18,6 +18,7 @@ export const ALBUM_NAME_STORAGE = 'albumName';
 export const AUTO_SHARE_STORAGE = 'autoShare';
 export const WALKTHROUGH_FLAG_STORAGE = 'walkthrough';
 export const DOWNLOADED_PHOTOS_STORAGE = 'downloadedPhotos';
+export const ALBUM_LINK_STORAGE = 'albumLink';
 
 export const BASE_REEL = {
   key: 0,

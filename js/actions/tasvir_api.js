@@ -1,3 +1,4 @@
+import { CameraRoll } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import request from 'superagent';
 
@@ -36,6 +37,8 @@ export function createAlbum() {
         Storage.saveAlbumName(name);
         dispatch(Album.updateId(responseJson.album));
         Storage.saveAlbumId(responseJson.album);
+        dispatch(Album.updateLink(responseJson.link));
+        Storage.saveAlbumLink(responseJson.link);
         dispatch(AlbumForm.reset());
       } else {
         dispatch(AlbumForm.reset());
@@ -45,6 +48,27 @@ export function createAlbum() {
       console.error(error);
       // something went wrong
       dispatch(AlbumForm.reset());
+    });
+  }
+}
+
+export function loadAlbum() {
+  return (dispatch, getState) => {
+    const { album: { id, savedPhotos } } = getState();
+
+    fetch(URL + ALBUMS_ENDPOINT + "/" +  id)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if(responseJson.success) {
+        dispatch(Album.updateLink(responseJson.link));
+        for(var i = 0; i < responseJson.photos.length; i++) {
+          const photo = responseJson.photos[i];
+          if(!(savedPhotos.includes(photo.id))) {
+            CameraRoll.saveToCameraRoll(photo.photo);
+            dispatch(Album.addSavedPhoto(photo.id));
+          }
+        }
+      }
     });
   }
 }

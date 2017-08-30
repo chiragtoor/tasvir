@@ -30,10 +30,20 @@ function savedPhotos(state = [], action) {
   }
 }
 
+function link(state = null, action) {
+  switch(action.type) {
+    case Actions.LOAD_LINK:
+      return action.link;
+    default:
+      return state;
+  }
+}
+
 const album = combineReducers({
   id,
   name,
-  savedPhotos
+  savedPhotos,
+  link
 });
 
 export default album;

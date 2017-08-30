@@ -8,6 +8,7 @@ import {
   Text
 } from 'react-native';
 import { connect } from 'react-redux';
+import FontAwesome, { Icons } from 'react-native-fontawesome';
 const Permissions = require('react-native-permissions');
 
 import * as Actions from '../../actions';
@@ -53,7 +54,7 @@ class Walkthrough extends Component {
     return (
       <View style={styles.page}>
         <Text style={{textAlign: 'center', fontSize: 20, color: '#FFFFFF'}}>
-          Preview your picturs to the right of the camera, simply swipe them up or down to share or delete.
+          Preview your picturs to the right of the camera, from there share (<FontAwesome style={{color: "#FFFFFF"}}>{Icons.cloudUpload}</FontAwesome>) or delete (<FontAwesome style={{color: "#FFFFFF"}}>{Icons.trash}</FontAwesome>) them.
         </Text>
         <Text style={{textAlign: 'center', fontSize: 20, color: '#FFFFFF'}}>
           Swipe the camera up to get to the menu.

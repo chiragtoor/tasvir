@@ -1,6 +1,7 @@
 import { NavigationActions } from 'react-navigation';
 import * as Storage from '../storage';
 import * as Album from './album';
+import * as TasvirApi from './tasvir_api';
 
 export const UPDATE_ALBUM_ID = 'join_album_form/UPDATE_ALBUM_ID';
 export const UPDATE_ALBUM_NAME = 'join_album_form/UPDATE_ALBUM_NAME';
@@ -26,6 +27,7 @@ export function joinAlbum() {
     Storage.saveAlbumId(id);
     dispatch(Album.updateName(name));
     Storage.saveAlbumName(name);
+    dispatch(TasvirApi.loadAlbum());
     dispatch(NavigationActions.navigate({ routeName: 'App' }));
   }
 }

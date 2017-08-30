@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native';
 
-import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
+import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE,
          AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, DOWNLOADED_PHOTOS_STORAGE } from './constants';
 
 function persist(key, value) {
@@ -29,4 +29,8 @@ export function walkthroughCompleted() {
 
 export function saveDownloadedPhotos(downloadedPhotos) {
   persist(DOWNLOADED_PHOTOS_STORAGE, downloadedPhotos);
+}
+
+export function saveAlbumLink(link) {
+  persist(ALBUM_LINK_STORAGE, link);
 }

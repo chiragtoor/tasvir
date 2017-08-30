@@ -57,8 +57,6 @@ class App extends Component {
     chan.join();
 
     chan.on("new:photo", msg => {
-      console.log("WEBSOCKET NEW PHOTO");
-      console.log(msg.id);
       this.props.saveImage(msg.photo, msg.id);
     });
   }
@@ -268,7 +266,7 @@ class App extends Component {
   }
 
   shareAlbum = () => {
-    Share.share({url: (URL_BASE + "albums/" + this.props.albumId + "?name=" + this.props.albumName),
+    Share.share({url: this.props.albumLink,
       title: ("Get pictures for: " + this.props.albumName)}, {});
   }
 
@@ -333,6 +331,7 @@ const mapStateToProps = (state) => {
     // album state
     albumName: state.album.name,
     albumId: state.album.id,
+    albumLink: state.album.link,
     // settings state
     autoShare: state.settings.autoShare,
     // reel state

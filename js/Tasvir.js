@@ -6,6 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { StackNavigator, addNavigationHelpers } from 'react-navigation';
 
+
 /*
  * in order to be able to navigate from actions we need to hook
  *  up react-navigation and redux, to do that we need to set up our
@@ -31,6 +32,8 @@ import Walkthrough from './screens/Walkthrough';
 
 import { loadAndDispatchState } from './actions';
 import * as Storage from './storage';
+
+console.log("HERE IN MAIN APPLICATION");
 
 const loggerMiddleware = createLogger({
   predicate: (getState, action) => __DEV__
@@ -75,32 +78,6 @@ const appReducer = combineReducers({
 });
 
 class NavWrapper extends React.Component {
-
-  // componentDidMount() {
-  //   Linking.addEventListener('url', this.handleOpenURL);
-  // }
-  //
-  // componentWillUnmount() {
-  //   Linking.removeEventListener('url', this.handleOpenURL);
-  // }
-  //
-  // handleOpenURL = (event) => {
-  //   const path = event.url.replace(/.*?:\/\//g, '').match(/\/([^\/]+)\/?$/)[1];
-  //   const parts = path.split('?name=');
-  //   const albumId = parts[0];
-  //   const albumName = parts[1];
-  //
-  //   console.log("HANDLE OPEN URL");
-  //   console.log("albumId: ", albumId);
-  //   console.log("albumName: ", albumName);
-  //
-  //   console.log("DISPATCH");
-  //
-  //   this.props.dispatch(joinAlbumUpdateId(albumId);
-  //   this.props.joinAlbumUpdateName(albumName);
-  //   this.props.attemptJoinAlbum();
-  // }
-
   render() {
     return (
       <TasvirNavigator navigation={addNavigationHelpers({

@@ -1,5 +1,6 @@
 import { NavigationActions } from 'react-navigation';
 import { AsyncStorage, CameraRoll } from 'react-native';
+import branch from 'react-native-branch';
 
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
          AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, ALBUMS_ENDPOINT, DOWNLOADED_PHOTOS_STORAGE } from '../constants';
@@ -31,8 +32,6 @@ export function completeWalkthrough() {
 export function saveImage(imageUrl, photoId) {
   return (dispatch, getState) => {
     const {album: {savedPhotos, id}} = getState();
-    console.log("SAVING IMAGE");
-    console.log(!(savedPhotos.includes(photoId)));
     if(id) {
       if(!(savedPhotos.includes(photoId))) {
         CameraRoll.saveToCameraRoll(imageUrl);
@@ -76,24 +75,25 @@ export function loadAndDispatchState() {
 
       if(getValue(value, WALKTHROUGH_FLAG_STORAGE)) {
         dispatch(NavigationActions.navigate({routeName: 'App'}));
+        branch.subscribe(({ error, params }) => {
+          if (params && !error) {
+            const albumId = params['album_id'];
+            const albumName = params['album_name'];
+          	if(albumId && albumName) {
+              dispatch(JoinAlbumForm.updateId(albumId));
+              dispatch(JoinAlbumForm.updateName(albumName));
+              dispatch(NavigationActions.navigate({routeName: 'JoinAlbum'}));
+            }
+
+          }
+        })
       } else {
         Storage.walkthroughCompleted();
         dispatch(NavigationActions.navigate({routeName: 'Walkthrough'}));
       }
 
-      if(albumId){
-        fetch(URL + ALBUMS_ENDPOINT + "/" +  albumId)
-        .then((response) => response.json())
-        .then((responseJson) => {
-          if(responseJson.success) {
-            for(var i = 0; i < responseJson.photos.length; i++) {
-              const photo = responseJson.photos[i];
-              if(!(savedPhotos.includes(photo.id))) {
-                dispatch(saveImage(photo.photo, photo.id));
-              }
-            }
-          }
-        });
+      if(albumId) {
+        dispatch(TasvirApi.loadAlbum());
       }
     }).catch((error) => {
       console.error(error);
