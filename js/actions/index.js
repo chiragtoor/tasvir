@@ -37,19 +37,14 @@ export function completeWalkthrough() {
 export function saveImage(imageUrl, photoId) {
   return (dispatch, getState) => {
     const {album: {savedPhotos, id}} = getState();
-    console.log("SAVE IMAGE CALLED");
     if(id) {
-      console.log("IN ALBUM: ", photoId);
       if(photoId === "NO_ALBUM") {
-        console.log("IN ALBUM, SAVE TO DEVICE HIT");
         CameraRoll.saveToCameraRoll(imageUrl);
       } else if(!(savedPhotos.includes(photoId))) {
-        console.log("PHOTO NOT IN ALBUMS, SAVING AND ADDING TO ALBUM");
         CameraRoll.saveToCameraRoll(imageUrl);
         dispatch(Album.addSavedPhoto(photoId));
       }
     } else {
-      console.log("NOT IN ALBUM, SAVING");
       CameraRoll.saveToCameraRoll(imageUrl);
     }
   }

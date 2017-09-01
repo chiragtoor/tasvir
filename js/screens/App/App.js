@@ -23,7 +23,7 @@ import { Socket } from 'phoenix';
 import ImageScreen from './ImageScreen';
 import { URL_BASE, POST_ACTION_SCROLL } from '../../constants';
 
-import TasvirToggle from '../../common/components/TasvirToggle';
+import TasvirToggle from './TasvirToggle';
 import TasvirButton from '../../common/components/TasvirButton';
 import TasvirDirections from '../../common/components/TasvirDirections';
 import TasvirIconButton from '../../common/components/TasvirIconButton';
@@ -237,7 +237,6 @@ class App extends Component {
         </View>
         <TasvirButton
           onPress={() => this.props.createAlbum()}
-          disabled={this.props.groupFormName === ""}
           text={'Done'} />
         <View style={styles.menuDivider} />
       </View>
@@ -264,13 +263,11 @@ class App extends Component {
         <View style={styles.margin} />
         <TasvirButton
           onPress={() => this.shareAlbum()}
-          disabled={this.props.groupFormName === ""}
           text={'Share Album'} />
         <View style={styles.margin} />
         <TasvirButton
-          danger={true}
+          secondary={true}
           onPress={() => this.props.attemptCloseAlbum()}
-          disabled={false}
           text={'Close Album'} />
       </View>
     )
@@ -319,10 +316,10 @@ class App extends Component {
             </View>
             <View style={styles.menuOptions}>
               <TasvirToggle
-                toggle={this.props.autoShare}
-                toggleChange={(value) => this.props.toggleAutoShare(value)}
-                mainText={'Auto Share'}
-                explanationText={'Automatically share pictures on capture'} />
+                value={this.props.autoShare}
+                toggle={(value) => this.props.toggleAutoShare(value)}
+                message={'Auto Share'}
+                explanation={'Automatically share pictures on capture'} />
             </View>
             <View style={styles.menuDivider} />
             {this.props.albumId == null ?
