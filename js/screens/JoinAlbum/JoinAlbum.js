@@ -28,7 +28,7 @@ class JoinAlbum extends Component {
           text={'Yes'} />
         <View style={styles.margin} />
         <TasvirButton
-          danger={true}
+          secondary={true}
           onPress={() => this.props.rejectAlbum()}
           disabled={false}
           text={'No'} />

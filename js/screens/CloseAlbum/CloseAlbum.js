@@ -23,15 +23,15 @@ class CloseAlbum extends Component {
         <TasvirDirections directions={directions} />
         <View style={styles.margin} />
         <TasvirButton
-          danger={true}
-          onPress={() => this.props.closeAlbum()}
-          disabled={false}
-          text={'Close Album'} />
-        <View style={styles.margin} />
-        <TasvirButton
           onPress={() => this.props.keepAlbumOpen()}
           disabled={false}
           text={'Keep Album Open'} />
+        <View style={styles.margin} />
+        <TasvirButton
+          secondary={true}
+          onPress={() => this.props.closeAlbum()}
+          disabled={false}
+          text={'Close Album'} />
       </View>
     );
   }

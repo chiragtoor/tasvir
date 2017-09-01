@@ -42,7 +42,7 @@ class Walkthrough extends Component {
           Just create an album and share the link with your friends, they will have access to all the photos you take.
         </Text>
         <TasvirButton
-          danger={true}
+          secondary={true}
           onPress={() => this.setState({page: 2})}
           disabled={false}
           text={'Okay'} />
@@ -60,7 +60,7 @@ class Walkthrough extends Component {
           Swipe the camera up to get to the menu.
         </Text>
         <TasvirButton
-          danger={true}
+          secondary={true}
           onPress={() => this.setState({page: 3})}
           disabled={false}
           text={'Okay'} />
@@ -75,7 +75,7 @@ class Walkthrough extends Component {
           Please allow access to your camera and pictures to manage your albums.
         </Text>
         <TasvirButton
-          danger={true}
+          secondary={true}
           onPress={() => this.done()}
           disabled={false}
           text={'Done'} />
