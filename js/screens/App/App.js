@@ -11,14 +11,16 @@ import {
   StyleSheet,
   Linking,
   Animated,
-  Share
+  Share,
+  CameraRoll
 } from 'react-native';
 var RNFS = require('react-native-fs');
 import { connect } from 'react-redux';
-import Camera from 'react-native-camera';
 import Swiper from 'react-native-swiper';
 
 import { Socket } from 'phoenix';
+
+import FontAwesome, { Icons } from 'react-native-fontawesome';
 
 import ImageScreen from './ImageScreen';
 import { URL_BASE, POST_ACTION_SCROLL } from '../../constants';
@@ -27,6 +29,7 @@ import TasvirToggle from './TasvirToggle';
 import TasvirButton from '../../common/components/TasvirButton';
 import TasvirDirections from '../../common/components/TasvirDirections';
 import TasvirIconButton from '../../common/components/TasvirIconButton';
+import TasvirCamera from './TasvirCamera';
 
 import * as Actions from '../../actions';
 
@@ -41,9 +44,20 @@ class App extends Component {
     super(props);
 
     this.state = {
-      captureFadeAnim: new Animated.Value(0),
-      cameraType: Camera.constants.Type.back
+      savedPhotos: []
     }
+
+    CameraRoll.getPhotos({
+      first: 20,
+      assetType: 'Photos'
+    }).then(r => this.setState({ savedPhotos: r.edges }))
+  }
+
+  reloadImages = () => {
+    CameraRoll.getPhotos({
+      first: 20,
+      assetType: 'Photos'
+    }).then(r => this.setState({ savedPhotos: r.edges }))
   }
 
   connectSocket = (albumId) => {
@@ -59,11 +73,12 @@ class App extends Component {
 
     chan.on("new:photo", msg => {
       this.props.saveImage(msg.photo, msg.id);
+      this.reloadImages();
     });
   }
 
   componentDidMount() {
-    this.scrollTo(0);
+    this.scrollTo(1);
     if(this.props.albumId) {
       this.connectSocket(this.props.albumId);
     }
@@ -81,24 +96,15 @@ class App extends Component {
     }
   }
 
-  takePicture = () => {
-    Animated.timing(
-      this.state.captureFadeAnim, { toValue: 1, duration: 100 }
-    ).start(() => {
-      Animated.timing(
-        this.state.captureFadeAnim, { toValue: 0, duration: 100 }
-      ).start();
-    });
-    this.camera.capture()
-      .then((data) => {
-        if(this.props.albumId) {
-          const path = data.path.split('/Documents/');
-          this.addImage(path[1]);
-        } else {
-          this.props.saveImage(data.path, "NO_ALBUM");
-        }
-      })
-      .catch(err => console.error(err));
+  takePicture = (data) => {
+    if(this.props.albumId) {
+      const path = data.path.split('/Documents/');
+      this.addImage(path[1]);
+      this.reloadImages();
+    } else {
+      this.props.saveImage(data.path, "NO_ALBUM");
+      this.reloadImages();
+    }
   }
 
   flipCamera = () => {
@@ -110,14 +116,35 @@ class App extends Component {
   }
 
   renderPages = () => {
+    const width = Dimensions.get('window').width;
+    const height = Dimensions.get('window').height;
     return this.props.previewReel.map((data, index) => {
-      if(data.isImage) {
+      if(index == 0) {
+        return(
+          <ScrollView key={data.key} style={{flex: 1, backgroundColor: "#48B2E2", height: height, width: width}}>
+            {this.state.savedPhotos.map((p, i) => {
+              return (
+                <Image
+                  key={i}
+                  style={{
+                    width: width,
+                    height: width
+                  }}
+                  source={{uri: p.node.image.uri}}
+                  resizeMode='contain' />
+                )
+              })
+            }
+          </ScrollView>
+        );
+      } else if(data.isImage) {
         return (
           <ImageScreen
             key={data.key}
             data={data.image}
-            goToCamera={() => this.scrollTo(0)}
+            goToCamera={() => this.scrollTo(1)}
             saveToDevice={() => {
+              this.reloadImages();
               this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + data.image, "NO_ALBUM");
               this.scrollPageProg = () => {
                 this.props.removeFromReel(index, (index) => {
@@ -149,61 +176,17 @@ class App extends Component {
             }}/>
         );
       } else {
-        const previewCount = this.props.previewReel.length - 1;
+        const hasPreviewReel = (this.props.previewReel.length - 1) > 0;
+        const hasGallery = this.state.savedPhotos.length > 0;
         return (
-          <View
+          <TasvirCamera
             key={data.key}
-            style={styles.container}>
-            <Camera
-              ref={(cam) => {
-                this.camera = cam;
-              }}
-              type={this.state.cameraType}
-              style={styles.preview}
-              captureTarget={Camera.constants.CaptureTarget.disk}
-              captureAudio={false}
-              keepAwake={true}
-              mirrorImage={true}
-              onFocusChanged={() => null}
-              zoomChanged={() => null}
-              aspect={Camera.constants.Aspect.fill}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
-                  <TouchableOpacity onPress={() => this.flipCamera()}>
-                    <View style={styles.onPreviewButtonBorder}>
-                      <View style={styles.onPreviewButton}>
-                        <Image style={{flex: 1, width: 20, resizeMode: 'contain'}} source={require('../../../img/camera_flip_icon.png')}/>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View style={{flex: 1, alignItems: 'center', marginBottom: 30}}>
-                  <TasvirIconButton
-                    onPress={this.takePicture}
-                    content={null}
-                    sizeLarge={true} />
-                </View>
-                <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
-                  {previewCount > 0 ?
-                    <TasvirIconButton
-                      onPress={() => this.scrollTo(1)}
-                      content={<Image
-                                  style={styles.imageButton}
-                                  source={{uri: (RNFS.DocumentDirectoryPath + '/' + this.props.previewReel[1].image)}}>
-                                  <View style={styles.imageButtonText}>
-                                    <Text style={{color: '#FFFFFF', fontWeight: 'bold'}}>{previewCount}</Text>
-                                  </View>
-                                </Image>} />
-                  :
-                    null
-                  }
-                </View>
-              </View>
-            </Camera>
-            <Animated.View
-              pointerEvents="none"
-              style={{opacity: this.state.captureFadeAnim, position: 'absolute', width: Dimensions.get('window').width, height: Dimensions.get('window').height, borderWidth: 7, borderColor: "#48B2E2"}} />
-          </View>
+            preview={hasPreviewReel ? this.props.previewReel[2].image : null}
+            previewCount={this.props.previewReel.length - 1}
+            gallery={hasGallery ? (this.state.savedPhotos[0].node.image.uri) : null}
+            goToPreview={() => this.scrollTo(2)}
+            goToGallery={() => this.scrollTo(0)}
+            takePicture={this.takePicture} />
         );
       }
     });

@@ -1,25 +1,18 @@
 import { combineReducers } from 'redux';
 import * as Actions from '../actions/reel';
 
-import { BASE_REEL, POST_ACTION_SCROLL, CAMERA_PAGE, MENU_PAGE } from '../constants';
+import { INIT_REEL, POST_ACTION_SCROLL, CAMERA_PAGE, MENU_PAGE } from '../constants';
 
-function previewReel(state = [BASE_REEL], action) {
+function previewReel(state = INIT_REEL, action) {
   switch(action.type) {
     case Actions.LOAD_PREVIEW_REEL:
       return action.previewReel;
     case Actions.REEL_ADD_IMAGE:
-      if(action.index == 0) {
-        return [
-          action.imagePack,
-          ...state
-        ];
-      } else {
-        return [
-          ...state.slice(0, action.index),
-          action.imagePack,
-          ...state.slice(action.index)
-        ];
-      }
+      return [
+        ...state.slice(0, action.index),
+        action.imagePack,
+        ...state.slice(action.index)
+      ];
     case Actions.REEL_REMOVE_IMAGE:
       return [
         ...state.slice(0, action.index),
@@ -38,7 +31,7 @@ function previewReel(state = [BASE_REEL], action) {
   }
 }
 
-function currentIndex(state = 0, action) {
+function currentIndex(state = 1, action) {
   switch(action.type) {
     case Actions.UPDATE_CURRENT_INDEX:
       return action.currentIndex;

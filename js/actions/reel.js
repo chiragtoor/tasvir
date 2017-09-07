@@ -53,9 +53,9 @@ export function updateCurrentIndex(currentIndex) {
   return (dispatch, getState) => {
     const { reel: { swiperLocked } } = getState();
     dispatch({type: UPDATE_CURRENT_INDEX, currentIndex});
-    if(swiperLocked && currentIndex == 0) {
+    if(swiperLocked && currentIndex == 1) {
       dispatch(unlockSwiper());
-    } else if(!swiperLocked && currentIndex != 0) {
+    } else if(!swiperLocked && currentIndex != 1) {
       dispatch(lockSwiper());
     }
   }
@@ -97,7 +97,7 @@ export function addToReel(image) {
       postAction: scrollDirection
     }
 
-    dispatch(addImage(imagePack, 1));
+    dispatch(addImage(imagePack, 2));
   }
 }
 

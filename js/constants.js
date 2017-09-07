@@ -21,10 +21,16 @@ export const DOWNLOADED_PHOTOS_STORAGE = 'downloadedPhotos';
 export const ALBUM_LINK_STORAGE = 'albumLink';
 
 export const BASE_REEL = {
-  key: 0,
+  key: 1,
   isImage: false,
   postAction: POST_ACTION_SCROLL.NONE
 };
+
+export const INIT_REEL = [{
+  key: 0,
+  isImage: false,
+  postAction: POST_ACTION_SCROLL.NONE
+}, BASE_REEL];
 
 export const REEL = [
   {
