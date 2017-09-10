@@ -41,6 +41,8 @@ export default class TasvirCamera extends Component {
   }
 
   render() {
+    console.log("AJIT: RENDERING TASIVR_CAMERA");
+    console.log("AJIT: ", this.props.gallery);
     return (
       <View
         style={styles.container}>
@@ -71,7 +73,7 @@ export default class TasvirCamera extends Component {
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
-                {this.props.gallery > 0 ?
+                {this.props.gallery ?
                   <TasvirIconButton
                     onPress={this.props.goToGallery}
                     content={<Image

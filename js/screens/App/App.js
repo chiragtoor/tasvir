@@ -30,6 +30,7 @@ import TasvirButton from '../../common/components/TasvirButton';
 import TasvirDirections from '../../common/components/TasvirDirections';
 import TasvirIconButton from '../../common/components/TasvirIconButton';
 import TasvirCamera from './TasvirCamera';
+import Gallery from './Gallery';
 
 import * as Actions from '../../actions';
 
@@ -50,14 +51,22 @@ class App extends Component {
     CameraRoll.getPhotos({
       first: 20,
       assetType: 'Photos'
-    }).then(r => this.setState({ savedPhotos: r.edges }))
+    }).then(r => {
+      console.log(r.edges[0].node.image.uri);
+      this.setState({ savedPhotos: r.edges })
+    })
   }
 
   reloadImages = () => {
+    console.log("AJIT: RELOADING IMAGES");
     CameraRoll.getPhotos({
       first: 20,
       assetType: 'Photos'
-    }).then(r => this.setState({ savedPhotos: r.edges }))
+    }).then(r => {
+      console.log("AJIT: IMAGES LOADED");
+      console.log("AJIT: ", r.edges[0].node.image.uri);
+      this.setState({ savedPhotos: r.edges })
+    })
   }
 
   connectSocket = (albumId) => {
@@ -90,7 +99,9 @@ class App extends Component {
 
   addImage = (image) => {
     if(this.props.autoShare) {
+      console.log("AJIT: AUTO SHARING");
       this.props.uploadImage((RNFS.DocumentDirectoryPath + '/' + image));
+      this.reloadImages();
     } else {
       this.props.addToReel(image);
     }
@@ -100,42 +111,17 @@ class App extends Component {
     if(this.props.albumId) {
       const path = data.path.split('/Documents/');
       this.addImage(path[1]);
-      this.reloadImages();
     } else {
       this.props.saveImage(data.path, "NO_ALBUM");
       this.reloadImages();
     }
   }
 
-  flipCamera = () => {
-    if(this.state.cameraType === Camera.constants.Type.back) {
-      this.setState({cameraType: Camera.constants.Type.front});
-    } else {
-      this.setState({cameraType: Camera.constants.Type.back});
-    }
-  }
-
   renderPages = () => {
-    const width = Dimensions.get('window').width;
-    const height = Dimensions.get('window').height;
     return this.props.previewReel.map((data, index) => {
       if(index == 0) {
         return(
-          <ScrollView key={data.key} style={{flex: 1, backgroundColor: "#48B2E2", height: height, width: width}}>
-            {this.state.savedPhotos.map((p, i) => {
-              return (
-                <Image
-                  key={i}
-                  style={{
-                    width: width,
-                    height: width
-                  }}
-                  source={{uri: p.node.image.uri}}
-                  resizeMode='contain' />
-                )
-              })
-            }
-          </ScrollView>
+          <Gallery key={data.key} savedPhotos={this.state.savedPhotos} />
         );
       } else if(data.isImage) {
         return (
@@ -144,8 +130,8 @@ class App extends Component {
             data={data.image}
             goToCamera={() => this.scrollTo(1)}
             saveToDevice={() => {
-              this.reloadImages();
               this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + data.image, "NO_ALBUM");
+              this.reloadImages();
               this.scrollPageProg = () => {
                 this.props.removeFromReel(index, (index) => {
                   this.scrollTo(index, false);
@@ -162,6 +148,7 @@ class App extends Component {
             onFinish={(action) => {
               if(action) {
                 this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + data.image);
+                this.reloadImages();
               }
               this.scrollPageProg = () => {
                 this.props.removeFromReel(index, (index) => {
@@ -176,13 +163,13 @@ class App extends Component {
             }}/>
         );
       } else {
-        const hasPreviewReel = (this.props.previewReel.length - 1) > 0;
+        const hasPreviewReel = (this.props.previewReel.length - 2) > 0;
         const hasGallery = this.state.savedPhotos.length > 0;
         return (
           <TasvirCamera
             key={data.key}
             preview={hasPreviewReel ? this.props.previewReel[2].image : null}
-            previewCount={this.props.previewReel.length - 1}
+            previewCount={this.props.previewReel.length - 2}
             gallery={hasGallery ? (this.state.savedPhotos[0].node.image.uri) : null}
             goToPreview={() => this.scrollTo(2)}
             goToGallery={() => this.scrollTo(0)}
