@@ -7,58 +7,9 @@ export const REEL_REMOVE_IMAGE_LEFT_EDGE = 'reel/REEL_REMOVE_IMAGE_LEFT_EDGE';
 export const REEL_REMOVE_IMAGE_RIGHT_EDGE = 'reel/REEL_REMOVE_IMAGE_RIGHT_EDGE';
 
 export const UPDATE_CURRENT_INDEX = 'reel/UPDATE_CURRENT_INDEX';
-export const LOCK_VIEW_PAGER = 'reel/LOCK_VIEW_PAGER';
-export const UNLOCK_VIEW_PAGER = 'reel/UNLOCK_VIEW_PAGER';
-export const LOCK_SWIPER = 'reel/LOCK_SWIPER';
-export const UNLOCK_SWIPER = 'reel/UNLOCK_SWIPER';
-
-export const UPDATE_MAIN_PAGE_CAMERA = 'reel/UPDATE_MAIN_PAGE_CAMERA';
-export const UPDATE_MAIN_PAGE_MENU = 'reel/UPDATE_MAIN_PAGE_MENU';
-
-export function updateMainPage(page) {
-  return (dispatch, getState) => {
-    const { reel: { mainPage, viewPagerLocked } } = getState();
-
-    if(page == CAMERA_PAGE) {
-      dispatch({ type: UPDATE_MAIN_PAGE_CAMERA });
-    } else if(page == MENU_PAGE) {
-      dispatch({ type: UPDATE_MAIN_PAGE_MENU });
-    }
-
-    if(viewPagerLocked && page == CAMERA_PAGE) {
-      dispatch(unlockViewPager());
-    } else if(!viewPagerLocked && page != CAMERA_PAGE) {
-      dispatch(lockViewPager());
-    }
-  }
-}
-
-export function lockViewPager() {
-  return { type: LOCK_VIEW_PAGER }
-}
-
-export function unlockViewPager() {
-  return { type: UNLOCK_VIEW_PAGER }
-}
-
-export function lockSwiper() {
-  return { type: LOCK_SWIPER }
-}
-
-export function unlockSwiper() {
-  return { type: UNLOCK_SWIPER }
-}
 
 export function updateCurrentIndex(currentIndex) {
-  return (dispatch, getState) => {
-    const { reel: { swiperLocked } } = getState();
-    dispatch({type: UPDATE_CURRENT_INDEX, currentIndex});
-    if(swiperLocked && currentIndex == 1) {
-      dispatch(unlockSwiper());
-    } else if(!swiperLocked && currentIndex != 1) {
-      dispatch(lockSwiper());
-    }
-  }
+  return {type: UPDATE_CURRENT_INDEX, currentIndex}
 }
 
 export function loadPreviewReel(previewReel) {

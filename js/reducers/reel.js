@@ -40,45 +40,9 @@ function currentIndex(state = 1, action) {
   }
 }
 
-function viewPagerLocked(state = false, action) {
-  switch(action.type) {
-    case Actions.LOCK_VIEW_PAGER:
-      return true;
-    case Actions.UNLOCK_VIEW_PAGER:
-      return false;
-    default:
-      return state;
-  }
-}
-
-function swiperLocked(state = false, action) {
-  switch(action.type) {
-    case Actions.LOCK_SWIPER:
-      return true;
-    case Actions.UNLOCK_SWIPER:
-      return false;
-    default:
-      return state;
-  }
-}
-
-function mainPage(state = CAMERA_PAGE, action) {
-  switch(action.type) {
-    case Actions.UPDATE_MAIN_PAGE_CAMERA:
-      return CAMERA_PAGE;
-    case Actions.UPDATE_MAIN_PAGE_MENU:
-      return MENU_PAGE;
-    default:
-      return state;
-  }
-}
-
 const reel = combineReducers({
   previewReel,
-  currentIndex,
-  viewPagerLocked,
-  swiperLocked,
-  mainPage
+  currentIndex
 });
 
 export default reel;

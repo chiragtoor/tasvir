@@ -154,8 +154,6 @@ class App extends Component {
                 this.scrollTo(index + 1);
               }
             }}
-            onSwipeStart={() => this.props.lockViewPager()}
-            onSwipeEnd={() => this.props.unlockViewPager()}
             onFinish={(action) => {
               if(action) {
                 this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + data.image).then(() => {
@@ -189,14 +187,6 @@ class App extends Component {
         );
       }
     });
-  }
-
-  _onMomentumScrollEnd = (e, {index}, context) => {
-    if(index == 0) {
-      this.props.unlockViewPager();
-    } else {
-      this.props.lockViewPager();
-    }
   }
 
   createAlbumForm = () => {
@@ -270,8 +260,7 @@ class App extends Component {
           vertical={true}
           showsPagination={false}
           index={0}
-          scrollEnabled={!this.props.swiperLocked}
-          onMomentumScrollEnd={this._onMomentumScrollEnd}>
+          scrollEnabled={this.props.currentIndex == 1}>
           <ScrollView
             style={styles.scrollContainer}
             ref={(ref) => this.ref = ref}
@@ -279,7 +268,6 @@ class App extends Component {
             pagingEnabled={true}
             contentOffset={{x: 0, y: 0}}
             showHorizontalScrollIndicator={false}
-            scrollEnabled={!this.props.viewPagerLocked}
             onMomentumScrollEnd={(event) => {
               if(this.scrollPageProg) {
                 this.scrollPageProg();
@@ -327,7 +315,6 @@ const mapStateToProps = (state) => {
     // reel state
     previewReel: state.reel.previewReel,
     viewPagerLocked: state.reel.viewPagerLocked,
-    swiperLocked: state.reel.swiperLocked,
     currentIndex: state.reel.currentIndex,
     // album form state
     formState: state.albumForm.formState
@@ -339,9 +326,6 @@ const mapDispatchToProps = (dispatch) => {
     updateCurrentIndex: (index) => dispatch(Actions.Reel.updateCurrentIndex(index)),
     removeFromReel: (index, scrollCallback) => dispatch(Actions.Reel.removeFromReel(index, scrollCallback)),
     toggleAutoShare: (boolean) => dispatch(Actions.Settings.updateAutoShare(boolean)),
-    updateMainPage: (page) => dispatch(Actions.Reel.updateMainPage(page)),
-    lockViewPager: () => dispatch(Actions.Reel.lockViewPager()),
-    unlockViewPager: () => dispatch(Actions.Reel.unlockViewPager()),
     albumFormUpdateName: (name) => dispatch(Actions.AlbumForm.updateName(name)),
     resetAlbumForm: () => dispatch(Actions.AlbumForm.reset()),
     createAlbum: () => dispatch(Actions.TasvirApi.createAlbum()),
