@@ -128,67 +128,50 @@ class App extends Component {
 
   renderPages = () => {
     return this.props.previewReel.map((data, index) => {
-      if(index == 0) {
-        return(
-          <Gallery key={data.key} savedPhotos={this.state.savedPhotos} />
-        );
-      } else if(data.isImage) {
-        return (
-          <ImageScreen
-            key={data.key}
-            data={data.image}
-            goToCamera={() => this.scrollTo(1)}
-            saveToDevice={() => {
-              this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + data.image, "NO_ALBUM").then(() => {
+      return (
+        <ImageScreen
+          key={data.key}
+          data={data.image}
+          goToCamera={() => this.scrollTo(1)}
+          saveToDevice={() => {
+            this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + data.image, "NO_ALBUM").then(() => {
+              this.reloadImages();
+            });
+            this.scrollPageProg = () => {
+              this.props.removeFromReel(index, (index) => {
+                this.scrollTo(index, false);
+              });
+            };
+            if(data.postAction == POST_ACTION_SCROLL.LEFT) {
+              this.scrollTo(index - 1);
+            } else {
+              this.scrollTo(index + 1);
+            }
+          }}
+          onFinish={(action) => {
+            if(action) {
+              this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + data.image).then(() => {
                 this.reloadImages();
               });
-              this.scrollPageProg = () => {
-                this.props.removeFromReel(index, (index) => {
-                  this.scrollTo(index, false);
-                });
-              };
-              if(data.postAction == POST_ACTION_SCROLL.LEFT) {
-                this.scrollTo(index - 1);
-              } else {
-                this.scrollTo(index + 1);
-              }
-            }}
-            onFinish={(action) => {
-              if(action) {
-                this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + data.image).then(() => {
-                  this.reloadImages();
-                });
-              }
-              this.scrollPageProg = () => {
-                this.props.removeFromReel(index, (index) => {
-                  this.scrollTo(index, false);
-                });
-              };
-              if(data.postAction == POST_ACTION_SCROLL.LEFT) {
-                this.scrollTo(index - 1);
-              } else {
-                this.scrollTo(index + 1);
-              }
-            }}/>
-        );
-      } else {
-        const hasPreviewReel = (this.props.previewReel.length - 2) > 0;
-        const hasGallery = this.state.savedPhotos.length > 0;
-        return (
-          <TasvirCamera
-            key={data.key}
-            preview={hasPreviewReel ? this.props.previewReel[2].image : null}
-            previewCount={this.props.previewReel.length - 2}
-            gallery={hasGallery ? (this.state.savedPhotos[0].node.image.uri) : null}
-            goToPreview={() => this.scrollTo(2)}
-            goToGallery={() => this.scrollTo(0)}
-            takePicture={this.takePicture} />
-        );
-      }
+            }
+            this.scrollPageProg = () => {
+              this.props.removeFromReel(index, (index) => {
+                this.scrollTo(index, false);
+              });
+            };
+            if(data.postAction == POST_ACTION_SCROLL.LEFT) {
+              this.scrollTo(index - 1);
+            } else {
+              this.scrollTo(index + 1);
+            }
+          }}/>
+      );
     });
   }
 
   render() {
+    const hasPreviewReel = this.props.previewReel.length > 0;
+    const hasGallery = this.state.savedPhotos.length > 0;
     return (
       <View style={styles.container}>
         <Swiper
@@ -215,6 +198,15 @@ class App extends Component {
                 this.props.updateCurrentIndex(page);
               }
             }}>
+            <Gallery key={'GALLERY'} savedPhotos={this.state.savedPhotos} />
+            <TasvirCamera
+              key={'CAMERA'}
+              preview={hasPreviewReel ? this.props.previewReel[0].image : null}
+              previewCount={this.props.previewReel.length}
+              gallery={hasGallery ? (this.state.savedPhotos[0].node.image.uri) : null}
+              goToPreview={() => this.scrollTo(2)}
+              goToGallery={() => this.scrollTo(0)}
+              takePicture={this.takePicture} />
             {this.renderPages()}
           </ScrollView>
           <Menu />

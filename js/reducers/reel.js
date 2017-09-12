@@ -3,16 +3,12 @@ import * as Actions from '../actions/reel';
 
 import { INIT_REEL, POST_ACTION_SCROLL, CAMERA_PAGE, MENU_PAGE } from '../constants';
 
-function previewReel(state = INIT_REEL, action) {
+function previewReel(state = [], action) {
   switch(action.type) {
     case Actions.LOAD_PREVIEW_REEL:
       return action.previewReel;
     case Actions.REEL_ADD_IMAGE:
-      return [
-        ...state.slice(0, action.index),
-        action.imagePack,
-        ...state.slice(action.index)
-      ];
+      return [action.imagePack, ...state];
     case Actions.REEL_REMOVE_IMAGE:
       return [
         ...state.slice(0, action.index),
@@ -23,8 +19,7 @@ function previewReel(state = INIT_REEL, action) {
       imagePackRightmost.postAction = POST_ACTION_SCROLL.LEFT;
       return [
         ...state.slice(0, action.index - 1),
-        imagePackRightmost,
-        ...state.slice(action.index + 1)
+        imagePackRightmost
       ];
     default:
       return state;

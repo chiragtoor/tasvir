@@ -55,7 +55,7 @@ export function addToReel(image) {
 export function removeFromReel(index, scrollCallback) {
   return (dispatch, getState) => {
     const {reel: {currentIndex, cameraIndex, previewReel}} = getState();
-    if(index == (previewReel.length - 1)) {
+    if(index == (previewReel.length - 1) && previewReel.length > 1) {
       dispatch(removeImageRightEdge(index));
     } else {
       dispatch(removeImage(index));
