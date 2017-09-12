@@ -9,36 +9,37 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 
-import * as Actions from '../../actions';
+import * as Actions from '../actions';
 
-import TasvirButton from '../../common/components/TasvirButton';
-import TasvirDirections from '../../common/components/TasvirDirections';
+import TasvirButton from '../common/components/TasvirButton';
+import TasvirDirections from '../common/components/TasvirDirections';
 
 class CloseAlbum extends Component {
   constructor(props) {
     super(props);
 
-    console.log("CLOSE ALBUM");
-    console.log(props);
+    this.state = {
+      closeAlbum: props.navigation.state.routeName === 'CloseAlbum'
+    }
   }
   render() {
-    const directions = this.props.closeAlbum ?
+    const directions = this.state.closeAlbum ?
       "Are you sure you want to close the album ''" + this.props.albumName + "''?"
-      : "Do you want to join the album ''" + this.props.albumName + "''?";
+      : "Do you want to join the album ''" + this.props.joinAlbumName + "''?";
     return (
       <View style={styles.page}>
         <TasvirDirections directions={directions} />
         <View style={styles.margin} />
         <TasvirButton
-          onPress={() => this.props.closeAlbum ? this.props.keepAlbumOpen() : this.props.joinAlbum()}
+          onPress={() => this.state.closeAlbum ? this.props.keepAlbumOpen() : this.props.joinAlbum()}
           disabled={false}
-          text={this.props.closeAlbum ? 'Keep Album Open': 'Yes'} />
+          text={this.state.closeAlbum ? 'Keep Album Open': 'Yes'} />
         <View style={styles.margin} />
         <TasvirButton
           secondary={true}
-          onPress={() => this.props.closeAlbum ? this.props.closeAlbum() : this.props.rejectAlbum()}
+          onPress={() => this.state.closeAlbum ? this.props.closeAlbum() : this.props.rejectAlbum()}
           disabled={false}
-          text={this.props.closeAlbum ? 'Close Album' : 'No'} />
+          text={this.state.closeAlbum ? 'Close Album' : 'No'} />
       </View>
     );
   }
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     albumName: state.album.name,
-    closeAlbum: state.album.closeAlbum
+    joinAlbumName: state.joinAlbumForm.name
   };
 };
 const mapDispatchToProps = (dispatch) => {

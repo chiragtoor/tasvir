@@ -27,7 +27,6 @@ import settings from './reducers/settings';
 import Splash from './screens/Splash';
 import App from './screens/App';
 import CloseAlbum from './screens/CloseAlbum';
-import JoinAlbum from './screens/JoinAlbum';
 import Walkthrough from './screens/Walkthrough';
 
 import { loadAndDispatchState } from './actions';
@@ -40,8 +39,8 @@ const loggerMiddleware = createLogger({
 const TasvirNavigator = StackNavigator({
   App: {screen: App },
   Splash: {screen: Splash},
-  CloseAlbum: {screen: CloseAlbum, closeAlbum: true},
-  JoinAlbum: {screen: JoinAlbum},
+  CloseAlbum: {screen: CloseAlbum},
+  JoinAlbum: {screen: CloseAlbum},
   Walkthrough: {screen: Walkthrough}
 }, {
   // on iOS screens coming from bottom up look better, no effect on Android
