@@ -83,7 +83,7 @@ export function uploadImage(image) {
       type : 'image/jpg'
     }
 
-    request.post(URL + ALBUMS_ENDPOINT + '/' + id + '/photo')
+    return request.post(URL + ALBUMS_ENDPOINT + '/' + id + '/photo')
       .attach('photo', file)
       .then((response) => response.body)
       .then((responseJson) => {

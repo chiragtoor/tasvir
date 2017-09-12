@@ -40,7 +40,7 @@ const loggerMiddleware = createLogger({
 const TasvirNavigator = StackNavigator({
   App: {screen: App },
   Splash: {screen: Splash},
-  CloseAlbum: {screen: CloseAlbum},
+  CloseAlbum: {screen: CloseAlbum, closeAlbum: true},
   JoinAlbum: {screen: JoinAlbum},
   Walkthrough: {screen: Walkthrough}
 }, {

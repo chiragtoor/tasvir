@@ -34,6 +34,6 @@ export function joinAlbum() {
 
 export function attemptJoinAlbum() {
   return (dispatch) => {
-  dispatch(NavigationActions.navigate({ routeName: 'JoinAlbum' }));
+    dispatch(NavigationActions.navigate({ routeName: 'JoinAlbum' }));
   }
 }

@@ -1,6 +1,5 @@
 import { NavigationActions } from 'react-navigation';
 import { AsyncStorage, CameraRoll } from 'react-native';
-import branch from 'react-native-branch';
 
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
          AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, ALBUMS_ENDPOINT, DOWNLOADED_PHOTOS_STORAGE } from '../constants';
@@ -39,13 +38,13 @@ export function saveImage(imageUrl, photoId) {
     const {album: {savedPhotos, id}} = getState();
     if(id) {
       if(photoId === "NO_ALBUM") {
-        CameraRoll.saveToCameraRoll(imageUrl);
+        return CameraRoll.saveToCameraRoll(imageUrl);
       } else if(!(savedPhotos.includes(photoId))) {
-        CameraRoll.saveToCameraRoll(imageUrl);
         dispatch(Album.addSavedPhoto(photoId));
+        return CameraRoll.saveToCameraRoll(imageUrl);
       }
     } else {
-      CameraRoll.saveToCameraRoll(imageUrl);
+      return CameraRoll.saveToCameraRoll(imageUrl);
     }
   }
 }
@@ -82,29 +81,9 @@ export function loadAndDispatchState() {
 
       if(getValue(value, WALKTHROUGH_FLAG_STORAGE)) {
         dispatch(NavigationActions.navigate({routeName: 'App'}));
-        branch.subscribe(({ error, params }) => {
-          if (params && !error) {
-            const albumId = params['album_id'];
-            const albumName = params['album_name'];
-          	if(albumId && albumName) {
-              dispatch(JoinAlbumForm.updateId(albumId));
-              dispatch(JoinAlbumForm.updateName(albumName));
-              dispatch(NavigationActions.navigate({routeName: 'JoinAlbum'}));
-            }
-
-          }
-        })
       } else {
         Storage.walkthroughCompleted();
         dispatch(NavigationActions.navigate({routeName: 'Walkthrough'}));
-        branch.getFirstReferringParams().then(params => {
-          const albumId = params['album_id'];
-          const albumName = params['album_name'];
-          if(albumId && albumName) {
-            dispatch(JoinAlbumForm.updateId(albumId));
-            dispatch(JoinAlbumForm.updateName(albumName));
-          }
-        });
       }
 
       if(albumId) {

@@ -62,13 +62,9 @@ export default class TasvirCamera extends Component {
           <View style={{position: 'absolute', flex: 1, width: Dimensions.get('window').width, height: Dimensions.get('window').height, justifyContent: 'space-between', paddingTop: 20, paddingBottom: 20}}>
             <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
               <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
-                <TouchableOpacity onPress={() => this.flipCamera()}>
-                  <View style={styles.onPreviewButtonBorder}>
-                    <View style={styles.onPreviewButton}>
-                      <Image style={{flex: 1, width: 20, resizeMode: 'contain'}} source={require('../../../img/camera_flip_icon.png')}/>
-                    </View>
-                  </View>
-                </TouchableOpacity>
+                <TasvirIconButton
+                  onPress={() => this.flipCamera()}
+                  content={<Image style={{flex: 1, width: 20, resizeMode: 'contain'}} source={require('../../../img/camera_flip_icon.png')}/>} />
               </View>
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>

@@ -21,6 +21,7 @@ import Swiper from 'react-native-swiper';
 import { Socket } from 'phoenix';
 
 import FontAwesome, { Icons } from 'react-native-fontawesome';
+import branch from 'react-native-branch';
 
 import ImageScreen from './ImageScreen';
 import { URL_BASE, POST_ACTION_SCROLL } from '../../constants';
@@ -49,7 +50,7 @@ class App extends Component {
     }
 
     CameraRoll.getPhotos({
-      first: 20,
+      first: 9,
       assetType: 'Photos'
     }).then(r => {
       console.log(r.edges[0].node.image.uri);
@@ -58,13 +59,10 @@ class App extends Component {
   }
 
   reloadImages = () => {
-    console.log("AJIT: RELOADING IMAGES");
     CameraRoll.getPhotos({
-      first: 20,
+      first: 9,
       assetType: 'Photos'
     }).then(r => {
-      console.log("AJIT: IMAGES LOADED");
-      console.log("AJIT: ", r.edges[0].node.image.uri);
       this.setState({ savedPhotos: r.edges })
     })
   }
@@ -91,6 +89,16 @@ class App extends Component {
     if(this.props.albumId) {
       this.connectSocket(this.props.albumId);
     }
+    branch.getLatestReferringParams().then((params) => {
+        const albumId = params['album_id'];
+        const albumName = params['album_name'];
+        if(albumId && albumName && albumId !== this.props.albumId) {
+          this.props.joinAlbumUpdateId(albumId);
+          this.props.joinAlbumUpdateName(albumName);
+          this.props.attemptJoinAlbum();
+        }
+
+      });
   }
 
   scrollTo = (page, animated = true) => {
@@ -99,7 +107,6 @@ class App extends Component {
 
   addImage = (image) => {
     if(this.props.autoShare) {
-      console.log("AJIT: AUTO SHARING");
       this.props.uploadImage((RNFS.DocumentDirectoryPath + '/' + image));
       this.reloadImages();
     } else {
@@ -112,8 +119,11 @@ class App extends Component {
       const path = data.path.split('/Documents/');
       this.addImage(path[1]);
     } else {
-      this.props.saveImage(data.path, "NO_ALBUM");
-      this.reloadImages();
+      this.props.saveImage(data.path, "NO_ALBUM").then((uri) => {
+        console.log("IMAGE TAKEN");
+        console.log(uri);
+        this.reloadImages();
+      });
     }
   }
 
@@ -130,8 +140,9 @@ class App extends Component {
             data={data.image}
             goToCamera={() => this.scrollTo(1)}
             saveToDevice={() => {
-              this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + data.image, "NO_ALBUM");
-              this.reloadImages();
+              this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + data.image, "NO_ALBUM").then(() => {
+                this.reloadImages();
+              });
               this.scrollPageProg = () => {
                 this.props.removeFromReel(index, (index) => {
                   this.scrollTo(index, false);
@@ -147,8 +158,9 @@ class App extends Component {
             onSwipeEnd={() => this.props.unlockViewPager()}
             onFinish={(action) => {
               if(action) {
-                this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + data.image);
-                this.reloadImages();
+                this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + data.image).then(() => {
+                  this.reloadImages();
+                });
               }
               this.scrollPageProg = () => {
                 this.props.removeFromReel(index, (index) => {
