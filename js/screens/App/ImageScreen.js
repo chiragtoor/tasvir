@@ -24,7 +24,7 @@ export default class ImageScreen extends Component {
       this.state.pan,
       {toValue: {x:0, y: -1 * Dimensions.get('window').height}, duration: 250}
     ).start(() => {
-      this.props.onFinish(true);
+      this.props.onFinish(1);
     });
   }
 
@@ -36,7 +36,7 @@ export default class ImageScreen extends Component {
       this.state.pan,
       {toValue: {x:0, y: Dimensions.get('window').height}, duration: 250}
     ).start(() => {
-      this.props.onFinish(false);
+      this.props.onFinish(0);
     });
   }
 
@@ -48,7 +48,7 @@ export default class ImageScreen extends Component {
       this.state.scale,
       {toValue: 0, duration: 250}
     ).start(() => {
-      this.props.saveToDevice();
+      this.props.onFinish(2);
     });
   }
 

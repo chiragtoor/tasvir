@@ -8,18 +8,11 @@ function previewReel(state = [], action) {
     case Actions.LOAD_PREVIEW_REEL:
       return action.previewReel;
     case Actions.REEL_ADD_IMAGE:
-      return [action.imagePack, ...state];
+      return [action.image, ...state];
     case Actions.REEL_REMOVE_IMAGE:
       return [
         ...state.slice(0, action.index),
         ...state.slice(action.index + 1)
-      ];
-    case Actions.REEL_REMOVE_IMAGE_RIGHT_EDGE:
-      let imagePackRightmost = state[action.index - 1];
-      imagePackRightmost.postAction = POST_ACTION_SCROLL.LEFT;
-      return [
-        ...state.slice(0, action.index - 1),
-        imagePackRightmost
       ];
     default:
       return state;

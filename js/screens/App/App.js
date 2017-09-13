@@ -126,49 +126,6 @@ class App extends Component {
     }
   }
 
-  renderPages = () => {
-    return this.props.previewReel.map((data, index) => {
-      return (
-        <ImageScreen
-          key={data.key}
-          data={data.image}
-          goToCamera={() => this.scrollTo(1)}
-          saveToDevice={() => {
-            this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + data.image, "NO_ALBUM").then(() => {
-              this.reloadImages();
-            });
-            this.scrollPageProg = () => {
-              this.props.removeFromReel(index, (index) => {
-                this.scrollTo(index, false);
-              });
-            };
-            if(data.postAction == POST_ACTION_SCROLL.LEFT) {
-              this.scrollTo(index - 1);
-            } else {
-              this.scrollTo(index + 1);
-            }
-          }}
-          onFinish={(action) => {
-            if(action) {
-              this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + data.image).then(() => {
-                this.reloadImages();
-              });
-            }
-            this.scrollPageProg = () => {
-              this.props.removeFromReel(index, (index) => {
-                this.scrollTo(index, false);
-              });
-            };
-            if(data.postAction == POST_ACTION_SCROLL.LEFT) {
-              this.scrollTo(index - 1);
-            } else {
-              this.scrollTo(index + 1);
-            }
-          }}/>
-      );
-    });
-  }
-
   render() {
     const hasPreviewReel = this.props.previewReel.length > 0;
     const hasGallery = this.state.savedPhotos.length > 0;
@@ -201,13 +158,49 @@ class App extends Component {
             <Gallery key={'GALLERY'} savedPhotos={this.state.savedPhotos} />
             <TasvirCamera
               key={'CAMERA'}
-              preview={hasPreviewReel ? this.props.previewReel[0].image : null}
+              preview={hasPreviewReel ? this.props.previewReel[0] : null}
               previewCount={this.props.previewReel.length}
               gallery={hasGallery ? (this.state.savedPhotos[0].node.image.uri) : null}
               goToPreview={() => this.scrollTo(2)}
               goToGallery={() => this.scrollTo(0)}
               takePicture={this.takePicture} />
-            {this.renderPages()}
+              {this.props.previewReel.map((image, imageIndex) => {
+                // because previewReel is rendered after the gallery and camera, +2 to the index
+                //  so we scrollTo the correct position in the onFinish action callback
+                const currentPage = imageIndex + 2;
+                return (
+                  <ImageScreen
+                    key={image}
+                    data={image}
+                    goToCamera={() => this.scrollTo(1)}
+                    onFinish={(action) => {
+                      if(action == 0) {
+                        this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + image).then(() => {
+                          this.reloadImages();
+                        });
+                      } else if(action == 2) {
+                        this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + image, "NO_ALBUM").then(() => {
+                          this.reloadImages();
+                        });
+                      }
+
+                      this.scrollPageProg = () => {
+                        this.props.removeImage(imageIndex);
+                        if(imageIndex == (this.props.previewReel.length - 1)) {
+                          this.props.updateCurrentIndex(this.props.currentIndex - 1);
+                          this.scrollTo(currentPage - 1, false);
+                        } else {
+                          this.scrollTo(currentPage, false);
+                        }
+                      };
+                      if(imageIndex == (this.props.previewReel.length - 1)) {
+                        this.scrollTo(currentPage - 1);
+                      } else {
+                        this.scrollTo(currentPage + 1);
+                      }
+                    }}/>
+                );
+              })}
           </ScrollView>
           <Menu />
         </Swiper>
@@ -228,9 +221,9 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToReel: (image) => dispatch(Actions.Reel.addToReel(image)),
+    addToReel: (image) => dispatch(Actions.Reel.addImage(image)),
     updateCurrentIndex: (index) => dispatch(Actions.Reel.updateCurrentIndex(index)),
-    removeFromReel: (index, scrollCallback) => dispatch(Actions.Reel.removeFromReel(index, scrollCallback)),
+    removeImage: (index) => dispatch(Actions.Reel.removeImage(index)),
     uploadImage: (image) => dispatch(Actions.TasvirApi.uploadImage(image)),
     joinAlbumUpdateName: (name) => dispatch(Actions.JoinAlbumForm.updateName(name)),
     joinAlbumUpdateId: (id) => dispatch(Actions.JoinAlbumForm.updateId(id)),
