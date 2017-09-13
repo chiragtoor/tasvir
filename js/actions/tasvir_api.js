@@ -4,6 +4,7 @@ import request from 'superagent';
 
 import * as AlbumForm from './album_form';
 import * as Album from './album';
+import * as Photos from './photos';
 import * as Reel from './reel';
 
 import * as Storage from '../storage';
@@ -54,7 +55,7 @@ export function createAlbum() {
 
 export function loadAlbum() {
   return (dispatch, getState) => {
-    const { album: { id, savedPhotos } } = getState();
+    const {album: {id}, photos: {savedPhotoIds}} = getState();
 
     fetch(URL + ALBUMS_ENDPOINT + "/" +  id)
     .then((response) => response.json())
@@ -63,9 +64,9 @@ export function loadAlbum() {
         dispatch(Album.updateLink(responseJson.link));
         for(var i = 0; i < responseJson.photos.length; i++) {
           const photo = responseJson.photos[i];
-          if(!(savedPhotos.includes(photo.id))) {
+          if(!(savedPhotoIds.includes(photo.id))) {
             CameraRoll.saveToCameraRoll(photo.photo);
-            dispatch(Album.addSavedPhoto(photo.id));
+            dispatch(Photos.addSavedPhoto(photo.id));
           }
         }
       }

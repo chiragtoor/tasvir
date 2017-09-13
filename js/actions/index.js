@@ -10,6 +10,7 @@ import * as AlbumForm from './album_form';
 import * as JoinAlbumForm from './join_album_form';
 import * as Settings from './settings';
 import * as TasvirApi from './tasvir_api';
+import * as Photos from './photos';
 
 import * as Storage from '../storage';
 
@@ -18,13 +19,15 @@ export {Reel as Reel,
         AlbumForm as AlbumForm,
         JoinAlbumForm as JoinAlbumForm,
         Settings as Settings,
-        TasvirApi as TasvirApi};
+        TasvirApi as TasvirApi,
+        Photos as Photos};
 
 export const NAVIGATE = 'Navigation/NAVIGATE';
 
 export function completeWalkthrough() {
   return (dispatch, getState) => {
     const { joinAlbumForm: { id, name } } = getState();
+    dispatch(Photos.loadGalleryImages());
     if(id && name) {
       dispatch(NavigationActions.navigate({routeName: 'JoinAlbum'}));
     } else {
@@ -35,16 +38,22 @@ export function completeWalkthrough() {
 
 export function saveImage(imageUrl, photoId) {
   return (dispatch, getState) => {
-    const {album: {savedPhotos, id}} = getState();
+    const {album: {id}, photos: {savedPhotoIds}} = getState();
     if(id) {
       if(photoId === "NO_ALBUM") {
-        return CameraRoll.saveToCameraRoll(imageUrl);
-      } else if(!(savedPhotos.includes(photoId))) {
+        CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
+          dispatch(Photos.loadGalleryImages());
+        });
+      } else if(!(savedPhotoIds.includes(photoId))) {
         dispatch(Album.addSavedPhoto(photoId));
-        return CameraRoll.saveToCameraRoll(imageUrl);
+        CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
+          dispatch(Photos.loadGalleryImages());
+        });
       }
     } else {
-      return CameraRoll.saveToCameraRoll(imageUrl);
+      CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
+        dispatch(Photos.loadGalleryImages());
+      });
     }
   }
 }
@@ -76,10 +85,11 @@ export function loadAndDispatchState() {
       }
 
       if(savedPhotos) {
-        dispatch(Album.loadSavedPhotos(savedPhotos));
+        dispatch(Photos.loadSavedPhotos(savedPhotos));
       }
 
       if(getValue(value, WALKTHROUGH_FLAG_STORAGE)) {
+        dispatch(Photos.loadGalleryImages());
         dispatch(NavigationActions.navigate({routeName: 'App'}));
       } else {
         Storage.walkthroughCompleted();

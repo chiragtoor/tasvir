@@ -23,6 +23,7 @@ import albumForm from './reducers/album_form';
 import joinAlbumForm from './reducers/join_album_form';
 import reel from './reducers/reel';
 import settings from './reducers/settings';
+import photos from './reducers/photos';
 
 import Splash from './screens/Splash';
 import App from './screens/App';
@@ -71,7 +72,8 @@ const appReducer = combineReducers({
   album: album,
   albumForm: albumForm,
   joinAlbumForm: joinAlbumForm,
-  settings: settings
+  settings: settings,
+  photos: photos
 });
 
 class NavWrapper extends React.Component {
@@ -108,8 +110,8 @@ const store = configureStore({});
 store.subscribe(() => {
   const previewReel = store.getState().reel.previewReel;
   Storage.savePreviewReel(previewReel);
-  const savedPhotos = store.getState().album.savedPhotos;
-  Storage.saveDownloadedPhotos(savedPhotos);
+  const savedPhotoIds = store.getState().photos.savedPhotoIds;
+  Storage.saveDownloadedPhotos(savedPhotoIds);
 })
 
 store.dispatch(loadAndDispatchState());

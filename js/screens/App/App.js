@@ -43,31 +43,6 @@ const w = Dimensions.get('window').width;
 
 class App extends Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      savedPhotos: []
-    }
-
-    CameraRoll.getPhotos({
-      first: 9,
-      assetType: 'Photos'
-    }).then(r => {
-      console.log(r.edges[0].node.image.uri);
-      this.setState({ savedPhotos: r.edges })
-    })
-  }
-
-  reloadImages = () => {
-    CameraRoll.getPhotos({
-      first: 9,
-      assetType: 'Photos'
-    }).then(r => {
-      this.setState({ savedPhotos: r.edges })
-    })
-  }
-
   connectSocket = (albumId) => {
     // connect to album web socket
     let socket = new Socket((URL_BASE + "socket"), {
@@ -81,7 +56,6 @@ class App extends Component {
 
     chan.on("new:photo", msg => {
       this.props.saveImage(msg.photo, msg.id);
-      this.reloadImages();
     });
   }
 
@@ -109,7 +83,6 @@ class App extends Component {
   addImage = (image) => {
     if(this.props.autoShare) {
       this.props.uploadImage((RNFS.DocumentDirectoryPath + '/' + image));
-      this.reloadImages();
     } else {
       this.props.addToReel(image);
     }
@@ -120,15 +93,13 @@ class App extends Component {
       const path = data.path.split('/Documents/');
       this.addImage(path[1]);
     } else {
-      this.props.saveImage(data.path, "NO_ALBUM").then((uri) => {
-        this.reloadImages();
-      });
+      this.props.saveImage(data.path, "NO_ALBUM");
     }
   }
 
   render() {
     const hasPreviewReel = this.props.previewReel.length > 0;
-    const hasGallery = this.state.savedPhotos.length > 0;
+    const hasGallery = this.props.galleryImages.length > 0;
     return (
       <View style={styles.container}>
         <Swiper
@@ -155,12 +126,12 @@ class App extends Component {
                 this.props.updateCurrentIndex(page);
               }
             }}>
-            <Gallery key={'GALLERY'} savedPhotos={this.state.savedPhotos} />
+            <Gallery key={'GALLERY'} savedPhotos={this.props.galleryImages} />
             <TasvirCamera
               key={'CAMERA'}
               preview={hasPreviewReel ? this.props.previewReel[0] : null}
               previewCount={this.props.previewReel.length}
-              gallery={hasGallery ? (this.state.savedPhotos[0].node.image.uri) : null}
+              gallery={hasGallery ? (this.props.galleryImages[0].node.image.uri) : null}
               goToPreview={() => this.scrollTo(2)}
               goToGallery={() => this.scrollTo(0)}
               takePicture={this.takePicture} />
@@ -175,13 +146,9 @@ class App extends Component {
                     goToCamera={() => this.scrollTo(1)}
                     onFinish={(action) => {
                       if(action == 0) {
-                        this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + image).then(() => {
-                          this.reloadImages();
-                        });
+                        this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + image);
                       } else if(action == 2) {
-                        this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + image, "NO_ALBUM").then(() => {
-                          this.reloadImages();
-                        });
+                        this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + image, "NO_ALBUM");
                       }
 
                       this.scrollPageProg = () => {
@@ -217,6 +184,10 @@ const mapStateToProps = (state) => {
     previewReel: state.reel.previewReel,
     viewPagerLocked: state.reel.viewPagerLocked,
     currentIndex: state.reel.currentIndex,
+    // settings state
+    autoShare: state.settings.autoShare,
+    // photos state
+    galleryImages: state.photos.galleryImages
   };
 };
 const mapDispatchToProps = (dispatch) => {

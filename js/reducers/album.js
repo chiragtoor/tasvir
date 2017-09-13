@@ -19,17 +19,6 @@ function name(state = null, action) {
   }
 }
 
-function savedPhotos(state = [], action) {
-  switch(action.type) {
-    case Actions.LOAD_SAVED_PHOTOS:
-      return action.savedPhotos;
-    case Actions.ADD_SAVED_PHOTO:
-      return [...state, action.savedPhoto];
-    default:
-      return state;
-  }
-}
-
 function link(state = null, action) {
   switch(action.type) {
     case Actions.LOAD_LINK:
@@ -42,7 +31,6 @@ function link(state = null, action) {
 const album = combineReducers({
   id,
   name,
-  savedPhotos,
   link
 });
 
