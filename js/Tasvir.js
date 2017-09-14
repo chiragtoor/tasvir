@@ -31,6 +31,7 @@ import AlbumAction from './screens/AlbumAction';
 import Walkthrough from './screens/Walkthrough';
 
 import { loadAndDispatchState } from './actions';
+import * as Storage from './storage';
 
 const loggerMiddleware = createLogger({
   predicate: (getState, action) => __DEV__
@@ -103,6 +104,16 @@ configureStore = (initialState) => {
 }
 
 const store = configureStore({});
+
+// in order to persist the reel to state since actions fire before the change
+//   and reducers are meant to be pure, no side-effects
+store.subscribe(() => {
+  const previewReel = store.getState().reel.previewReel;
+  Storage.savePreviewReel(previewReel);
+  const savedPhotoIds = store.getState().photos.savedPhotoIds;
+  Storage.saveDownloadedPhotos(savedPhotoIds);
+})
+
 store.dispatch(loadAndDispatchState());
 
 export default class Tasvir extends React.Component {

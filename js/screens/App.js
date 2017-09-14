@@ -43,15 +43,14 @@ class App extends Component {
     this.scrollTo(Actions.CAMERA_INDEX);
     if(this.props.albumId) this.connectSocket();
     branch.getLatestReferringParams().then((params) => {
-        const albumId = params['album_id'];
-        const albumName = params['album_name'];
-        if(albumId && albumName && albumId !== this.props.albumId) {
-          this.props.joinAlbumUpdateId(albumId);
-          this.props.joinAlbumUpdateName(albumName);
-          this.props.attemptJoinAlbum();
-        }
-
-      });
+      const albumId = params['album_id'];
+      const albumName = params['album_name'];
+      if(albumId && albumName && albumId !== this.props.albumId) {
+        this.props.joinAlbumUpdateId(albumId);
+        this.props.joinAlbumUpdateName(albumName);
+        this.props.attemptJoinAlbum();
+      }
+    });
   }
 
   scrollTo = (page, animated = true) => {

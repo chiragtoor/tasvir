@@ -10,17 +10,13 @@ export function loadSavedPhotos(savedPhotos) {
 }
 
 export function addSavedPhoto(savedPhoto) {
-  return (dispatch, getState) => {
-    const { photos: { savedPhotoIds } } = getState();
-    Storage.saveDownloadedPhotos([savedPhoto, ...savedPhotoIds]);
-    dispatch({type: ADD_SAVED_PHOTO, savedPhoto });
-  }
+  return {type: ADD_SAVED_PHOTO, savedPhoto };
 }
 
 export function loadGalleryImages() {
   return (dispatch) => {
     CameraRoll.getPhotos({
-      first: 3,
+      first: 20,
       assetType: 'Photos'
     }).then(roll => {
       dispatch({type: LOAD_GALLERY_PHOTOS, galleryImages: roll.edges })

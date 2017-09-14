@@ -14,11 +14,7 @@ export function loadPreviewReel(previewReel) {
 }
 
 export function addImage(image) {
-  return (dispatch, getState) => {
-    const { reel: { previewReel } } = getState();
-    Storage.savePreviewReel([image, ...previewReel]);
-    dispatch({type: REEL_ADD_IMAGE, image});
-  }
+  return {type: REEL_ADD_IMAGE, image};
 }
 
 export function removeImage(index) {
