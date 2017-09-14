@@ -2,9 +2,13 @@ import React, {Component} from 'react';
 import {View, Text, Dimensions, StyleSheet, Image, Animated, TouchableOpacity} from 'react-native';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 var RNFS = require('react-native-fs');
+import { connect } from 'react-redux';
+
+import * as Actions from '../../actions';
+
 import TasvirIconButton from '../../common/components/TasvirIconButton';
 
-export default class ImageScreen extends Component {
+class ImageScreen extends Component {
 
   constructor(props) {
     super(props);
@@ -36,7 +40,8 @@ export default class ImageScreen extends Component {
       this.state.pan,
       {toValue: {x:0, y: Dimensions.get('window').height}, duration: 250}
     ).start(() => {
-      this.props.onFinish(0);
+      this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + this.props.data);
+      this.props.onFinish();
     });
   }
 
@@ -48,7 +53,8 @@ export default class ImageScreen extends Component {
       this.state.scale,
       {toValue: 0, duration: 250}
     ).start(() => {
-      this.props.onFinish(2);
+      this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + this.props.data, "NO_ALBUM");
+      this.props.onFinish();
     });
   }
 
@@ -131,3 +137,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF2C55"
   }
 });
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    uploadImage: (image) => dispatch(Actions.TasvirApi.uploadImage(image)),
+    saveImage: (photo, photoId) => dispatch(Actions.saveImage(photo, photoId))
+  };
+};
+export default connect(null, mapDispatchToProps)(ImageScreen);

@@ -43,7 +43,7 @@ const w = Dimensions.get('window').width;
 
 class App extends Component {
 
-  connectSocket = (albumId) => {
+  connectSocket = () => {
     // connect to album web socket
     let socket = new Socket((URL_BASE + "socket"), {
       logger: ((kind, msg, data) => { console.log(`${kind}: ${msg}`, data) })
@@ -51,7 +51,7 @@ class App extends Component {
 
     socket.connect();
 
-    var chan = socket.channel("album:" + albumId, {});
+    var chan = socket.channel("album:" + this.props.albumId, {});
     chan.join();
 
     chan.on("new:photo", msg => {
@@ -61,9 +61,7 @@ class App extends Component {
 
   componentDidMount() {
     this.scrollTo(1);
-    if(this.props.albumId) {
-      this.connectSocket(this.props.albumId);
-    }
+    if(this.props.albumId) this.connectSocket();
     branch.getLatestReferringParams().then((params) => {
         const albumId = params['album_id'];
         const albumName = params['album_name'];
@@ -80,26 +78,7 @@ class App extends Component {
     this.ref.scrollTo({x: (w * page), y: 0, animated: animated});
   }
 
-  addImage = (image) => {
-    if(this.props.autoShare) {
-      this.props.uploadImage((RNFS.DocumentDirectoryPath + '/' + image));
-    } else {
-      this.props.addToReel(image);
-    }
-  }
-
-  takePicture = (data) => {
-    if(this.props.albumId) {
-      const path = data.path.split('/Documents/');
-      this.addImage(path[1]);
-    } else {
-      this.props.saveImage(data.path, "NO_ALBUM");
-    }
-  }
-
   render() {
-    const hasPreviewReel = this.props.previewReel.length > 0;
-    const hasGallery = this.props.galleryImages.length > 0;
     return (
       <View style={styles.container}>
         <Swiper
@@ -126,15 +105,11 @@ class App extends Component {
                 this.props.updateCurrentIndex(page);
               }
             }}>
-            <Gallery key={'GALLERY'} savedPhotos={this.props.galleryImages} />
+            <Gallery key={'GALLERY'} />
             <TasvirCamera
               key={'CAMERA'}
-              preview={hasPreviewReel ? this.props.previewReel[0] : null}
-              previewCount={this.props.previewReel.length}
-              gallery={hasGallery ? (this.props.galleryImages[0].node.image.uri) : null}
               goToPreview={() => this.scrollTo(2)}
-              goToGallery={() => this.scrollTo(0)}
-              takePicture={this.takePicture} />
+              goToGallery={() => this.scrollTo(0)} />
               {this.props.previewReel.map((image, imageIndex) => {
                 // because previewReel is rendered after the gallery and camera, +2 to the index
                 //  so we scrollTo the correct position in the onFinish action callback
@@ -144,13 +119,7 @@ class App extends Component {
                     key={image}
                     data={image}
                     goToCamera={() => this.scrollTo(1)}
-                    onFinish={(action) => {
-                      if(action == 0) {
-                        this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + image);
-                      } else if(action == 2) {
-                        this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + image, "NO_ALBUM");
-                      }
-
+                    onFinish={() => {
                       this.scrollPageProg = () => {
                         this.props.removeImage(imageIndex);
                         if(imageIndex == (this.props.previewReel.length - 1)) {
@@ -182,20 +151,13 @@ const mapStateToProps = (state) => {
     albumId: state.album.id,
     // reel state
     previewReel: state.reel.previewReel,
-    viewPagerLocked: state.reel.viewPagerLocked,
-    currentIndex: state.reel.currentIndex,
-    // settings state
-    autoShare: state.settings.autoShare,
-    // photos state
-    galleryImages: state.photos.galleryImages
+    currentIndex: state.reel.currentIndex
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToReel: (image) => dispatch(Actions.Reel.addImage(image)),
     updateCurrentIndex: (index) => dispatch(Actions.Reel.updateCurrentIndex(index)),
     removeImage: (index) => dispatch(Actions.Reel.removeImage(index)),
-    uploadImage: (image) => dispatch(Actions.TasvirApi.uploadImage(image)),
     joinAlbumUpdateName: (name) => dispatch(Actions.JoinAlbumForm.updateName(name)),
     joinAlbumUpdateId: (id) => dispatch(Actions.JoinAlbumForm.updateId(id)),
     attemptJoinAlbum: () => dispatch(Actions.JoinAlbumForm.attemptJoinAlbum()),

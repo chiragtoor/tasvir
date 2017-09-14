@@ -3,9 +3,13 @@ import {View, Text, Dimensions, StyleSheet, Image, Animated, TouchableOpacity} f
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Camera from 'react-native-camera';
 var RNFS = require('react-native-fs');
+import { connect } from 'react-redux';
+
+import * as Actions from '../../actions';
+
 import TasvirIconButton from '../../common/components/TasvirIconButton';
 
-export default class TasvirCamera extends Component {
+class TasvirCamera extends Component {
 
   constructor(props) {
     super(props);
@@ -25,7 +29,7 @@ export default class TasvirCamera extends Component {
     }
   }
 
-  takePicture = () => {
+  capture = () => {
     Animated.timing(
       this.state.captureFadeAnim, { toValue: 1, duration: 100 }
     ).start(() => {
@@ -35,14 +39,31 @@ export default class TasvirCamera extends Component {
     });
     this.camera.capture()
       .then((data) => {
-        this.props.takePicture(data);
+        this.takePicture(data);
       })
       .catch(err => console.error(err));
   }
 
+  addImage = (image) => {
+    if(this.props.autoShare) {
+      this.props.uploadImage((RNFS.DocumentDirectoryPath + '/' + image));
+    } else {
+      this.props.addToReel(image);
+    }
+  }
+
+  takePicture = (data) => {
+    if(this.props.albumId) {
+      const path = data.path.split('/Documents/');
+      this.addImage(path[1]);
+    } else {
+      this.props.saveImage(data.path, "NO_ALBUM");
+    }
+  }
+
   render() {
-    console.log("AJIT: RENDERING TASIVR_CAMERA");
-    console.log("AJIT: ", this.props.gallery);
+    const hasPreviewReel = this.props.previewReel.length > 0;
+    const hasGallery = this.props.galleryImages.length > 0;
     return (
       <View
         style={styles.container}>
@@ -69,12 +90,12 @@ export default class TasvirCamera extends Component {
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
-                {this.props.gallery ?
+                {hasGallery ?
                   <TasvirIconButton
                     onPress={this.props.goToGallery}
                     content={<Image
                                 style={styles.imageButton}
-                                source={{uri: this.props.gallery}}>
+                                source={{uri: this.props.galleryImages[0].node.image.uri}}>
                                 <View style={styles.imageButtonText}>
                                   <FontAwesome style={{color: "#FFFFFF"}}>{Icons.th}</FontAwesome>
                                 </View>
@@ -85,19 +106,19 @@ export default class TasvirCamera extends Component {
               </View>
               <View style={{flex: 1, alignItems: 'center'}}>
                 <TasvirIconButton
-                  onPress={this.takePicture}
+                  onPress={this.capture}
                   content={null}
                   sizeLarge={true} />
               </View>
               <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
-                {this.props.preview ?
+                {hasPreviewReel ?
                   <TasvirIconButton
                     onPress={this.props.goToPreview}
                     content={<Image
                                 style={styles.imageButton}
-                                source={{uri: (RNFS.DocumentDirectoryPath + '/' + this.props.preview)}}>
+                                source={{uri: (RNFS.DocumentDirectoryPath + '/' + this.props.previewReel[0])}}>
                                 <View style={styles.imageButtonText}>
-                                  <Text style={{color: '#FFFFFF', fontWeight: 'bold'}}>{this.props.previewCount}</Text>
+                                  <Text style={{color: '#FFFFFF', fontWeight: 'bold'}}>{this.props.previewReel.length}</Text>
                                 </View>
                               </Image>} />
                 :
@@ -157,3 +178,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0)'
   }
 });
+
+const mapStateToProps = (state) => {
+  return {
+  albumId: state.album.id,
+  // reel state
+  previewReel: state.reel.previewReel,
+  autoShare: state.settings.autoShare,
+  // photos state
+  galleryImages: state.photos.galleryImages
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToReel: (image) => dispatch(Actions.Reel.addImage(image)),
+    uploadImage: (image) => dispatch(Actions.TasvirApi.uploadImage(image)),
+    saveImage: (photo, photoId) => dispatch(Actions.saveImage(photo, photoId))
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(TasvirCamera);

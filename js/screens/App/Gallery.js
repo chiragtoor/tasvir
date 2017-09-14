@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import {View, ScrollView, Dimensions, StyleSheet, Image, Animated, TouchableOpacity} from 'react-native';
+import { connect } from 'react-redux';
+
+import * as Actions from '../../actions';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
-export default class Gallery extends Component {
+class Gallery extends Component {
 
   formatImages = (arr) => {
     return arr.map((p) => {
@@ -32,7 +35,7 @@ export default class Gallery extends Component {
   }
 
   render() {
-    const photos = this.formatImages(this.props.savedPhotos);
+    const photos = this.formatImages(this.props.galleryImages);
     return (
       <ScrollView style={{flex: 1, backgroundColor: "#48B2E2", height: HEIGHT, width: WIDTH}}>
         {photos.map((p, i) => {
@@ -74,3 +77,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#48B2E2',
   }
 });
+
+const mapStateToProps = (state) => {
+  return {
+  galleryImages: state.photos.galleryImages
+  };
+};
+export default connect(mapStateToProps, null)(Gallery);
