@@ -40,7 +40,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.scrollTo(1);
+    this.scrollTo(Actions.CAMERA_INDEX);
     if(this.props.albumId) this.connectSocket();
     branch.getLatestReferringParams().then((params) => {
         const albumId = params['album_id'];
