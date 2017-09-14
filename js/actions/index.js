@@ -22,6 +22,10 @@ export {Reel as Reel,
         TasvirApi as TasvirApi,
         Photos as Photos};
 
+export const GALLERY_INDEX = 0;
+export const CAMERA_INDEX = 1;
+export const PREVIEW_REEL_INDEX = 2;
+
 export const NAVIGATE = 'Navigation/NAVIGATE';
 
 export function completeWalkthrough() {

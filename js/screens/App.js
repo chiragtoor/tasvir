@@ -88,17 +88,17 @@ class App extends Component {
             <Gallery key={'GALLERY'} />
             <TasvirCamera
               key={'CAMERA'}
-              goToPreview={() => this.scrollTo(2)}
-              goToGallery={() => this.scrollTo(0)} />
+              goToPreview={() => this.scrollTo(Actions.PREVIEW_REEL_INDEX)}
+              goToGallery={() => this.scrollTo(Actions.GALLERY_INDEX)} />
               {this.props.previewReel.map((image, imageIndex) => {
                 // because previewReel is rendered after the gallery and camera, +2 to the index
                 //  so we scrollTo the correct position in the onFinish action callback
-                const currentPage = imageIndex + 2;
+                const currentPage = imageIndex + Actions.PREVIEW_REEL_INDEX;
                 return (
                   <ImageScreen
                     key={image}
                     data={image}
-                    goToCamera={() => this.scrollTo(1)}
+                    goToCamera={() => this.scrollTo(Actions.CAMERA_INDEX)}
                     onFinish={() => {
                       this.scrollPageProg = () => {
                         this.props.removeImage(imageIndex);
