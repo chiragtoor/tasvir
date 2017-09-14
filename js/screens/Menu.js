@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import {
-  Text,
   View,
-  ScrollView,
   Dimensions,
   Image,
   TextInput,
   StyleSheet,
+  TouchableOpacity,
   Share
 } from 'react-native';
 import { connect } from 'react-redux';
-import Button from 'react-native-button';
 
 import TasvirToggle from '../components/TasvirToggle';
 import TasvirButton from '../components/TasvirButton';
@@ -53,10 +51,10 @@ class Menu extends Component {
               onChangeText={(text) => this.props.albumFormUpdateName(text)}
               placeholder={'Enter a name for the album'}
               value={this.props.albumFormName} />
-            <Button
+            <TouchableOpacity
               onPress={() => this.props.resetAlbumForm()}>
               <Image style={{flex: 1, width: 20, resizeMode: 'contain'}} source={require('../../img/cancel_blue.png')}/>
-            </Button>
+            </TouchableOpacity>
           </View>
           <View style={styles.textInputLine} />
         </View>
@@ -113,7 +111,6 @@ const styles = StyleSheet.create({
   },
   menuHeader: {
     height: 100,
-    width: Dimensions.get('window').width,
     backgroundColor: "#48B2E2",
     justifyContent: 'center',
     alignItems: 'center'
@@ -140,7 +137,6 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   createGroupMenu: {
-    width: Dimensions.get('window').width,
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
