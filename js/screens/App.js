@@ -1,45 +1,25 @@
 import React, { Component } from 'react';
 import {
-  Text,
   View,
   ScrollView,
   Dimensions,
-  Image,
-  Switch,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Linking,
-  Animated,
-  Share,
-  CameraRoll
+  StyleSheet
 } from 'react-native';
-var RNFS = require('react-native-fs');
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
-
 import { Socket } from 'phoenix';
-
-import FontAwesome, { Icons } from 'react-native-fontawesome';
 import branch from 'react-native-branch';
 
 import ImageScreen from './ImageScreen';
 import Menu from './Menu';
-import { URL_BASE, POST_ACTION_SCROLL } from '../../constants';
+import { URL_BASE } from '../constants';
 
-import TasvirToggle from './TasvirToggle';
-import TasvirButton from '../../common/components/TasvirButton';
-import TasvirDirections from '../../common/components/TasvirDirections';
-import TasvirIconButton from '../../common/components/TasvirIconButton';
 import TasvirCamera from './TasvirCamera';
 import Gallery from './Gallery';
 
-import * as Actions from '../../actions';
+import * as Actions from '../actions';
 
-import styles from './styles';
-
-import Button from 'react-native-button';
-const w = Dimensions.get('window').width;
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 class App extends Component {
 
@@ -75,7 +55,7 @@ class App extends Component {
   }
 
   scrollTo = (page, animated = true) => {
-    this.ref.scrollTo({x: (w * page), y: 0, animated: animated});
+    this.ref.scrollTo({x: (SCREEN_WIDTH * page), y: 0, animated: animated});
   }
 
   render() {
@@ -101,7 +81,7 @@ class App extends Component {
                 this.scrollPageProg();
                 this.scrollPageProg = null;
               } else {
-                const page =  Math.floor(event.nativeEvent.contentOffset.x / w);
+                const page =  Math.floor(event.nativeEvent.contentOffset.x / SCREEN_WIDTH);
                 this.props.updateCurrentIndex(page);
               }
             }}>
@@ -144,6 +124,18 @@ class App extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollContainer: {
+    flex: 1
+  },
+  swiper: {
+    backgroundColor: "#48B2E2"
+  }
+});
 
 const mapStateToProps = (state) => {
   return {

@@ -4,9 +4,9 @@ import FontAwesome, { Icons } from 'react-native-fontawesome';
 var RNFS = require('react-native-fs');
 import { connect } from 'react-redux';
 
-import * as Actions from '../../actions';
+import * as Actions from '../actions';
 
-import TasvirIconButton from '../../common/components/TasvirIconButton';
+import TasvirIconButton from '../components/TasvirIconButton';
 
 class ImageScreen extends Component {
 

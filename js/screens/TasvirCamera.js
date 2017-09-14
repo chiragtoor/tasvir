@@ -5,9 +5,9 @@ import Camera from 'react-native-camera';
 var RNFS = require('react-native-fs');
 import { connect } from 'react-redux';
 
-import * as Actions from '../../actions';
+import * as Actions from '../actions';
 
-import TasvirIconButton from '../../common/components/TasvirIconButton';
+import TasvirIconButton from '../components/TasvirIconButton';
 
 class TasvirCamera extends Component {
 
@@ -85,7 +85,7 @@ class TasvirCamera extends Component {
               <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
                 <TasvirIconButton
                   onPress={() => this.flipCamera()}
-                  content={<Image style={{flex: 1, width: 20, resizeMode: 'contain'}} source={require('../../../img/camera_flip_icon.png')}/>} />
+                  content={<Image style={{flex: 1, width: 20, resizeMode: 'contain'}} source={require('../../img/camera_flip_icon.png')}/>} />
               </View>
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>

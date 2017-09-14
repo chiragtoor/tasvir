@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, ScrollView, Dimensions, StyleSheet, Image, Animated, TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 
-import * as Actions from '../../actions';
+import * as Actions from '../actions';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;

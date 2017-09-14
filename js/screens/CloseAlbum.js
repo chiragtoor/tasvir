@@ -11,8 +11,8 @@ import { connect } from 'react-redux';
 
 import * as Actions from '../actions';
 
-import TasvirButton from '../common/components/TasvirButton';
-import TasvirDirections from '../common/components/TasvirDirections';
+import TasvirButton from '../components/TasvirButton';
+import TasvirDirections from '../components/TasvirDirections';
 
 class CloseAlbum extends Component {
   constructor(props) {

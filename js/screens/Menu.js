@@ -12,13 +12,11 @@ import {
 import { connect } from 'react-redux';
 import Button from 'react-native-button';
 
-import TasvirToggle from './TasvirToggle';
-import TasvirButton from '../../common/components/TasvirButton';
-import TasvirDirections from '../../common/components/TasvirDirections';
+import TasvirToggle from '../components/TasvirToggle';
+import TasvirButton from '../components/TasvirButton';
+import TasvirDirections from '../components/TasvirDirections';
 
-import * as Actions from '../../actions';
-
-import styles from './styles';
+import * as Actions from '../actions';
 
 class Menu extends Component {
 
@@ -57,7 +55,7 @@ class Menu extends Component {
               value={this.props.albumFormName} />
             <Button
               onPress={() => this.props.resetAlbumForm()}>
-              <Image style={{flex: 1, width: 20, resizeMode: 'contain'}} source={require('../../../img/cancel_blue.png')}/>
+              <Image style={{flex: 1, width: 20, resizeMode: 'contain'}} source={require('../../img/cancel_blue.png')}/>
             </Button>
           </View>
           <View style={styles.textInputLine} />
@@ -88,7 +86,7 @@ class Menu extends Component {
       <View style={styles.menu}>
         <View style={styles.menuHeader}>
           <Image style={{width: 200, resizeMode: 'contain', marginTop: 10}}
-            source={require('../../../img/tasvir_logo.png')}/>
+            source={require('../../img/tasvir_logo.png')}/>
         </View>
         <View style={styles.menuOptions}>
           <TasvirToggle
@@ -107,6 +105,72 @@ class Menu extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  menu: {
+    flex: 1,
+    backgroundColor: "#FFFFFF"
+  },
+  menuHeader: {
+    height: 100,
+    width: Dimensions.get('window').width,
+    backgroundColor: "#48B2E2",
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  margin: {
+    height: 50,
+    width: 50
+  },
+  menuOptions: {
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 10,
+    paddingBottom: 10
+  },
+  menuDivider: {
+    height: 1,
+    backgroundColor: '#EFEFEF',
+    marginTop: 10
+  },
+  groupNameInput: {
+    flex: 1,
+    height: 50,
+    fontSize: 20,
+    textAlign: 'center'
+  },
+  createGroupMenu: {
+    width: Dimensions.get('window').width,
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  textView: {
+    width: Dimensions.get('window').width,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    marginLeft: 20,
+    marginRight: 20,
+    alignItems: 'center'
+  },
+  textInputLine: {
+    height: 1,
+    backgroundColor: '#EFEFEF',
+    marginLeft: 20,
+    marginRight: 20,
+  },
+  groupNameInput: {
+    flex: 1,
+    height: 30,
+    fontSize: 20
+  },
+  groupName: {
+    fontSize: 20,
+    color: '#4A4A4A'
+  }
+});
+
 
 const mapStateToProps = (state) => {
   return {

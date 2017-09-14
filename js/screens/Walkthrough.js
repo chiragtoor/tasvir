@@ -14,7 +14,7 @@ import Permissions from 'react-native-permissions';
 
 import * as Actions from '../actions';
 
-import TasvirButton from '../common/components/TasvirButton';
+import TasvirButton from '../components/TasvirButton';
 
 const LOGO = require('../../img/tasvir_logo.png');
 
