@@ -1,8 +1,6 @@
 import { combineReducers } from 'redux';
 import * as Actions from '../actions/reel';
 
-import { INIT_REEL, POST_ACTION_SCROLL, CAMERA_PAGE, MENU_PAGE } from '../constants';
-
 function previewReel(state = [], action) {
   switch(action.type) {
     case Actions.LOAD_PREVIEW_REEL:

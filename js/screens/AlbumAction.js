@@ -14,7 +14,7 @@ import * as Actions from '../actions';
 import TasvirButton from '../components/TasvirButton';
 import TasvirDirections from '../components/TasvirDirections';
 
-class CloseAlbum extends Component {
+class AlbumAction extends Component {
   constructor(props) {
     super(props);
 
@@ -73,4 +73,4 @@ const mapDispatchToProps = (dispatch) => {
     joinAlbum: () => dispatch(Actions.JoinAlbumForm.joinAlbum())
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(CloseAlbum);
+export default connect(mapStateToProps, mapDispatchToProps)(AlbumAction);

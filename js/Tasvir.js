@@ -27,11 +27,10 @@ import photos from './reducers/photos';
 
 import Splash from './screens/Splash';
 import App from './screens/App';
-import CloseAlbum from './screens/CloseAlbum';
+import AlbumAction from './screens/AlbumAction';
 import Walkthrough from './screens/Walkthrough';
 
 import { loadAndDispatchState } from './actions';
-import * as Storage from './storage';
 
 const loggerMiddleware = createLogger({
   predicate: (getState, action) => __DEV__
@@ -40,8 +39,8 @@ const loggerMiddleware = createLogger({
 const TasvirNavigator = StackNavigator({
   App: {screen: App },
   Splash: {screen: Splash},
-  CloseAlbum: {screen: CloseAlbum},
-  JoinAlbum: {screen: CloseAlbum},
+  CloseAlbum: {screen: AlbumAction},
+  JoinAlbum: {screen: AlbumAction},
   Walkthrough: {screen: Walkthrough}
 }, {
   // on iOS screens coming from bottom up look better, no effect on Android
@@ -104,16 +103,6 @@ configureStore = (initialState) => {
 }
 
 const store = configureStore({});
-
-// in order to persist the reel to state since actions fire before the change
-//   and reducers are meant to be pure, no side-effects
-store.subscribe(() => {
-  const previewReel = store.getState().reel.previewReel;
-  Storage.savePreviewReel(previewReel);
-  const savedPhotoIds = store.getState().photos.savedPhotoIds;
-  Storage.saveDownloadedPhotos(savedPhotoIds);
-})
-
 store.dispatch(loadAndDispatchState());
 
 export default class Tasvir extends React.Component {

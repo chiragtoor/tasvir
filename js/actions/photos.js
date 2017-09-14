@@ -1,4 +1,5 @@
 import { CameraRoll } from 'react-native';
+import * as Storage from '../storage';
 
 export const LOAD_SAVED_PHOTOS = 'album/LOAD_SAVED_PHOTOS';
 export const ADD_SAVED_PHOTO = 'album/ADD_SAVED_PHOTO';
@@ -9,7 +10,11 @@ export function loadSavedPhotos(savedPhotos) {
 }
 
 export function addSavedPhoto(savedPhoto) {
-  return {type: ADD_SAVED_PHOTO, savedPhoto };
+  return (dispatch, getState) => {
+    const { photos: { savedPhotoIds } } = getState();
+    Storage.saveDownloadedPhotos([savedPhoto, ...savedPhotoIds]);
+    dispatch({type: ADD_SAVED_PHOTO, savedPhoto });
+  }
 }
 
 export function loadGalleryImages() {
