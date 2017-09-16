@@ -5,31 +5,6 @@ import { Socket } from 'phoenix';
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
          AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, SOCKET_URL, ALBUMS_ENDPOINT, DOWNLOADED_PHOTOS_STORAGE } from '../constants';
 
-const socket = new Socket(SOCKET_URL);
-let chan = null;
-
-export function joinChannel() {
-  return (dispatch, getState) => {
-    const {album: {id}} = getState();
-    if(id != null) {
-      socket.connect();
-      chan = socket.channel("album:" + id, {});
-
-      chan.join();
-      chan.on("new:photo", msg => {
-        dispatch(saveImage(msg.photo, msg.id));
-      });
-    }
-  }
-}
-
-export function leaveChannel() {
-  return (dispatch) => {
-    chan.leave();
-    socket.disconnect();
-  }
-}
-
 import * as Reel from './reel';
 import * as Album from './album';
 import * as AlbumForm from './album_form';
@@ -54,15 +29,39 @@ export const PREVIEW_REEL_INDEX = 2;
 
 export const NAVIGATE = 'Navigation/NAVIGATE';
 
+const socket = new Socket(SOCKET_URL);
+let chan = null;
+
+export function joinChannel() {
+  return (dispatch, getState) => {
+    const {album: {id}} = getState();
+    if(id != null) {
+      socket.connect();
+      chan = socket.channel("album:" + id, {});
+
+      chan.join();
+      chan.on("new:photo", msg => {
+        CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
+          dispatch(Photos.loadGalleryImages());
+          dispatch(Album.updateLatestChannelImage(msg.id));
+        });
+      });
+    }
+  }
+}
+
+export function leaveChannel() {
+  return (dispatch) => {
+    chan.leave();
+    socket.disconnect();
+  }
+}
+
 export function completeWalkthrough() {
   return (dispatch, getState) => {
     const { joinAlbumForm: { id, name } } = getState();
     dispatch(Photos.loadGalleryImages());
-    if(id && name) {
-      dispatch(NavigationActions.navigate({routeName: 'JoinAlbum'}));
-    } else {
-      dispatch(NavigationActions.navigate({routeName: 'App'}));
-    }
+    dispatch(NavigationActions.navigate({routeName: 'App'}));
   }
 }
 

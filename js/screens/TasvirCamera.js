@@ -15,9 +15,17 @@ class TasvirCamera extends Component {
     super(props);
 
     this.state = {
+      galleryAnim: new Animated.Value(0),
       captureFadeAnim: new Animated.Value(0),
       cameraType: Camera.constants.Type.back,
-      savedPhotos: []
+      latestChannelImage: null
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.latestChannelImage != this.state.latestChannelImage) {
+      this.setState({latestChannelImage: nextProps.latestChannelImage});
+      this.animateGallery();
     }
   }
 
@@ -27,6 +35,16 @@ class TasvirCamera extends Component {
     } else {
       this.setState({cameraType: Camera.constants.Type.back});
     }
+  }
+
+  animateGallery = () => {
+    Animated.timing(
+      this.state.galleryAnim, { toValue: 1, duration: 500 }
+    ).start(() => {
+      Animated.timing(
+        this.state.galleryAnim, { toValue: 0, duration: 500 }
+      ).start();
+    });
   }
 
   capture = () => {
@@ -64,6 +82,7 @@ class TasvirCamera extends Component {
   render() {
     const hasPreviewReel = this.props.previewReel.length > 0;
     const hasGallery = this.props.galleryImages.length > 0;
+    let galleryStyle = {position: 'absolute', left: 2, top: 2, transform: [{scale: this.state.galleryAnim}]};
     return (
       <View
         style={styles.container}>
@@ -91,15 +110,21 @@ class TasvirCamera extends Component {
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
                 {hasGallery ?
-                  <TasvirIconButton
-                    onPress={this.props.goToGallery}
-                    content={<Image
-                                style={styles.imageButton}
-                                source={{uri: this.props.galleryImages[0].node.image.uri}}>
-                                <View style={styles.imageButtonText}>
-                                  <FontAwesome style={{color: "#FFFFFF"}}>{Icons.th}</FontAwesome>
-                                </View>
-                              </Image>} />
+                  <View style={{width: 38, height: 38}}>
+                    <TasvirIconButton
+                      style={{zIndex: 0}}
+                      onPress={this.props.goToGallery}
+                      content={<Image
+                                  style={styles.imageButton}
+                                  source={{uri: this.props.galleryImages[0].node.image.uri}}>
+                                  <View style={styles.imageButtonText}>
+                                    <FontAwesome style={{color: "#FFFFFF"}}>{Icons.th}</FontAwesome>
+                                  </View>
+                                </Image>} />
+                    <Animated.View style={galleryStyle}>
+                      <View style={{borderRadius: 17, height: 34, width: 34, backgroundColor: "#48B2E2"}} />
+                    </Animated.View>
+                  </View>
                 :
                   null
                 }
@@ -120,7 +145,7 @@ class TasvirCamera extends Component {
                                 <View style={styles.imageButtonText}>
                                   <Text style={{color: '#FFFFFF', fontWeight: 'bold'}}>{this.props.previewReel.length}</Text>
                                 </View>
-                              </Image>} />
+                              </Image>}/>
                 :
                   null
                 }
@@ -186,7 +211,8 @@ const mapStateToProps = (state) => {
   previewReel: state.reel.previewReel,
   autoShare: state.settings.autoShare,
   // photos state
-  galleryImages: state.photos.galleryImages
+  galleryImages: state.photos.galleryImages,
+  latestChannelImage: state.album.latestChannelImage
   };
 };
 const mapDispatchToProps = (dispatch) => {

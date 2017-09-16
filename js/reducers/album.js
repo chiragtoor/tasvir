@@ -28,10 +28,20 @@ function link(state = null, action) {
   }
 }
 
+function latestChannelImage(state = null, action) {
+  switch(action.type) {
+    case Actions.UPDATE_CHANNEL_IMAGE:
+      return action.id;
+    default:
+      return state;
+  }
+}
+
 const album = combineReducers({
   id,
   name,
-  link
+  link,
+  latestChannelImage
 });
 
 export default album;
