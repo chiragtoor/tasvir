@@ -1,4 +1,5 @@
 import { NavigationActions } from 'react-navigation';
+import { joinChannel } from '../actions';
 import * as Storage from '../storage';
 import * as Album from './album';
 import * as TasvirApi from './tasvir_api';
@@ -28,6 +29,7 @@ export function joinAlbum() {
     dispatch(Album.updateName(name));
     Storage.saveAlbumName(name);
     dispatch(TasvirApi.loadAlbum());
+    dispatch(joinChannel());
     dispatch(NavigationActions.navigate({ routeName: 'App' }));
   }
 }

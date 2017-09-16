@@ -1,4 +1,5 @@
 import { NavigationActions } from 'react-navigation';
+import { leaveChannel } from '../actions';
 import * as Storage from '../storage';
 
 export const UPDATE_ALBUM_ID = 'album/UPDATE_ALBUM_ID';
@@ -41,6 +42,7 @@ export function closeAlbum() {
     Storage.saveAlbumName(null);
     dispatch(updateLink(null));
     Storage.saveAlbumLink(null);
+    dispatch(leaveChannel());
     dispatch(NavigationActions.back({}));
   }
 }

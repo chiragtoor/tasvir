@@ -1,8 +1,34 @@
 import { NavigationActions } from 'react-navigation';
 import { AsyncStorage, CameraRoll } from 'react-native';
+import { Socket } from 'phoenix';
 
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
-         AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, ALBUMS_ENDPOINT, DOWNLOADED_PHOTOS_STORAGE } from '../constants';
+         AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, SOCKET_URL, ALBUMS_ENDPOINT, DOWNLOADED_PHOTOS_STORAGE } from '../constants';
+
+const socket = new Socket(SOCKET_URL);
+let chan = null;
+
+export function joinChannel() {
+  return (dispatch, getState) => {
+    const {album: {id}} = getState();
+    if(id != null) {
+      socket.connect();
+      chan = socket.channel("album:" + id, {});
+
+      chan.join();
+      chan.on("new:photo", msg => {
+        dispatch(saveImage(msg.photo, msg.id));
+      });
+    }
+  }
+}
+
+export function leaveChannel() {
+  return (dispatch) => {
+    chan.leave();
+    socket.disconnect();
+  }
+}
 
 import * as Reel from './reel';
 import * as Album from './album';
@@ -85,7 +111,8 @@ export function loadAndDispatchState() {
         dispatch(Album.updateName(getValue(value, ALBUM_NAME_STORAGE)));
         if(previewReel) dispatch(Reel.loadPreviewReel(previewReel));
         if (autoShare) dispatch(Settings.updateAutoShare(autoShare));
-        dispatch(Reel.updateCurrentIndex(0));
+        dispatch(Reel.updateCurrentIndex(CAMERA_INDEX));
+        dispatch(joinChannel());
       }
 
       if(savedPhotos) {

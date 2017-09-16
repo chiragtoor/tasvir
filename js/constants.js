@@ -1,6 +1,6 @@
-// export const URL_BASE = __DEV__ ? 'https://7472c4a5.ngrok.io/' : 'https://stormy-stream-34151.herokuapp.com/';
-export const URL_BASE = 'https://www.tasvirapp.com/';
+export const URL_BASE = __DEV__ ? 'https://c3b305e6.ngrok.io/' : 'https://www.tasvirapp.com/';
 export const URL = URL_BASE + 'api';
+export const SOCKET_URL = URL_BASE + 'socket';
 export const ALBUMS_ENDPOINT = '/albums';
 
 export const PREVIEW_REEL_STORAGE = 'previewReel';

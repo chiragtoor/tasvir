@@ -10,38 +10,20 @@ import Swiper from 'react-native-swiper';
 import { Socket } from 'phoenix';
 import branch from 'react-native-branch';
 
-import ImageScreen from './ImageScreen';
-import Menu from './Menu';
-import { URL_BASE } from '../constants';
-
 import TasvirCamera from './TasvirCamera';
 import Gallery from './Gallery';
+import ImageScreen from './ImageScreen';
+import Menu from './Menu';
 
 import * as Actions from '../actions';
+import { URL_BASE } from '../constants';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 class App extends Component {
 
-  connectSocket = () => {
-    // connect to album web socket
-    let socket = new Socket((URL_BASE + "socket"), {
-      logger: ((kind, msg, data) => { console.log(`${kind}: ${msg}`, data) })
-    });
-
-    socket.connect();
-
-    var chan = socket.channel("album:" + this.props.albumId, {});
-    chan.join();
-
-    chan.on("new:photo", msg => {
-      this.props.saveImage(msg.photo, msg.id);
-    });
-  }
-
   componentDidMount() {
     this.scrollTo(Actions.CAMERA_INDEX);
-    if(this.props.albumId) this.connectSocket();
     branch.getLatestReferringParams().then((params) => {
       const albumId = params['album_id'];
       const albumName = params['album_name'];
