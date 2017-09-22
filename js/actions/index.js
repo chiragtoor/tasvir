@@ -37,7 +37,7 @@ export function joinChannel() {
     const {album: {id}, photos: {savedPhotoIds}} = getState();
     if(id != null) {
       socket.connect();
-      chan = socket.channel("album:"    id, {});
+      chan = socket.channel("album:" + id, {});
 
       chan.join();
       chan.on("new:photo", msg => {
