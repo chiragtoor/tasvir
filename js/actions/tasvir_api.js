@@ -69,6 +69,7 @@ export function loadAlbum() {
             dispatch(Photos.addSavedPhoto(photo.id));
           }
         }
+        dispatch(Photos.loadGalleryImages());
       }
     });
   }
@@ -89,7 +90,6 @@ export function uploadImage(image) {
       .then((response) => response.body)
       .then((responseJson) => {
         if(responseJson.success) {
-          console.log("UPLOADED IMAGE: ", responseJson.id);
           dispatch(saveImage(image, responseJson.id));
         } else {
           console.error("ERROR UPLOADING IMAGE");

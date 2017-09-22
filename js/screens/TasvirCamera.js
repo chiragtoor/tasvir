@@ -116,7 +116,7 @@ class TasvirCamera extends Component {
                       onPress={this.props.goToGallery}
                       content={<Image
                                   style={styles.imageButton}
-                                  source={{uri: this.props.galleryImages[0].node.image.uri}}>
+                                  source={{uri: this.props.latestImage}}>
                                   <View style={styles.imageButtonText}>
                                     <FontAwesome style={{color: "#FFFFFF"}}>{Icons.th}</FontAwesome>
                                   </View>
@@ -212,6 +212,7 @@ const mapStateToProps = (state) => {
   autoShare: state.settings.autoShare,
   // photos state
   galleryImages: state.photos.galleryImages,
+  latestImage: state.photos.latestImage,
   latestChannelImage: state.album.latestChannelImage
   };
 };

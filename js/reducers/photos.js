@@ -21,9 +21,19 @@ function galleryImages(state = [], action) {
   }
 }
 
+function latestImage(state = [], action) {
+  switch(action.type) {
+    case Actions.LOAD_LATEST_IMAGE:
+      return action.latestImage;
+    default:
+      return state;
+  }
+}
+
 const photos = combineReducers({
   savedPhotoIds,
-  galleryImages
+  galleryImages,
+  latestImage
 });
 
 export default photos;

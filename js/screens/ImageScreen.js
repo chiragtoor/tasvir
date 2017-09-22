@@ -28,7 +28,8 @@ class ImageScreen extends Component {
       this.state.pan,
       {toValue: {x:0, y: -1 * Dimensions.get('window').height}, duration: 250}
     ).start(() => {
-      this.props.onFinish(1);
+      this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + this.props.data);
+      this.props.onFinish();
     });
   }
 
@@ -40,7 +41,6 @@ class ImageScreen extends Component {
       this.state.pan,
       {toValue: {x:0, y: Dimensions.get('window').height}, duration: 250}
     ).start(() => {
-      this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + this.props.data);
       this.props.onFinish();
     });
   }

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Linking } from 'react-native';
+import { AsyncStorage } from 'react-native';
 import { Provider, connect } from 'react-redux';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { StackNavigator, addNavigationHelpers } from 'react-navigation';
-
+import branch from 'react-native-branch';
 
 /*
  * in order to be able to navigate from actions we need to hook
@@ -31,7 +31,10 @@ import AlbumAction from './screens/AlbumAction';
 import Walkthrough from './screens/Walkthrough';
 
 import { loadAndDispatchState } from './actions';
+import * as JoinAlbumForm from './actions/join_album_form';
 import * as Storage from './storage';
+
+import { WALKTHROUGH_FLAG_STORAGE } from './constants';
 
 const loggerMiddleware = createLogger({
   predicate: (getState, action) => __DEV__
@@ -112,7 +115,23 @@ store.subscribe(() => {
   Storage.savePreviewReel(previewReel);
   const savedPhotoIds = store.getState().photos.savedPhotoIds;
   Storage.saveDownloadedPhotos(savedPhotoIds);
-})
+});
+
+branch.subscribe(async ({error, params}) => {
+  if (error) return;
+  if (params['+clicked_branch_link']) {
+    const albumId = params['album_id'];
+    const albumName = params['album_name'];
+    if(albumId && albumName) {
+      store.dispatch(JoinAlbumForm.updateId(albumId));
+      store.dispatch(JoinAlbumForm.updateName(albumName));
+      const walkthroughCompleted = await AsyncStorage.getItem(WALKTHROUGH_FLAG_STORAGE);
+      if(walkthroughCompleted) {
+        store.dispatch(JoinAlbumForm.attemptJoinAlbum());
+      }
+    }
+  }
+});
 
 store.dispatch(loadAndDispatchState());
 

@@ -8,7 +8,6 @@ import {
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
 import { Socket } from 'phoenix';
-import branch from 'react-native-branch';
 
 import TasvirCamera from './TasvirCamera';
 import Gallery from './Gallery';
@@ -21,18 +20,8 @@ import { URL_BASE } from '../constants';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 class App extends Component {
-
   componentDidMount() {
     this.scrollTo(Actions.CAMERA_INDEX);
-    branch.getLatestReferringParams().then((params) => {
-      const albumId = params['album_id'];
-      const albumName = params['album_name'];
-      if(albumId && albumName && albumId !== this.props.albumId) {
-        this.props.joinAlbumUpdateId(albumId);
-        this.props.joinAlbumUpdateName(albumName);
-        this.props.attemptJoinAlbum();
-      }
-    });
   }
 
   scrollTo = (page, animated = true) => {
@@ -130,11 +119,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateCurrentIndex: (index) => dispatch(Actions.Reel.updateCurrentIndex(index)),
-    removeImage: (index) => dispatch(Actions.Reel.removeImage(index)),
-    joinAlbumUpdateName: (name) => dispatch(Actions.JoinAlbumForm.updateName(name)),
-    joinAlbumUpdateId: (id) => dispatch(Actions.JoinAlbumForm.updateId(id)),
-    attemptJoinAlbum: () => dispatch(Actions.JoinAlbumForm.attemptJoinAlbum()),
-    saveImage: (photo, photoId) => dispatch(Actions.saveImage(photo, photoId))
+    removeImage: (index) => dispatch(Actions.Reel.removeImage(index))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);

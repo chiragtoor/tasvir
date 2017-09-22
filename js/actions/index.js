@@ -34,17 +34,19 @@ let chan = null;
 
 export function joinChannel() {
   return (dispatch, getState) => {
-    const {album: {id}} = getState();
+    const {album: {id}, photos: {savedPhotoIds}} = getState();
     if(id != null) {
       socket.connect();
-      chan = socket.channel("album:" + id, {});
+      chan = socket.channel("album:"    id, {});
 
       chan.join();
       chan.on("new:photo", msg => {
-        CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
-          dispatch(Photos.loadGalleryImages());
-          dispatch(Album.updateLatestChannelImage(msg.id));
-        });
+        if(!(savedPhotoIds.includes(msg.id))) {
+          CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
+            dispatch(Photos.loadGalleryImages());
+            dispatch(Album.updateLatestChannelImage(msg.id));
+          });
+        }
       });
     }
   }
@@ -60,8 +62,12 @@ export function leaveChannel() {
 export function completeWalkthrough() {
   return (dispatch, getState) => {
     const { joinAlbumForm: { id, name } } = getState();
-    dispatch(Photos.loadGalleryImages());
-    dispatch(NavigationActions.navigate({routeName: 'App'}));
+    Storage.walkthroughCompleted();
+    if(id && name) {
+      dispatch(NavigationActions.navigate({ routeName: 'JoinAlbum' }));
+    } else {
+      dispatch(NavigationActions.navigate({routeName: 'App'}));
+    }
   }
 }
 
@@ -92,7 +98,7 @@ export function loadAndDispatchState() {
     return AsyncStorage.multiGet([PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE,
             ALBUM_NAME_STORAGE, AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, DOWNLOADED_PHOTOS_STORAGE]).then((value) => {
       const getValue = (arr, key) => {
-        for (var i = 0; i < arr.length; i++) {
+        for (var i = 0; i < arr.length; i    ) {
           if(arr[i][0] === key) {
             return JSON.parse(arr[i][1]);
           }
@@ -118,11 +124,10 @@ export function loadAndDispatchState() {
         dispatch(Photos.loadSavedPhotos(savedPhotos));
       }
 
+      dispatch(Photos.loadGalleryImages());
       if(getValue(value, WALKTHROUGH_FLAG_STORAGE)) {
-        dispatch(Photos.loadGalleryImages());
         dispatch(NavigationActions.navigate({routeName: 'App'}));
       } else {
-        Storage.walkthroughCompleted();
         dispatch(NavigationActions.navigate({routeName: 'Walkthrough'}));
       }
 
