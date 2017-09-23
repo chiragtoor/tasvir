@@ -43,7 +43,7 @@ class Walkthrough extends Component {
           Just create an album and share the link with your friends, they will have access to all the photos you take.
         </Text>
         <Text style={styles.font}>
-          Friends can add to your album as well, just download the app and use the shared link!
+          Friends can add to your album as well, just download the app from the shared link!
         </Text>
         <TasvirButton
           secondary={true}
