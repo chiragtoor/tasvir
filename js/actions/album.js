@@ -5,7 +5,6 @@ import * as Storage from '../storage';
 export const UPDATE_ALBUM_ID = 'album/UPDATE_ALBUM_ID';
 export const UPDATE_ALBUM_NAME = 'album/UPDATE_ALBUM_NAME';
 export const LOAD_SAVED_PHOTOS = 'album/LOAD_SAVED_PHOTOS';
-export const ADD_SAVED_PHOTO = 'album/ADD_SAVED_PHOTO';
 export const LOAD_LINK = 'album/LOAD_LINK';
 export const UPDATE_CHANNEL_IMAGE = 'album/UPDATE_CHANNEL_IMAGE';
 
@@ -33,10 +32,6 @@ export function keepAlbumOpen() {
 
 export function loadSavedPhotos(savedPhotos) {
   return {type: LOAD_SAVED_PHOTOS, savedPhotos};
-}
-
-export function addSavedPhoto(savedPhoto) {
-  return {type: ADD_SAVED_PHOTO, savedPhoto };
 }
 
 export function closeAlbum() {

@@ -42,6 +42,7 @@ export function joinChannel() {
       chan.join();
       chan.on("new:photo", msg => {
         if(!(savedPhotoIds.includes(msg.id))) {
+          dispatch(Photos.addSavedPhoto(msg.id));
           CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
             dispatch(Photos.loadGalleryImages());
             dispatch(Album.updateLatestChannelImage(msg.id));
@@ -74,14 +75,14 @@ export function completeWalkthrough() {
 
 export function saveImage(imageUrl, photoId) {
   return (dispatch, getState) => {
-    const {album: {id}, photos: {savedPhotoIds}} = getState();
+    const { album: { id }, photos: { savedPhotoIds } } = getState();
     if(id) {
       if(photoId === "NO_ALBUM") {
         CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
           dispatch(Photos.loadGalleryImages());
         });
       } else if(!(savedPhotoIds.includes(photoId))) {
-        dispatch(Album.addSavedPhoto(photoId));
+        dispatch(Photos.addSavedPhoto(photoId));
         CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
           dispatch(Photos.loadGalleryImages());
         });

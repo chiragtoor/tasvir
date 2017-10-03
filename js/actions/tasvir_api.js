@@ -10,7 +10,7 @@ import * as Reel from './reel';
 import * as Storage from '../storage';
 import { URL, ALBUMS_ENDPOINT } from '../../js/constants';
 
-import { saveImage } from '../actions';
+import { saveImage, joinChannel } from '../actions';
 
 function getHeaders() {
   return {
@@ -41,6 +41,7 @@ export function createAlbum() {
         dispatch(Album.updateLink(responseJson.link));
         Storage.saveAlbumLink(responseJson.link);
         dispatch(AlbumForm.reset());
+        dispatch(joinChannel());
       } else {
         dispatch(AlbumForm.reset());
       }

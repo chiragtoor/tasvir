@@ -556,6 +556,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		46D287A31F820893002B1AB4 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				1F1625635EAC443F9CCF4976 /* libRCTCamera.a */,
+				CF6E6E26399F4D07950AFE3A /* libReactNativePermissions.a */,
+				6EC5EB1C3BC842C4AA94BBF3 /* libRNFS.a */,
+				D2867DA92D8C4EBB94977B7C /* libreact-native-branch.a */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		5E91572E1DD0AC6500FF2AA8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -615,6 +626,7 @@
 				00E356EF1AD99517003FC87E /* TasvirTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				B009E00C6E0E4CBDAD1D71E0 /* Frameworks */,
+				46D287A31F820893002B1AB4 /* Recovered References */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
