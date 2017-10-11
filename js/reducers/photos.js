@@ -16,6 +16,8 @@ function galleryImages(state = [], action) {
   switch(action.type) {
     case Actions.LOAD_GALLERY_PHOTOS:
       return action.galleryImages;
+    case Actions.ADD_GALLERY_PHOTOS:
+      return [...state, ...action.galleryImages];
     default:
       return state;
   }

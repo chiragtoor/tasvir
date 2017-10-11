@@ -36,13 +36,18 @@
 		2DCD954D1E0B4F2C00145EB5 /* TasvirTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TasvirTests.m */; };
 		467E97251F3AACDC00A3CF9F /* libRCTCameraRoll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 467E97241F3AACA300A3CF9F /* libRCTCameraRoll.a */; };
 		467E97581F42D18D00A3CF9F /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 467E97571F42D18C00A3CF9F /* fontawesome-webfont.ttf */; };
+		46A87D981F867EC800DDDF5C /* NSMutableDictionary+ImageMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = 46A87D971F867EC800DDDF5C /* NSMutableDictionary+ImageMetadata.m */; };
+		46A87DBE1F867F4900DDDF5C /* RCTSensorOrientationChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 46A87DBD1F867F4900DDDF5C /* RCTSensorOrientationChecker.m */; };
+		46A87DC21F8680B800DDDF5C /* CameraFocusSquare.m in Sources */ = {isa = PBXBuildFile; fileRef = 46A87DC11F8680B800DDDF5C /* CameraFocusSquare.m */; };
+		46A87DC61F8685B000DDDF5C /* RNTTestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 46A87DC51F8685B000DDDF5C /* RNTTestManager.m */; };
+		46D287D61F867C30002B1AB4 /* RCTCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D287D51F867C30002B1AB4 /* RCTCamera.m */; };
+		46D287D81F867D43002B1AB4 /* RCTCameraManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D287D71F867D43002B1AB4 /* RCTCameraManager.m */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		9624BACE72BC4D6083E29304 /* branch.json in Resources */ = {isa = PBXBuildFile; fileRef = 7DDA0DD43FD240FB8A718822 /* branch.json */; };
 		E3AC56A987DC4E7FAC5B74CF /* libreact-native-branch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2867DA92D8C4EBB94977B7C /* libreact-native-branch.a */; };
 		EE7803EB67904CD98C7B3665 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EC5EB1C3BC842C4AA94BBF3 /* libRNFS.a */; };
 		F57507AAEA13407D8BBEB9EC /* libReactNativePermissions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF6E6E26399F4D07950AFE3A /* libReactNativePermissions.a */; };
-		FAB63D80A1CE4A64BCF134E0 /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F1625635EAC443F9CCF4976 /* libRCTCamera.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -207,13 +212,6 @@
 			remoteGlobalIDString = 3D3CD9181DE5FBD800167DC4;
 			remoteInfo = "jschelpers-tvOS";
 		};
-		467E96CF1F37B46000A3CF9F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FB059099DFDE4995AB7DAF1C /* RCTCamera.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4107012F1ACB723B00C6AA39;
-			remoteInfo = RCTCamera;
-		};
 		467E96EB1F37B46000A3CF9F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
@@ -327,12 +325,21 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tasvir/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Tasvir/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
-		1F1625635EAC443F9CCF4976 /* libRCTCamera.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTCamera.a; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* Tasvir-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tasvir-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Tasvir-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tasvir-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		467E971F1F3AACA300A3CF9F /* RCTCameraRoll.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCameraRoll.xcodeproj; path = "../node_modules/react-native/Libraries/CameraRoll/RCTCameraRoll.xcodeproj"; sourceTree = "<group>"; };
 		467E97571F42D18C00A3CF9F /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "fontawesome-webfont.ttf"; path = "../../../../Downloads/font-awesome-4.7.0/fonts/fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		46A222271F4F28BE00236BE8 /* Tasvir.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Tasvir.entitlements; path = Tasvir/Tasvir.entitlements; sourceTree = "<group>"; };
+		46A87D971F867EC800DDDF5C /* NSMutableDictionary+ImageMetadata.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+ImageMetadata.m"; sourceTree = "<group>"; };
+		46A87DBC1F867F2F00DDDF5C /* RCTSensorOrientationChecker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTSensorOrientationChecker.h; sourceTree = "<group>"; };
+		46A87DBD1F867F4900DDDF5C /* RCTSensorOrientationChecker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTSensorOrientationChecker.m; sourceTree = "<group>"; };
+		46A87DC01F86809D00DDDF5C /* CameraFocusSquare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraFocusSquare.h; sourceTree = "<group>"; };
+		46A87DC11F8680B800DDDF5C /* CameraFocusSquare.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraFocusSquare.m; sourceTree = "<group>"; };
+		46A87DC51F8685B000DDDF5C /* RNTTestManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNTTestManager.m; sourceTree = "<group>"; };
+		46D287D31F867C16002B1AB4 /* RCTCameraManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTCameraManager.h; sourceTree = "<group>"; };
+		46D287D41F867C23002B1AB4 /* RCTCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTCamera.h; sourceTree = "<group>"; };
+		46D287D51F867C30002B1AB4 /* RCTCamera.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTCamera.m; sourceTree = "<group>"; };
+		46D287D71F867D43002B1AB4 /* RCTCameraManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTCameraManager.m; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		6EC5EB1C3BC842C4AA94BBF3 /* libRNFS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFS.a; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
@@ -342,7 +349,6 @@
 		CF6E6E26399F4D07950AFE3A /* libReactNativePermissions.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libReactNativePermissions.a; sourceTree = "<group>"; };
 		D1A321A87B1142D6968882C1 /* ReactNativePermissions.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativePermissions.xcodeproj; path = "../node_modules/react-native-permissions/ReactNativePermissions.xcodeproj"; sourceTree = "<group>"; };
 		D2867DA92D8C4EBB94977B7C /* libreact-native-branch.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libreact-native-branch.a"; sourceTree = "<group>"; };
-		FB059099DFDE4995AB7DAF1C /* RCTCamera.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RCTCamera.xcodeproj"; sourceTree = "<group>"; };
 		FE911DC51A944D94929CBC67 /* RNFS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -371,7 +377,6 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
-				FAB63D80A1CE4A64BCF134E0 /* libRCTCamera.a in Frameworks */,
 				F57507AAEA13407D8BBEB9EC /* libReactNativePermissions.a in Frameworks */,
 				EE7803EB67904CD98C7B3665 /* libRNFS.a in Frameworks */,
 				E3AC56A987DC4E7FAC5B74CF /* libreact-native-branch.a in Frameworks */,
@@ -492,6 +497,16 @@
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				7DDA0DD43FD240FB8A718822 /* branch.json */,
+				46D287D31F867C16002B1AB4 /* RCTCameraManager.h */,
+				46D287D41F867C23002B1AB4 /* RCTCamera.h */,
+				46D287D51F867C30002B1AB4 /* RCTCamera.m */,
+				46D287D71F867D43002B1AB4 /* RCTCameraManager.m */,
+				46A87D971F867EC800DDDF5C /* NSMutableDictionary+ImageMetadata.m */,
+				46A87DBC1F867F2F00DDDF5C /* RCTSensorOrientationChecker.h */,
+				46A87DBD1F867F4900DDDF5C /* RCTSensorOrientationChecker.m */,
+				46A87DC01F86809D00DDDF5C /* CameraFocusSquare.h */,
+				46A87DC11F8680B800DDDF5C /* CameraFocusSquare.m */,
+				46A87DC51F8685B000DDDF5C /* RNTTestManager.m */,
 			);
 			name = Tasvir;
 			sourceTree = "<group>";
@@ -511,14 +526,6 @@
 				467E96EE1F37B46000A3CF9F /* libthird-party.a */,
 				467E96F01F37B46000A3CF9F /* libdouble-conversion.a */,
 				467E96F21F37B46000A3CF9F /* libdouble-conversion.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		467E96C91F37B46000A3CF9F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				467E96D01F37B46000A3CF9F /* libRCTCamera.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -559,7 +566,6 @@
 		46D287A31F820893002B1AB4 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				1F1625635EAC443F9CCF4976 /* libRCTCamera.a */,
 				CF6E6E26399F4D07950AFE3A /* libReactNativePermissions.a */,
 				6EC5EB1C3BC842C4AA94BBF3 /* libRNFS.a */,
 				D2867DA92D8C4EBB94977B7C /* libreact-native-branch.a */,
@@ -600,7 +606,6 @@
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
-				FB059099DFDE4995AB7DAF1C /* RCTCamera.xcodeproj */,
 				D1A321A87B1142D6968882C1 /* ReactNativePermissions.xcodeproj */,
 				FE911DC51A944D94929CBC67 /* RNFS.xcodeproj */,
 				855F2008CEF64C1B864E5112 /* RNBranch.xcodeproj */,
@@ -778,10 +783,6 @@
 				{
 					ProductGroup = 5E91572E1DD0AC6500FF2AA8 /* Products */;
 					ProjectRef = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
-				},
-				{
-					ProductGroup = 467E96C91F37B46000A3CF9F /* Products */;
-					ProjectRef = FB059099DFDE4995AB7DAF1C /* RCTCamera.xcodeproj */;
 				},
 				{
 					ProductGroup = 467E97201F3AACA300A3CF9F /* Products */;
@@ -994,13 +995,6 @@
 			remoteRef = 3DAD3EAE1DF850E9000B6D8A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		467E96D01F37B46000A3CF9F /* libRCTCamera.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTCamera.a;
-			remoteRef = 467E96CF1F37B46000A3CF9F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		467E96EC1F37B46000A3CF9F /* libthird-party.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1174,7 +1168,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46D287D81F867D43002B1AB4 /* RCTCameraManager.m in Sources */,
+				46A87DC61F8685B000DDDF5C /* RNTTestManager.m in Sources */,
+				46A87DC21F8680B800DDDF5C /* CameraFocusSquare.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				46A87DBE1F867F4900DDDF5C /* RCTSensorOrientationChecker.m in Sources */,
+				46A87D981F867EC800DDDF5C /* NSMutableDictionary+ImageMetadata.m in Sources */,
+				46D287D61F867C30002B1AB4 /* RCTCamera.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1236,7 +1236,6 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-camera/ios",
 					"$(SRCROOT)/../node_modules/react-native-permissions/**",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-branch/ios/**",
@@ -1244,10 +1243,7 @@
 				INFOPLIST_FILE = TasvirTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1266,7 +1262,6 @@
 				DEVELOPMENT_TEAM = FDG76994N8;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-camera/ios",
 					"$(SRCROOT)/../node_modules/react-native-permissions/**",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-branch/ios/**",
@@ -1274,10 +1269,7 @@
 				INFOPLIST_FILE = TasvirTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1299,7 +1291,6 @@
 				DEVELOPMENT_TEAM = FDG76994N8;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-camera/ios",
 					"$(SRCROOT)/../node_modules/react-native-permissions/**",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-branch/ios/**",
@@ -1329,7 +1320,6 @@
 				DEVELOPMENT_TEAM = FDG76994N8;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-camera/ios",
 					"$(SRCROOT)/../node_modules/react-native-permissions/**",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-branch/ios/**",
@@ -1362,17 +1352,13 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-camera/ios",
 					"$(SRCROOT)/../node_modules/react-native-permissions/**",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-branch/ios/**",
 				);
 				INFOPLIST_FILE = "Tasvir-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1399,17 +1385,13 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-camera/ios",
 					"$(SRCROOT)/../node_modules/react-native-permissions/**",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-branch/ios/**",
 				);
 				INFOPLIST_FILE = "Tasvir-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1435,10 +1417,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Tasvir-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.Tasvir-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
@@ -1460,10 +1439,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Tasvir-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.Tasvir-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;

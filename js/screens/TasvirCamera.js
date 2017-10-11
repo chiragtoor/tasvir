@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
-import {View, Text, Dimensions, StyleSheet, Image, Animated, TouchableOpacity} from 'react-native';
+import {View, Text, Dimensions, StyleSheet, Image, Animated, TouchableOpacity, NativeModules} from 'react-native';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
-import Camera from 'react-native-camera';
+// import Camera from 'react-native-camera';
 var RNFS = require('react-native-fs');
 import { connect } from 'react-redux';
 
 import * as Actions from '../actions';
 
 import TasvirIconButton from '../components/TasvirIconButton';
+import MapView from '../components/MapView';
 
 class TasvirCamera extends Component {
 
@@ -17,7 +18,7 @@ class TasvirCamera extends Component {
     this.state = {
       galleryAnim: new Animated.Value(0),
       captureFadeAnim: new Animated.Value(0),
-      cameraType: Camera.constants.Type.back,
+      //cameraType: MapView.constants.Type.back,
       latestChannelImage: null
     }
   }
@@ -30,11 +31,11 @@ class TasvirCamera extends Component {
   }
 
   flipCamera = () => {
-    if(this.state.cameraType === Camera.constants.Type.back) {
-      this.setState({cameraType: Camera.constants.Type.front});
-    } else {
-      this.setState({cameraType: Camera.constants.Type.back});
-    }
+    // if(this.state.cameraType === Camera.constants.Type.back) {
+    //   this.setState({cameraType: Camera.constants.Type.front});
+    // } else {
+    //   this.setState({cameraType: Camera.constants.Type.back});
+    // }
   }
 
   animateGallery = () => {
@@ -79,6 +80,11 @@ class TasvirCamera extends Component {
     }
   }
 
+  componentDidMount() {
+    console.log(this.camera);
+    this.camera.test(1);
+  }
+
   render() {
     const hasPreviewReel = this.props.previewReel.length > 0;
     const hasGallery = this.props.galleryImages.length > 0;
@@ -86,19 +92,21 @@ class TasvirCamera extends Component {
     return (
       <View
         style={styles.container}>
-        <Camera
+        <MapView
           ref={(cam) => {
             this.camera = cam;
           }}
           type={this.state.cameraType}
           style={styles.preview}
-          captureTarget={Camera.constants.CaptureTarget.disk}
+          //captureTarget={Camera.constants.CaptureTarget.disk}
           captureAudio={false}
           keepAwake={true}
           mirrorImage={true}
+          defaultOnFocusComponent={true}
           onFocusChanged={() => null}
           zoomChanged={() => null}
-          aspect={Camera.constants.Aspect.fill}>
+          //aspect={Camera.constants.Aspect.fill}
+          >
           <View style={{position: 'absolute', flex: 1, width: Dimensions.get('window').width, height: Dimensions.get('window').height, justifyContent: 'space-between', paddingTop: 20, paddingBottom: 20}}>
             <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
               <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
@@ -152,7 +160,7 @@ class TasvirCamera extends Component {
               </View>
             </View>
           </View>
-        </Camera>
+        </MapView>
         <Animated.View
           pointerEvents="none"
           style={{opacity: this.state.captureFadeAnim, position: 'absolute', width: Dimensions.get('window').width, height: Dimensions.get('window').height, borderWidth: 7, borderColor: "#48B2E2"}} />
@@ -169,7 +177,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    height: Dimensions.get('window').height,
+    // height: Dimensions.get('window').height,
     width: Dimensions.get('window').width
   },
   onPreviewButtonBorder: {
