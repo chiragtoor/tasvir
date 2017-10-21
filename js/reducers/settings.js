@@ -13,7 +13,6 @@ function autoShare(state = false, action) {
 function idfv(state = null, action) {
   switch(action.type) {
     case Actions.UPDATE_SETTINGS_IDFV:
-      console.log("TASVIR -- SET IN REDUCER: ", action.idfv);
       return action.idfv;
     default:
       return state;

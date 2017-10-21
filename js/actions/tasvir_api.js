@@ -56,7 +56,7 @@ export function createAlbum() {
 
 export function loadAlbum() {
   return (dispatch, getState) => {
-    const {album: { id }, settings: { idfv } } = getState();
+    const {album: { id }, settings: { idfv }, photos: {savedPhotoIds} } = getState();
 
     fetch(URL + ALBUMS_ENDPOINT + "/" +  id)
     .then((response) => response.json())
@@ -65,8 +65,11 @@ export function loadAlbum() {
         dispatch(Album.updateLink(responseJson.link));
         for(var i = 0; i < responseJson.photos.length; i++) {
           const photo = responseJson.photos[i];
-          if(!(idfv === photo.sent_by)) {
+          // do not want to save own captured pictures or previously saved images,
+          //  both these cases will be duplicates in the camera roll
+          if(!(idfv === photo.sent_by || savedPhotoIds.includes(photo.id))) {
             CameraRoll.saveToCameraRoll(photo.photo);
+            dispatch(Photos.addSavedPhoto(photo.id));
           }
         }
         dispatch(Photos.loadGalleryImages());
