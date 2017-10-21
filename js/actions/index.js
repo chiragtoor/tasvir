@@ -1,9 +1,11 @@
 import { NavigationActions } from 'react-navigation';
 import { AsyncStorage, CameraRoll } from 'react-native';
 import { Socket } from 'phoenix';
+var DeviceInfo = require('react-native-device-info');
 
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
-         AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, SOCKET_URL, ALBUMS_ENDPOINT, DOWNLOADED_PHOTOS_STORAGE } from '../constants';
+         AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, SOCKET_URL,
+         ALBUMS_ENDPOINT, DOWNLOADED_PHOTOS_STORAGE, IDFV_STORAGE } from '../constants';
 
 import * as Reel from './reel';
 import * as Album from './album';
@@ -34,15 +36,14 @@ let chan = null;
 
 export function joinChannel() {
   return (dispatch, getState) => {
-    const {album: {id}, photos: {savedPhotoIds}} = getState();
+    const {album: {id}, settings: {idfv}} = getState();
     if(id != null) {
       socket.connect();
       chan = socket.channel("album:" + id, {});
 
       chan.join();
       chan.on("new:photo", msg => {
-        if(!(savedPhotoIds.includes(msg.id))) {
-          dispatch(Photos.addSavedPhoto(msg.id));
+        if(!(msg.sent_by === idfv)) {
           CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
             dispatch(Photos.loadGalleryImages());
             dispatch(Album.updateLatestChannelImage(msg.id));
@@ -73,32 +74,20 @@ export function completeWalkthrough() {
   }
 }
 
-export function saveImage(imageUrl, photoId) {
+export function saveImage(imageUrl) {
   return (dispatch, getState) => {
-    const { album: { id }, photos: { savedPhotoIds } } = getState();
-    if(id) {
-      if(photoId === "NO_ALBUM") {
-        CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
-          dispatch(Photos.loadGalleryImages());
-        });
-      } else if(!(savedPhotoIds.includes(photoId))) {
-        dispatch(Photos.addSavedPhoto(photoId));
-        CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
-          dispatch(Photos.loadGalleryImages());
-        });
-      }
-    } else {
-      CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
-        dispatch(Photos.loadGalleryImages());
-      });
-    }
+    const { album: { id } } = getState();
+    CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
+      dispatch(Photos.loadGalleryImages());
+    });
   }
 }
 
 export function loadAndDispatchState() {
   return (dispatch) => {
     return AsyncStorage.multiGet([PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE,
-            ALBUM_NAME_STORAGE, AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, DOWNLOADED_PHOTOS_STORAGE]).then((value) => {
+            ALBUM_NAME_STORAGE, AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE,
+            IDFV_STORAGE]).then((value) => {
       const getValue = (arr, key) => {
         for (var i = 0; i < arr.length; i++) {
           if(arr[i][0] === key) {
@@ -111,7 +100,13 @@ export function loadAndDispatchState() {
       const albumId = getValue(value, ALBUM_ID_STORAGE);
       const autoShare = getValue(value, AUTO_SHARE_STORAGE);
       const previewReel = getValue(value, PREVIEW_REEL_STORAGE);
-      const savedPhotos = getValue(value, DOWNLOADED_PHOTOS_STORAGE);
+      const idfv = getValue(value, IDFV_STORAGE);
+
+      if(idfv == null) {
+        dispatch(Settings.updateIDFV(DeviceInfo.getUniqueID(), true));
+      } else {
+        dispatch(Settings.updateIDFV(idfv));
+      }
 
       if(albumId) {
         dispatch(Album.updateId(albumId));
@@ -120,10 +115,6 @@ export function loadAndDispatchState() {
         if (autoShare) dispatch(Settings.updateAutoShare(autoShare));
         dispatch(Reel.updateCurrentIndex(CAMERA_INDEX));
         dispatch(joinChannel());
-      }
-
-      if(savedPhotos) {
-        dispatch(Photos.loadSavedPhotos(savedPhotos));
       }
 
       if(getValue(value, WALKTHROUGH_FLAG_STORAGE)) {

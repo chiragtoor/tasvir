@@ -60,33 +60,33 @@ class App extends Component {
               key={'CAMERA'}
               goToPreview={() => this.scrollTo(Actions.PREVIEW_REEL_INDEX)}
               goToGallery={() => this.scrollTo(Actions.GALLERY_INDEX)} />
-              {this.props.previewReel.map((image, imageIndex) => {
-                // because previewReel is rendered after the gallery and camera, +2 to the index
-                //  so we scrollTo the correct position in the onFinish action callback
-                const currentPage = imageIndex + Actions.PREVIEW_REEL_INDEX;
-                return (
-                  <ImageScreen
-                    key={image}
-                    data={image}
-                    goToCamera={() => this.scrollTo(Actions.CAMERA_INDEX)}
-                    onFinish={() => {
-                      this.scrollPageProg = () => {
-                        this.props.removeImage(imageIndex);
-                        if(imageIndex == (this.props.previewReel.length - 1)) {
-                          this.props.updateCurrentIndex(this.props.currentIndex - 1);
-                          this.scrollTo(currentPage - 1, false);
-                        } else {
-                          this.scrollTo(currentPage, false);
-                        }
-                      };
+            {this.props.previewReel.map((image, imageIndex) => {
+              // because previewReel is rendered after the gallery and camera, +2 to the index
+              //  so we scrollTo the correct position in the onFinish action callback
+              const currentPage = imageIndex + Actions.PREVIEW_REEL_INDEX;
+              return (
+                <ImageScreen
+                  key={image}
+                  data={image}
+                  goToCamera={() => this.scrollTo(Actions.CAMERA_INDEX)}
+                  onFinish={() => {
+                    this.scrollPageProg = () => {
+                      this.props.removeImage(imageIndex);
                       if(imageIndex == (this.props.previewReel.length - 1)) {
-                        this.scrollTo(currentPage - 1);
+                        this.props.updateCurrentIndex(this.props.currentIndex - 1);
+                        this.scrollTo(currentPage - 1, false);
                       } else {
-                        this.scrollTo(currentPage + 1);
+                        this.scrollTo(currentPage, false);
                       }
-                    }}/>
-                );
-              })}
+                    };
+                    if(imageIndex == (this.props.previewReel.length - 1)) {
+                      this.scrollTo(currentPage - 1);
+                    } else {
+                      this.scrollTo(currentPage + 1);
+                    }
+                  }}/>
+              );
+            })}
           </ScrollView>
           <Menu />
         </Swiper>

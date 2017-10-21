@@ -1,6 +1,6 @@
 // export const URL_BASE = __DEV__ ? 'https://c3b305e6.ngrok.io/' : 'https://www.tasvirapp.com/';
-// export const URL_BASE = 'https://c33728be.ngrok.io/';
-export const URL_BASE = 'https://www.tasvirapp.com/';
+export const URL_BASE = 'https://174867e3.ngrok.io/';
+// export const URL_BASE = 'https://www.tasvirapp.com/';
 export const URL = URL_BASE + 'api';
 export const SOCKET_URL = URL_BASE + 'socket';
 export const ALBUMS_ENDPOINT = '/albums';
@@ -12,3 +12,4 @@ export const AUTO_SHARE_STORAGE = 'autoShare';
 export const WALKTHROUGH_FLAG_STORAGE = 'walkthrough';
 export const DOWNLOADED_PHOTOS_STORAGE = 'downloadedPhotos';
 export const ALBUM_LINK_STORAGE = 'albumLink';
+export const IDFV_STORAGE = 'idfv';

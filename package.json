@@ -12,6 +12,7 @@
 				"react-native": "0.47.1",
 				"react-native-branch": "^2.0.0-rc.2",
 				"react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
+				"react-native-device-info": "^0.12.1",
 				"react-native-fontawesome": "^5.7.0",
 				"react-native-fs": "^2.5.1",
 				"react-native-permissions": "^1.0.0",

@@ -56,7 +56,7 @@ export function createAlbum() {
 
 export function loadAlbum() {
   return (dispatch, getState) => {
-    const {album: {id}, photos: {savedPhotoIds}} = getState();
+    const {album: { id }, settings: { idfv } } = getState();
 
     fetch(URL + ALBUMS_ENDPOINT + "/" +  id)
     .then((response) => response.json())
@@ -65,9 +65,8 @@ export function loadAlbum() {
         dispatch(Album.updateLink(responseJson.link));
         for(var i = 0; i < responseJson.photos.length; i++) {
           const photo = responseJson.photos[i];
-          if(!(savedPhotoIds.includes(photo.id))) {
+          if(!(idfv === photo.sent_by)) {
             CameraRoll.saveToCameraRoll(photo.photo);
-            dispatch(Photos.addSavedPhoto(photo.id));
           }
         }
         dispatch(Photos.loadGalleryImages());
@@ -78,7 +77,7 @@ export function loadAlbum() {
 
 export function uploadImage(image) {
   return (dispatch, getState) => {
-    const { album: { id } } = getState();
+    const { album: { id }, settings: { idfv } } = getState();
 
     const file = {
       uri: image,
@@ -86,13 +85,13 @@ export function uploadImage(image) {
       type : 'image/jpg'
     }
 
+    dispatch(saveImage(image));
     return request.post(URL + ALBUMS_ENDPOINT + '/' + id + '/photo')
+      .field('sent_by', idfv)
       .attach('photo', file)
       .then((response) => response.body)
       .then((responseJson) => {
-        if(responseJson.success) {
-          dispatch(saveImage(image, responseJson.id));
-        } else {
+        if(!(responseJson.success)) {
           console.error("ERROR UPLOADING IMAGE");
         }
       })

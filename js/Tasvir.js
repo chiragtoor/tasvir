@@ -113,8 +113,6 @@ const store = configureStore({});
 store.subscribe(() => {
   const previewReel = store.getState().reel.previewReel;
   Storage.savePreviewReel(previewReel);
-  const savedPhotoIds = store.getState().photos.savedPhotoIds;
-  Storage.saveDownloadedPhotos(savedPhotoIds);
 });
 
 branch.subscribe(async ({error, params}) => {

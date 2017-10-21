@@ -3,6 +3,7 @@ package com.tasvir;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import io.branch.rnbranch.RNBranchPackage;
 import com.rnfs.RNFSPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
@@ -32,6 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNDeviceInfo(),
             new RNBranchPackage(),
             new RNFSPackage(),
             new RCTCameraPackage()
