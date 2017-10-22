@@ -1,6 +1,5 @@
 import { CameraRoll } from 'react-native';
 import { NavigationActions } from 'react-navigation';
-import request from 'superagent';
 
 import * as AlbumForm from './album_form';
 import * as Album from './album';
@@ -82,21 +81,18 @@ export function uploadImage(image) {
   return (dispatch, getState) => {
     const { album: { id }, settings: { idfv } } = getState();
 
+    dispatch(saveImage(image));
+
     const file = {
       uri: image,
       name: 'photo.jpg',
       type : 'image/jpg'
     }
 
-    dispatch(saveImage(image));
-    return request.post(URL + ALBUMS_ENDPOINT + '/' + id + '/photo')
-      .field('sent_by', idfv)
-      .attach('photo', file)
-      .then((response) => response.body)
-      .then((responseJson) => {
-        if(!(responseJson.success)) {
-          console.error("ERROR UPLOADING IMAGE");
-        }
-      })
+    dispatch({type: 'NO_REDUCER_STUB_UPLOAD_IMAGE', meta: { offline: {
+      effect: { photo: file, sent_by: idfv, id: id },
+      commit: { type: 'NO_REDUCER_STUB_IMAGE_UPLOADED', meta: {  } },
+    }}});
+
   }
 }

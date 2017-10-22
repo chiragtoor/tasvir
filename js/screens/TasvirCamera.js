@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, Dimensions, StyleSheet, Image, Animated, TouchableOpacity} from 'react-native';
+import {View, Text, Dimensions, StyleSheet, Image, Animated, TouchableOpacity, ImageBackground } from 'react-native';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Camera from 'react-native-camera';
 var RNFS = require('react-native-fs');
