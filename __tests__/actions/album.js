@@ -52,8 +52,9 @@ describe('album_actions', () => {
   it('closeAlbum() dipatches RESET_ALBUM, Navigation/NAVIGATE', () => {
     const store = mockStore({});
     store.dispatch(Actions.closeAlbum());
-    expect(store.getActions).toEqual([
-      { type: RESET_ALBUM }
+    expect(store.getActions()).toEqual([
+      { type: Actions.RESET_ALBUM },
+      { type: 'Navigation/BACK' }
     ]);
   });
 

@@ -56,8 +56,12 @@ export function joinChannel() {
 
 export function leaveChannel() {
   return (dispatch) => {
-    chan.leave();
-    socket.disconnect();
+    if(chan != null) {
+      chan.leave();
+    }
+    if(socket != null) {
+      socket.disconnect();
+    }
   }
 }
 

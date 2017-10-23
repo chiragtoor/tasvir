@@ -44,7 +44,9 @@
 						"react"
 				],
 				"globals": {
-				  "window": true
+				  "window": true,
+					"chan": false,
+					"socket": false
 				}
 		}
 }

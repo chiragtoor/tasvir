@@ -2,60 +2,82 @@ import * as Actions from '../../js/actions/album';
 import reducer from '../../js/reducers/album';
 
 describe('album_reducer', () => {
+
+  const expectedInitialState = {
+    id: null,
+    name: null,
+    link: null,
+    latestChannelImage: null
+  };
+
   it('initial state is as expected', () => {
     expect(
       reducer(undefined, {})
-    ).toEqual({
-      name: null,
-      id: null
-    });
+    ).toEqual(expectedInitialState);
   });
 
   it('handles UPDATE_ALBUM_NAME properly', () => {
-    const NAME = "Test Album";
+    const name = "Album";
     expect(
       reducer({}, {
         type: Actions.UPDATE_ALBUM_NAME,
-        name: NAME
+        name: name
       })
     ).toEqual({
-      name: NAME,
-      id: null
-    });
-
-    const NEW_ALBUM = "Other Test Album";
-    expect(
-      reducer({ name: NAME }, {
-        type: Actions.UPDATE_ALBUM_NAME,
-        name: NEW_ALBUM
-      })
-    ).toEqual({
-      name: NEW_ALBUM,
-      id: null
+      ...expectedInitialState,
+      name: name
     });
   });
 
   it('handles UPDATE_ALBUM_ID properly', () => {
-    const ID = "wyGqL7omNdR6DlKqe54r1yPb0VqD6MQx72B80nEmOJ4KRzkLgRkvWwVdeNlo1GpbXy3PrA9ja5QWw8GpBkzX3M2nx9AjOaEJMx2m";
+    const id = "album link"
     expect(
       reducer({}, {
         type: Actions.UPDATE_ALBUM_ID,
-        id: ID
+        id
       })
     ).toEqual({
-      name: null,
-      id: ID
+      ...expectedInitialState,
+      id: id
     });
+  });
 
-    const NEW_ID = "e89j8wXnRzD635AB4Ne10dxEjK6KDMWaLNokjX9p1JAzO38egyxYwRmqV7BGPlbEnydQ052x4rkaqbWVmo9Q2r7JLPGpylMOEodQ";
+  it('handles LOAD_LINK properly', () => {
+    const link = "branch link"
     expect(
-      reducer({ id: ID }, {
-        type: Actions.UPDATE_ALBUM_ID,
-        id: NEW_ID
+      reducer({}, {
+        type: Actions.LOAD_LINK,
+        link
       })
     ).toEqual({
-      name: null,
-      id: NEW_ID
+      ...expectedInitialState,
+      link: link
     });
+  });
+
+  it('handles UPDATE_CHANNEL_IMAGE properly', () => {
+    const id = "some id";
+    expect(
+      reducer({}, {
+        type: Actions.UPDATE_CHANNEL_IMAGE,
+        id: id
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      latestChannelImage: id
+    });
+  });
+
+  it('handles RESET_ALBUM properly', () => {
+    expect(
+      reducer({
+        id: "some id",
+        name: "an album",
+        link: "branch link",
+        latestChannelImage: "latest image id"
+      }, {
+        type: Actions.RESET_ALBUM
+      })
+    ).toEqual(expectedInitialState);
   });
 });
