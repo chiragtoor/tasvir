@@ -6,6 +6,7 @@ export const UPDATE_ALBUM_ID = 'album/UPDATE_ALBUM_ID';
 export const UPDATE_ALBUM_NAME = 'album/UPDATE_ALBUM_NAME';
 export const LOAD_LINK = 'album/LOAD_LINK';
 export const UPDATE_CHANNEL_IMAGE = 'album/UPDATE_CHANNEL_IMAGE';
+export const RESET_ALBUM = 'album/RESET_ALBUM';
 
 export function updateLatestChannelImage(id) {
   return { type: UPDATE_CHANNEL_IMAGE, id };
@@ -23,19 +24,21 @@ export function updateLink(link) {
   return { type: LOAD_LINK, link };
 }
 
+export function reset() {
+  return { type: RESET_ALBUM };
+}
+
 export function keepAlbumOpen() {
   return (dispatch) => {
-    dispatch(NavigationActions.navigate({ routeName: 'App' }));
+    return dispatch(NavigationActions.navigate({ routeName: 'App' }));
   }
 }
 
 export function closeAlbum() {
   return (dispatch) => {
-    dispatch(updateId(null));
+    dispatch(reset());
     Storage.saveAlbumId(null);
-    dispatch(updateName(null));
     Storage.saveAlbumName(null);
-    dispatch(updateLink(null));
     Storage.saveAlbumLink(null);
     dispatch(leaveChannel());
     dispatch(NavigationActions.back({}));
@@ -44,6 +47,6 @@ export function closeAlbum() {
 
 export function attemptCloseAlbum() {
   return (dispatch) => {
-  dispatch(NavigationActions.navigate({ routeName: 'CloseAlbum' }));
+    return dispatch(NavigationActions.navigate({ routeName: 'CloseAlbum' }));
   }
 }

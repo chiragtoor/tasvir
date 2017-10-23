@@ -42,6 +42,9 @@
 				],
 				"unmockedModulePathPatterns": [
 						"react"
-				]
+				],
+				"globals": {
+				  "window": true
+				}
 		}
 }

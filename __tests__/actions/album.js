@@ -1,21 +1,69 @@
 import * as Actions from '../../js/actions/album';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 
-describe('group_actions', () => {
-  it('correctly creates UPDATE_ALBUM_ID action', () => {
-    const ALBUM_ID = "wyGqL7omNdR6DlKqe54r1yPb0VqD6MQx72B80nEmOJ4KRzkLgRkvWwVdeNlo1GpbXy3PrA9ja5QWw8GpBkzX3M2nx9AjOaEJMx2m";
+const middlewares = [ thunk ];
+const mockStore = configureMockStore(middlewares)
+
+describe('album_actions', () => {
+  it('updateId() dipatches UPDATE_ALBUM_ID', () => {
+    const id = "album_id_hash";
     const expectedAction = {
       type: Actions.UPDATE_ALBUM_ID,
-      id: ALBUM_ID
+      id
     }
-    expect(Actions.updateId(ALBUM_ID)).toEqual(expectedAction);
+    expect(Actions.updateId(id)).toEqual(expectedAction);
   });
 
-  it('correctly creates UPDATE_ALBUM_NAME action', () => {
-    const ALBUM_NAME = "Test Album";
+  it('updateName() dipatches UPDATE_ALBUM_NAME', () => {
+    const name = "Test Album";
     const expectedAction = {
       type: Actions.UPDATE_ALBUM_NAME,
-      name: ALBUM_NAME
+      name
     }
-    expect(Actions.updateName(ALBUM_NAME)).toEqual(expectedAction);
+    expect(Actions.updateName(name)).toEqual(expectedAction);
+  });
+
+  it('updateLatestChannelImage() dipatches UPDATE_CHANNEL_IMAGE', () => {
+    const id = "album_id_hash";
+    const expectedAction = {
+      type: Actions.UPDATE_CHANNEL_IMAGE,
+      id
+    }
+    expect(Actions.updateLatestChannelImage(id)).toEqual(expectedAction);
+  });
+
+  it('updateLink() dipatches LOAD_LINK', () => {
+    const link = "branch link";
+    const expectedAction = {
+      type: Actions.LOAD_LINK,
+      link
+    }
+    expect(Actions.updateLink(link)).toEqual(expectedAction);
+  });
+
+  it('reset() dipatches RESET_ALBUM', () => {
+    const expectedAction = {
+      type: Actions.RESET_ALBUM
+    }
+    expect(Actions.reset()).toEqual(expectedAction);
+  });
+
+  it('closeAlbum() dipatches RESET_ALBUM, Navigation/NAVIGATE', () => {
+    const store = mockStore({});
+    store.dispatch(Actions.closeAlbum());
+    expect(store.getActions).toEqual([
+      { type: RESET_ALBUM }
+    ]);
+  });
+
+  it('keepAlbumOpen() navigates to App', () => {
+    const store = mockStore({});
+    expect(store.dispatch(Actions.keepAlbumOpen())).toEqual({ type: 'Navigation/NAVIGATE', routeName: 'App' });
+  });
+
+  it('attemptCloseAlbum() navigates to CloseAlbum', () => {
+    const store = mockStore({});
+    expect(store.dispatch(Actions.attemptCloseAlbum())).toEqual({ type: 'Navigation/NAVIGATE', routeName: 'CloseAlbum' });
   });
 });
