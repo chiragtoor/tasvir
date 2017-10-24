@@ -6,9 +6,12 @@ import nock from 'nock';
 import * as TasvirApi from '../../js/actions/tasvir_api';
 import * as AlbumForm from '../../js/actions/album_form';
 import * as Album from '../../js/actions/album';
+import * as Actions from '../../js/actions';
 import MockAsyncStorage from '../../__mocks__/mock_async_storage';
+import MockActions from '../../__mocks__/mock_actions';
 
-import { URL, ALBUMS_ENDPOINT, ALBUM_ID_STORAGE } from '../../js/constants';
+import { URL, ALBUMS_ENDPOINT, ALBUM_ID_STORAGE,
+         ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE } from '../../js/constants';
 
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares)
@@ -22,33 +25,48 @@ describe('user_actions', () => {
    * Tests for creating a group
    */
   it('correctly handles a success response when creating a group', async () => {
-    const name = "Test Album";
-    const id = "wyGqL7omNdR6DlKqe54r1yPb0VqD6MQx72B80nEmOJ4KRzkLgRkvWwVdeNlo1GpbXy3PrA9ja5QWw8GpBkzX3M2nx9AjOaEJMx2m";
+    const name = "some album";
+    const id = "album id";
+    const link = "branch link";
+    const mockAction = { type: "MOCK_ACTION" };
 
     const AsyncStorage = new MockAsyncStorage({});
     jest.setMock('AsyncStorage', AsyncStorage);
+    // mock joinChannel due to internal phoenix js libraries used that will be
+    //  undefined in test environment
+    Actions.joinChannel = jest.fn(() => {
+      return mockAction;
+    });
 
     nock(URL)
       .post(ALBUMS_ENDPOINT)
-      .reply(201, { success: 1, album: id })
+      .reply(201, { success: 1, album: id, link: link })
 
     const expectedActions = [
       { type: Album.UPDATE_ALBUM_NAME, name },
       { type: Album.UPDATE_ALBUM_ID, id },
-      { type: AlbumForm.RESET_ALBUM_FORM }
-    ]
-    const store = mockStore({ albumForm: { name: name } })
+      { type: Album.LOAD_LINK, link },
+      { type: AlbumForm.RESET_ALBUM_FORM },
+      mockAction
+    ];
+
+    // when joinChannel is called after album creation it calls getState and depends on
+    //  previous actions going through and updating reducer states. When called in tests
+    //  the reducer state is not updated, so trying to access album id will be a undefined error, to get
+    //  around this setting id in the mockStore so that once that action is called it is present
+    const store = mockStore({ albumForm: { name: name }, album: { id: id }, settings: { idfv: "idfv" } })
     await store.dispatch(TasvirApi.createAlbum())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions)
       })
 
     await expect(AsyncStorage.getItem(ALBUM_ID_STORAGE)).resolves.toBe(JSON.stringify(id));
+    await expect(AsyncStorage.getItem(ALBUM_NAME_STORAGE)).resolves.toBe(JSON.stringify(name));
+    await expect(AsyncStorage.getItem(ALBUM_LINK_STORAGE)).resolves.toBe(JSON.stringify(link));
   });
 
   it('correctly handles a error response when creating a group', async () => {
     const name = "Test Album";
-    const id = "wyGqL7omNdR6DlKqe54r1yPb0VqD6MQx72B80nEmOJ4KRzkLgRkvWwVdeNlo1GpbXy3PrA9ja5QWw8GpBkzX3M2nx9AjOaEJMx2m";
 
     const AsyncStorage = new MockAsyncStorage({});
     jest.setMock('AsyncStorage', AsyncStorage);
@@ -65,13 +83,11 @@ describe('user_actions', () => {
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions)
       })
-
     await expect(AsyncStorage.getItem(ALBUM_ID_STORAGE)).resolves.toBe(null);
   });
 
-  it('correctly handles a server error when creating a group', async () => {
+  it('correctly handles a server error when creating a album', async () => {
     const name = "Test Album";
-    const id = "wyGqL7omNdR6DlKqe54r1yPb0VqD6MQx72B80nEmOJ4KRzkLgRkvWwVdeNlo1GpbXy3PrA9ja5QWw8GpBkzX3M2nx9AjOaEJMx2m";
 
     const AsyncStorage = new MockAsyncStorage({});
     jest.setMock('AsyncStorage', AsyncStorage);
@@ -88,7 +104,6 @@ describe('user_actions', () => {
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions)
       })
-
     await expect(AsyncStorage.getItem(ALBUM_ID_STORAGE)).resolves.toBe(null);
   });
 });
