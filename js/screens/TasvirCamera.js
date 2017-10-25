@@ -17,14 +17,13 @@ class TasvirCamera extends Component {
     this.state = {
       galleryAnim: new Animated.Value(0),
       captureFadeAnim: new Animated.Value(0),
-      cameraType: Camera.constants.Type.back,
-      latestChannelImage: null
+      cameraType: Camera.constants.Type.back
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.latestChannelImage != this.state.latestChannelImage) {
-      this.setState({latestChannelImage: nextProps.latestChannelImage});
+    if(nextProps.imageReceivedFlag) {
+      this.props.acknowledgeFlagImageReceivedFromChannel();
       this.animateGallery();
     }
   }
@@ -213,14 +212,15 @@ const mapStateToProps = (state) => {
   // photos state
   galleryImages: state.photos.galleryImages,
   latestImage: state.photos.latestImage,
-  latestChannelImage: state.album.latestChannelImage
+  imageReceivedFlag: state.app.imageReceivedFlag
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     addToReel: (image) => dispatch(Actions.Reel.addImage(image)),
     uploadImage: (image) => dispatch(Actions.TasvirApi.uploadImage(image)),
-    saveImage: (photo, photoId) => dispatch(Actions.saveImage(photo, photoId))
+    saveImage: (photo, photoId) => dispatch(Actions.saveImage(photo, photoId)),
+    acknowledgeFlagImageReceivedFromChannel: () => dispatch(Actions.App.acknowledgeFlagImageReceivedFromChannel())
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(TasvirCamera);
