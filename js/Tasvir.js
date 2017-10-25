@@ -22,11 +22,11 @@ import request from 'superagent';
  *  around our app state, we want our app state and nav to be at the same
  *  level in the reducer.
  */
+import app from './reducers/app';
 import album from './reducers/album';
 import albumForm from './reducers/album_form';
 import joinAlbumForm from './reducers/join_album_form';
 import reel from './reducers/reel';
-import settings from './reducers/settings';
 import photos from './reducers/photos';
 
 import Splash from './screens/Splash';
@@ -79,8 +79,8 @@ const appReducer = combineReducers({
   album: album,
   albumForm: albumForm,
   joinAlbumForm: joinAlbumForm,
-  settings: settings,
-  photos: photos
+  photos: photos,
+  app: app
 });
 
 class NavWrapper extends React.Component {

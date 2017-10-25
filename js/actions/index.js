@@ -11,7 +11,7 @@ import * as Reel from './reel';
 import * as Album from './album';
 import * as AlbumForm from './album_form';
 import * as JoinAlbumForm from './join_album_form';
-import * as Settings from './settings';
+import * as App from './app';
 import * as TasvirApi from './tasvir_api';
 import * as Photos from './photos';
 
@@ -21,7 +21,7 @@ export {Reel as Reel,
         Album as Album,
         AlbumForm as AlbumForm,
         JoinAlbumForm as JoinAlbumForm,
-        Settings as Settings,
+        App as App,
         TasvirApi as TasvirApi,
         Photos as Photos};
 
@@ -34,14 +34,14 @@ let chan = null;
 
 export function joinChannel() {
   return (dispatch, getState) => {
-    const {album: {id}, settings: {idfv}} = getState();
+    const { album: { id }, app: { senderId } } = getState();
     if(id != null) {
       socket.connect();
       chan = socket.channel("album:" + id, {});
 
       chan.join();
       chan.on("new:photo", msg => {
-        if(!(msg.sent_by === idfv)) {
+        if(!(msg.sent_by === senderId)) {
           CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
             dispatch(Photos.loadGalleryImages());
             dispatch(Album.updateLatestChannelImage(msg.id));
@@ -105,16 +105,16 @@ export function loadAndDispatchState() {
       const idfv = getValue(value, IDFV_STORAGE);
 
       if(idfv == null) {
-        dispatch(Settings.updateIDFV(DeviceInfo.getUniqueID(), true));
+        dispatch(App.updateSenderId(DeviceInfo.getUniqueID(), true));
       } else {
-        dispatch(Settings.updateIDFV(idfv));
+        dispatch(App.updateSenderId(idfv));
       }
 
       if(albumId) {
         dispatch(Album.updateId(albumId));
         dispatch(Album.updateName(getValue(value, ALBUM_NAME_STORAGE)));
         if(previewReel) dispatch(Reel.loadPreviewReel(previewReel));
-        if (autoShare) dispatch(Settings.updateAutoShare(autoShare));
+        if (autoShare) dispatch(App.updateAutoShare(autoShare));
         dispatch(Reel.updateCurrentIndex(CAMERA_INDEX));
         dispatch(joinChannel());
       }

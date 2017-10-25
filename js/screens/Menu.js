@@ -174,15 +174,15 @@ const mapStateToProps = (state) => {
     albumName: state.album.name,
     albumId: state.album.id,
     albumLink: state.album.link,
-    // settings state
-    autoShare: state.settings.autoShare,
+    // app state
+    autoShare: state.app.autoShare,
     // album form state
     formState: state.albumForm.formState
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    toggleAutoShare: (boolean) => dispatch(Actions.Settings.updateAutoShare(boolean)),
+    toggleAutoShare: (boolean) => dispatch(Actions.App.updateAutoShare(boolean)),
     albumFormUpdateName: (name) => dispatch(Actions.AlbumForm.updateName(name)),
     resetAlbumForm: () => dispatch(Actions.AlbumForm.reset()),
     createAlbum: () => dispatch(Actions.TasvirApi.createAlbum()),

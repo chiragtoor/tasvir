@@ -209,7 +209,7 @@ const mapStateToProps = (state) => {
   albumId: state.album.id,
   // reel state
   previewReel: state.reel.previewReel,
-  autoShare: state.settings.autoShare,
+  autoShare: state.app.autoShare,
   // photos state
   galleryImages: state.photos.galleryImages,
   latestImage: state.photos.latestImage,
