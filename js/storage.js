@@ -8,10 +8,6 @@ function persist(key, value) {
   AsyncStorage.setItem(key, JSON.stringify(value));
 }
 
-export function saveIDFV(idfv) {
-  persist(IDFV_STORAGE, idfv);
-}
-
 export function saveSenderId(senderId) {
   persist(SENDER_ID_STORAGE, senderId);
 }

@@ -95,7 +95,7 @@ class Menu extends Component {
         </View>
         <View style={styles.menuDivider} />
         {this.props.albumId == null ?
-          this.props.formState == Actions.AlbumForm.INIT_STATE ? this.createAlbumMenu() : this.createAlbumForm()
+          this.props.formState == Actions.App.APP_ALBUM_FORM_STATE_INIT ? this.createAlbumMenu() : this.createAlbumForm()
         :
           this.albumMenu()
         }
@@ -177,17 +177,17 @@ const mapStateToProps = (state) => {
     // app state
     autoShare: state.app.autoShare,
     // album form state
-    formState: state.albumForm.formState
+    formState: state.app.albumFormState
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     toggleAutoShare: (boolean) => dispatch(Actions.App.updateAutoShare(boolean)),
     albumFormUpdateName: (name) => dispatch(Actions.AlbumForm.updateName(name)),
-    resetAlbumForm: () => dispatch(Actions.AlbumForm.reset()),
+    resetAlbumForm: () => dispatch(Actions.App.resetAlbumForm()),
     createAlbum: () => dispatch(Actions.TasvirApi.createAlbum()),
-    attemptCloseAlbum: () => dispatch(Actions.Album.attemptCloseAlbum()),
-    startAlbumForm: () => dispatch(Actions.AlbumForm.initAlbumForm())
+    attemptCloseAlbum: () => dispatch(Actions.App.closeAlbum()),
+    startAlbumForm: () => dispatch(Actions.App.openAlbumForm())
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);

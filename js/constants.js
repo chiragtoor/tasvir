@@ -12,7 +12,6 @@ export const AUTO_SHARE_STORAGE = 'autoShare';
 export const WALKTHROUGH_FLAG_STORAGE = 'walkthrough';
 export const DOWNLOADED_PHOTOS_STORAGE = 'downloadedPhotos';
 export const ALBUM_LINK_STORAGE = 'albumLink';
-export const IDFV_STORAGE = 'idfv';
 export const SENDER_ID_STORAGE = 'senderId';
 
 // routes

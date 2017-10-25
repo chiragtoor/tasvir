@@ -67,8 +67,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    keepAlbumOpen: () => dispatch(Actions.Album.keepAlbumOpen()),
-    closeAlbum: () => dispatch(Actions.Album.closeAlbum()),
+    keepAlbumOpen: () => dispatch(Actions.App.cancelCloseAlbum()),
+    closeAlbum: () => dispatch(Actions.App.confirmCloseAlbum()),
     rejectAlbum: () => dispatch(Actions.JoinAlbumForm.rejectAlbum()),
     joinAlbum: () => dispatch(Actions.JoinAlbumForm.joinAlbum())
   };

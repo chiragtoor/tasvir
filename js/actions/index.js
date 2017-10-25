@@ -5,7 +5,7 @@ var DeviceInfo = require('react-native-device-info');
 
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
          AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, SOCKET_URL,
-         ALBUMS_ENDPOINT, DOWNLOADED_PHOTOS_STORAGE, IDFV_STORAGE } from '../constants';
+         ALBUMS_ENDPOINT, DOWNLOADED_PHOTOS_STORAGE, SENDER_ID_STORAGE } from '../constants';
 
 import * as Reel from './reel';
 import * as Album from './album';
@@ -89,7 +89,7 @@ export function loadAndDispatchState() {
   return (dispatch) => {
     return AsyncStorage.multiGet([PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE,
             ALBUM_NAME_STORAGE, AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE,
-            IDFV_STORAGE]).then((value) => {
+            SENDER_ID_STORAGE, DOWNLOADED_PHOTOS_STORAGE]).then((value) => {
       const getValue = (arr, key) => {
         for (var i = 0; i < arr.length; i++) {
           if(arr[i][0] === key) {
@@ -102,13 +102,15 @@ export function loadAndDispatchState() {
       const albumId = getValue(value, ALBUM_ID_STORAGE);
       const autoShare = getValue(value, AUTO_SHARE_STORAGE);
       const previewReel = getValue(value, PREVIEW_REEL_STORAGE);
-      const idfv = getValue(value, IDFV_STORAGE);
+      const senderId = getValue(value, SENDER_ID_STORAGE);
+      const savedPhotos = getValue(value, DOWNLOADED_PHOTOS_STORAGE);
 
-      if(idfv == null) {
+      if(senderId == null) {
         dispatch(App.updateSenderId(DeviceInfo.getUniqueID(), true));
       } else {
-        dispatch(App.updateSenderId(idfv));
+        dispatch(App.updateSenderId(senderId));
       }
+      dispatch(App.loadSavedPhotos(savedPhotos));
 
       if(albumId) {
         dispatch(Album.updateId(albumId));
