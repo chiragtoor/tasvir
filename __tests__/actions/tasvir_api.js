@@ -43,7 +43,6 @@ describe('user_actions', () => {
       .reply(201, { success: 1, album: id, link: link })
 
     const expectedActions = [
-      { type: Album.UPDATE_ALBUM_NAME, name },
       { type: Album.UPDATE_ALBUM_ID, id },
       { type: Album.LOAD_LINK, link },
       { type: AlbumForm.RESET_ALBUM_FORM },
@@ -54,7 +53,7 @@ describe('user_actions', () => {
     //  previous actions going through and updating reducer states. When called in tests
     //  the reducer state is not updated, so trying to access album id will be a undefined error, to get
     //  around this setting id in the mockStore so that once that action is called it is present
-    const store = mockStore({ albumForm: { name: name }, album: { id: id }, app: { senderId: "idfv" } })
+    const store = mockStore({ album: { name: name, id: id }, app: { senderId: "idfv" } })
     await store.dispatch(TasvirApi.createAlbum())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions)
@@ -78,7 +77,7 @@ describe('user_actions', () => {
     const expectedActions = [
       { type: AlbumForm.RESET_ALBUM_FORM }
     ]
-    const store = mockStore({ albumForm: { name: name } })
+    const store = mockStore({ album: { name: name } })
     await store.dispatch(TasvirApi.createAlbum())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions)
@@ -99,7 +98,7 @@ describe('user_actions', () => {
     const expectedActions = [
       { type: AlbumForm.RESET_ALBUM_FORM }
     ]
-    const store = mockStore({ albumForm: { name: name } })
+    const store = mockStore({ album: { name: name } })
     await store.dispatch(TasvirApi.createAlbum())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions)

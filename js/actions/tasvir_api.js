@@ -21,7 +21,7 @@ function getHeaders() {
 
 export function createAlbum() {
   return (dispatch, getState) => {
-    const { albumForm: { name } } = getState();
+    const { album: { name } } = getState();
     return fetch(URL + ALBUMS_ENDPOINT, {
       method: 'POST',
       headers: getHeaders(),
@@ -34,7 +34,6 @@ export function createAlbum() {
     .then((response) => response.json())
     .then((responseJson) => {
       if(responseJson.success) {
-        dispatch(Album.updateName(name));
         Storage.saveAlbumName(name);
         dispatch(Album.updateId(responseJson.album));
         Storage.saveAlbumId(responseJson.album);

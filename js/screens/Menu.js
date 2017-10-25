@@ -183,7 +183,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     toggleAutoShare: (boolean) => dispatch(Actions.App.updateAutoShare(boolean)),
-    albumFormUpdateName: (name) => dispatch(Actions.AlbumForm.updateName(name)),
+    albumFormUpdateName: (name) => dispatch(Actions.Album.updateName(name)),
     resetAlbumForm: () => dispatch(Actions.App.resetAlbumForm()),
     createAlbum: () => dispatch(Actions.TasvirApi.createAlbum()),
     attemptCloseAlbum: () => dispatch(Actions.App.closeAlbum()),
