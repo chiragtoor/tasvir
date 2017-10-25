@@ -1,6 +1,6 @@
 import * as Actions from '../../js/actions/reel';
 
-describe('settings_actions', () => {
+describe('reel_actions', () => {
   it('updateCurrentIndex() dispatches UPDATE_CURRENT_INDEX', () => {
     const currentIndex = 4;
     const expectedAction = {

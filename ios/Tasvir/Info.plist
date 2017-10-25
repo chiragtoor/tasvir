@@ -86,5 +86,7 @@
     <array>
       <string>fetch</string>
     </array>
+    <key>CodePushDeploymentKey</key>
+    <string>deployment-key-here</string>
   </dict>
 </plist>

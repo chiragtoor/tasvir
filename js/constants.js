@@ -13,3 +13,12 @@ export const WALKTHROUGH_FLAG_STORAGE = 'walkthrough';
 export const DOWNLOADED_PHOTOS_STORAGE = 'downloadedPhotos';
 export const ALBUM_LINK_STORAGE = 'albumLink';
 export const IDFV_STORAGE = 'idfv';
+export const SENDER_ID_STORAGE = 'senderId';
+
+// routes
+export const CLOSE_ALBUM_ROUTE = 'CloseAlbum';
+
+
+
+export const NAVIGATION_ACTION = "Navigation/NAVIGATE";
+export const NAVIGATION_BACK_ACTION = "Navigation/BACK";
