@@ -4,6 +4,7 @@ import { NavigationActions } from 'react-navigation';
 import * as AlbumForm from './album_form';
 import * as Album from './album';
 import * as Photos from './photos';
+import * as App from './app';
 import * as Reel from './reel';
 
 import * as Storage from '../storage';
@@ -55,7 +56,7 @@ export function createAlbum() {
 
 export function loadAlbum() {
   return (dispatch, getState) => {
-    const {album: { id }, app: { senderId }, photos: {savedPhotoIds} } = getState();
+    const {album: { id }, app: { senderId }, app: { savedPhotos } } = getState();
 
     fetch(URL + ALBUMS_ENDPOINT + "/" +  id)
     .then((response) => response.json())
@@ -66,9 +67,9 @@ export function loadAlbum() {
           const photo = responseJson.photos[i];
           // do not want to save own captured pictures or previously saved images,
           //  both these cases will be duplicates in the camera roll
-          if(!(senderId === photo.sent_by || savedPhotoIds.includes(photo.id))) {
+          if(!(senderId === photo.sent_by || savedPhotos.includes(photo.id))) {
             CameraRoll.saveToCameraRoll(photo.photo);
-            dispatch(Photos.addSavedPhoto(photo.id));
+            dispatch(App.addSavedPhoto(photo.id));
           }
         }
         dispatch(Photos.loadGalleryImages());

@@ -41,12 +41,9 @@ export function joinChannel() {
 
       chan.join();
       chan.on("new:photo", msg => {
-        console.log("GOT IMAGE FROM CHANNEL");
         if(!(msg.sent_by === senderId)) {
-          console.log("NOT MINE");
           CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
             dispatch(Photos.loadGalleryImages());
-            console.log("FLAG IMAGE");
             dispatch(App.flagImageReceivedFromChannel());
           });
         }
