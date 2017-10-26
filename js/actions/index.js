@@ -9,7 +9,6 @@ import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
 
 import * as Reel from './reel';
 import * as Album from './album';
-import * as AlbumForm from './album_form';
 import * as JoinAlbumForm from './join_album_form';
 import * as App from './app';
 import * as TasvirApi from './tasvir_api';
@@ -19,7 +18,6 @@ import * as Storage from '../storage';
 
 export {Reel as Reel,
         Album as Album,
-        AlbumForm as AlbumForm,
         JoinAlbumForm as JoinAlbumForm,
         App as App,
         TasvirApi as TasvirApi,

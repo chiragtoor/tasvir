@@ -24,7 +24,6 @@ import request from 'superagent';
  */
 import app from './reducers/app';
 import album from './reducers/album';
-import albumForm from './reducers/album_form';
 import joinAlbumForm from './reducers/join_album_form';
 import reel from './reducers/reel';
 import photos from './reducers/photos';
@@ -77,7 +76,6 @@ const appReducer = combineReducers({
   nav: navReducer,
   reel: reel,
   album: album,
-  albumForm: albumForm,
   joinAlbumForm: joinAlbumForm,
   photos: photos,
   app: app

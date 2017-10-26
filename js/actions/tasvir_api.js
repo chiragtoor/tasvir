@@ -1,7 +1,6 @@
 import { CameraRoll } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
-import * as AlbumForm from './album_form';
 import * as Album from './album';
 import * as Photos from './photos';
 import * as App from './app';
@@ -39,16 +38,16 @@ export function createAlbum() {
         Storage.saveAlbumId(responseJson.album);
         dispatch(Album.updateLink(responseJson.link));
         Storage.saveAlbumLink(responseJson.link);
-        dispatch(AlbumForm.reset());
+        dispatch(App.resetAlbumForm());
         dispatch(joinChannel());
       } else {
-        dispatch(AlbumForm.reset());
+        dispatch(App.resetAlbumForm());
       }
     })
     .catch((error) => {
       console.error(error);
       // something went wrong
-      dispatch(AlbumForm.reset());
+      dispatch(App.resetAlbumForm());
     });
   }
 }

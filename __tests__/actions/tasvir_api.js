@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import nock from 'nock';
 
 import * as TasvirApi from '../../js/actions/tasvir_api';
-import * as AlbumForm from '../../js/actions/album_form';
+import * as App from '../../js/actions/app';
 import * as Album from '../../js/actions/album';
 import * as Actions from '../../js/actions';
 import MockAsyncStorage from '../../__mocks__/mock_async_storage';
@@ -45,7 +45,7 @@ describe('user_actions', () => {
     const expectedActions = [
       { type: Album.UPDATE_ALBUM_ID, id },
       { type: Album.LOAD_LINK, link },
-      { type: AlbumForm.RESET_ALBUM_FORM },
+      { type: App.APP_RESET_ALBUM_FORM },
       mockAction
     ];
 
@@ -75,7 +75,7 @@ describe('user_actions', () => {
       .reply(422, { success: 0 })
 
     const expectedActions = [
-      { type: AlbumForm.RESET_ALBUM_FORM }
+      { type: App.APP_RESET_ALBUM_FORM }
     ]
     const store = mockStore({ album: { name: name } })
     await store.dispatch(TasvirApi.createAlbum())
@@ -96,7 +96,7 @@ describe('user_actions', () => {
       .reply(500, { })
 
     const expectedActions = [
-      { type: AlbumForm.RESET_ALBUM_FORM }
+      { type: App.APP_RESET_ALBUM_FORM }
     ]
     const store = mockStore({ album: { name: name } })
     await store.dispatch(TasvirApi.createAlbum())
