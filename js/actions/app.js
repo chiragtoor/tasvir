@@ -121,8 +121,8 @@ export function cancelCloseAlbum() {
 export function joinAlbum(name, id) {
   return (dispatch, getState) => {
     dispatch(setConfirmationCopy("JOIN ALBUM?"));
-    dispatch(setConfirmationAcceptCopy("No"));
-    dispatch(setConfirmationRejectCopy("Yes"));
+    dispatch(setConfirmationAcceptCopy("Yes"));
+    dispatch(setConfirmationRejectCopy("No"));
     dispatch(Confirmation.setConfirmationAcceptAction(() => confirmJoinAlbum(name, id)));
     dispatch(Confirmation.setConfirmationRejectAction(() => cancelCloseAlbum()));
     dispatch(NavigationActions.navigate({ routeName: JOIN_ALBUM_ROUTE }));
