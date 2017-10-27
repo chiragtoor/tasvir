@@ -153,8 +153,8 @@ describe('app_actions', () => {
     store.dispatch(Actions.joinAlbum(albumName, albumId));
     expect(store.getActions()).toEqual([
       { type: Actions.APP_SET_CONFIRMATION_COPY, copy: ("JOIN ALBUM?") },
-      { type: Actions.APP_SET_CONFIRMATION_ACCEPT_COPY, copy: "No" },
-      { type: Actions.APP_SET_CONFIRMATION_REJECT_COPY, copy: "Yes" },
+      { type: Actions.APP_SET_CONFIRMATION_ACCEPT_COPY, copy: "Yes" },
+      { type: Actions.APP_SET_CONFIRMATION_REJECT_COPY, copy: "No" },
       mockAcceptAction,
       mockRejectAction,
       { type: NAVIGATION_ACTION, routeName: JOIN_ALBUM_ROUTE }
