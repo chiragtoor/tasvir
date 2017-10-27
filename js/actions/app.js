@@ -2,13 +2,14 @@
  * app.js holds application UI and misc state related actions
  */
 import { NavigationActions } from 'react-navigation';
-import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { leaveChannel } from '../actions';
+import { leaveChannel, joinChannel } from '../actions';
 import { CLOSE_ALBUM_ROUTE } from '../constants';
+import * as TasvirApi from './tasvir_api';
 import * as Storage from '../storage';
 import * as Album from './album';
+import * as Confirmation from './confirmation';
 
 export const APP_UPDATE_AUTO_SHARE = 'app/APP_UPDATE_AUTO_SHARE';
 export const APP_UPDATE_SENDER_ID = 'app/APP_UPDATE_SENDER_ID';
@@ -17,6 +18,11 @@ export const APP_ADD_SAVED_PHOTO = 'app/APP_ADD_SAVED_PHOTO';
 export const APP_UPDATE_RECEIVED_IMAGE_FLAG = 'app/APP_UPDATE_RECEIVED_IMAGE_FLAG';
 export const APP_OPEN_ALBUM_FORM = 'app/APP_OPEN_ALBUM_FORM';
 export const APP_RESET_ALBUM_FORM = 'app/APP_RESET_ALBUM_FORM';
+export const APP_SET_CONFIRMATION_ACCEPT = 'app/APP_SET_CONFIRMATION_ACCEPT';
+export const APP_SET_CONFIRMATION_REJECT = 'app/APP_SET_CONFIRMATION_REJECT';
+export const APP_SET_CONFIRMATION_COPY = 'app/APP_SET_CONFIRMATION_COPY';
+export const APP_SET_CONFIRMATION_ACCEPT_COPY = 'app/APP_SET_CONFIRMATION_ACCEPT_COPY';
+export const APP_SET_CONFIRMATION_REJECT_COPY = 'app/APP_SET_CONFIRMATION_REJECT_COPY';
 // form states for the album form
 export const APP_ALBUM_FORM_STATE_INIT = 0;
 export const APP_ALBUM_FORM_STATE_OPEN = 1;
@@ -57,8 +63,40 @@ export function resetAlbumForm() {
   return { type: APP_RESET_ALBUM_FORM };
 }
 
+export function setConfirmationCopy(copy) {
+  return { type: APP_SET_CONFIRMATION_COPY, copy };
+}
+
+export function setConfirmationAcceptCopy(copy) {
+  return { type: APP_SET_CONFIRMATION_ACCEPT_COPY, copy };
+}
+
+export function setConfirmationRejectCopy(copy) {
+  return { type: APP_SET_CONFIRMATION_REJECT_COPY, copy };
+}
+
+export function confirmationAccept() {
+  return (dispatch, getState) => {
+    const { app: { confirmationAccept } } = getState();
+    dispatch(confirmationAccept());
+  }
+}
+
+export function confirmationReject() {
+  return (dispatch, getState) => {
+    const { app: { confirmationReject } } = getState();
+    dispatch(confirmationReject());
+  }
+}
+
 export function closeAlbum() {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const { album: { name } } = getState();
+    dispatch(setConfirmationCopy("CLOSE ALBUM " + name + "?"));
+    dispatch(setConfirmationAcceptCopy("Close Album"));
+    dispatch(setConfirmationRejectCopy("Keep Album Open"));
+    dispatch(Confirmation.setConfirmationAcceptAction(() => confirmCloseAlbum()));
+    dispatch(Confirmation.setConfirmationRejectAction(() => cancelCloseAlbum()));
     dispatch(NavigationActions.navigate({ routeName: CLOSE_ALBUM_ROUTE }));
   }
 }
@@ -75,6 +113,35 @@ export function confirmCloseAlbum() {
 }
 
 export function cancelCloseAlbum() {
+  return (dispatch) => {
+    dispatch(NavigationActions.back({}));
+  }
+}
+
+export function joinAlbum(name, id) {
+  return (dispatch, getState) => {
+    dispatch(setConfirmationCopy("JOIN ALBUM?"));
+    dispatch(setConfirmationAcceptCopy("No"));
+    dispatch(setConfirmationRejectCopy("Yes"));
+    dispatch(Confirmation.setConfirmationAcceptAction(() => confirmJoinAlbum(name, id)));
+    dispatch(Confirmation.setConfirmationRejectAction(() => cancelCloseAlbum()));
+    dispatch(NavigationActions.navigate({ routeName: JOIN_ALBUM_ROUTE }));
+  }
+}
+
+export function confirmJoinAlbum(name, id) {
+  return (dispatch) => {
+    dispatch(Album.updateId(id));
+    Storage.saveAlbumId(id);
+    dispatch(Album.updateName(name));
+    Storage.saveAlbumName(name);
+    dispatch(TasvirApi.loadAlbum());
+    dispatch(joinChannel());
+    dispatch(NavigationActions.navigate({ routeName: APP_ROUTE }));
+  }
+}
+
+export function cancelJoinAlbum() {
   return (dispatch) => {
     dispatch(NavigationActions.back({}));
   }

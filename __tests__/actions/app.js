@@ -2,6 +2,8 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import * as Actions from '../../js/actions/app';
 import * as Album from '../../js/actions/album';
+import * as Confirmation from '../../js/actions/confirmation';
+import * as TasvirApi from '../../js/actions/tasvir_api';
 import MockAsyncStorage from '../../__mocks__/mock_async_storage';
 
 import { AUTO_SHARE_STORAGE, SENDER_ID_STORAGE, CLOSE_ALBUM_ROUTE,
@@ -79,10 +81,26 @@ describe('app_actions', () => {
     });
   });
 
-  it('closeAlbum() dispatches NAVIGATION_ACTION', () => {
-    const store = mockStore({});
+  it('closeAlbum() dispatches APP_SET_CONFIRMATION_COPY, APP_SET_CONFIRMATION_ACCEPT_COPY, APP_SET_CONFIRMATION_REJECT_COPY, APP_SET_CONFIRMATION_ACCEPT, APP_SET_CONFIRMATION_REJECT, NAVIGATION_ACTION', () => {
+    const mockAcceptAction = { type: Actions.APP_SET_CONFIRMATION_ACCEPT, accept: true };
+    const mockRejectAction = { type: Actions.APP_SET_CONFIRMATION_REJECT, reject: false };
+    Confirmation.setConfirmationAcceptAction = jest.fn((fun) => {
+      return mockAcceptAction;
+    });
+    Confirmation.setConfirmationRejectAction = jest.fn((fun) => {
+      return mockRejectAction;
+    });
+
+    const albumName = "new york 2017";
+    const store = mockStore({ album: { name: albumName } });
+
     store.dispatch(Actions.closeAlbum());
     expect(store.getActions()).toEqual([
+      { type: Actions.APP_SET_CONFIRMATION_COPY, copy: ("CLOSE ALBUM " + albumName + "?") },
+      { type: Actions.APP_SET_CONFIRMATION_ACCEPT_COPY, copy: "Close Album" },
+      { type: Actions.APP_SET_CONFIRMATION_REJECT_COPY, copy: "Keep Album Open" },
+      mockAcceptAction,
+      mockRejectAction,
       { type: NAVIGATION_ACTION, routeName: CLOSE_ALBUM_ROUTE }
     ]);
   });
@@ -92,11 +110,6 @@ describe('app_actions', () => {
 
     const AsyncStorage = new MockAsyncStorage({});
     jest.setMock('AsyncStorage', AsyncStorage);
-
-    const mockAction = { type: "MOCK_ACTION" };
-    Actions.joinChannel = jest.fn(() => {
-      return mockAction;
-    });
 
     store.dispatch(Actions.confirmCloseAlbum());
     expect(store.getActions()).toEqual([
@@ -112,6 +125,57 @@ describe('app_actions', () => {
   it('cancelCloseAlbum() dispatches NAVIGATION_BACK_ACTION', () => {
     const store = mockStore({});
     store.dispatch(Actions.cancelCloseAlbum());
+    expect(store.getActions()).toEqual([
+      { type: NAVIGATION_BACK_ACTION }
+    ]);
+  });
+
+  it('joinAlbum() dispatches APP_SET_CONFIRMATION_COPY, APP_SET_CONFIRMATION_ACCEPT_COPY, APP_SET_CONFIRMATION_REJECT_COPY, APP_SET_CONFIRMATION_ACCEPT, APP_SET_CONFIRMATION_REJECT, NAVIGATION_ACTION', () => {
+    const mockAcceptAction = { type: Actions.APP_SET_CONFIRMATION_ACCEPT, accept: true };
+    const mockRejectAction = { type: Actions.APP_SET_CONFIRMATION_REJECT, reject: false };
+    Confirmation.setConfirmationAcceptAction = jest.fn((fun) => {
+      return mockAcceptAction;
+    });
+    Confirmation.setConfirmationRejectAction = jest.fn((fun) => {
+      return mockRejectAction;
+    });
+
+    const albumName = "new york 2017";
+    const store = mockStore({ album: { name: albumName } });
+
+    store.dispatch(Actions.closeAlbum());
+    expect(store.getActions()).toEqual([
+      { type: Actions.APP_SET_CONFIRMATION_COPY, copy: ("CLOSE ALBUM " + albumName + "?") },
+      { type: Actions.APP_SET_CONFIRMATION_ACCEPT_COPY, copy: "Close Album" },
+      { type: Actions.APP_SET_CONFIRMATION_REJECT_COPY, copy: "Keep Album Open" },
+      mockAcceptAction,
+      mockRejectAction,
+      { type: NAVIGATION_ACTION, routeName: CLOSE_ALBUM_ROUTE }
+    ]);
+  });
+
+  it('confirmJoinAlbum() dispatches UPDATE_ALBUM_ID, UPDATE_ALBUM_NAME, ', async () => {
+    TasvirApi.loadAlbum
+
+    const store = mockStore({ album: { id: "album id", name: "some album", link: "some link" } });
+
+    const AsyncStorage = new MockAsyncStorage({});
+    jest.setMock('AsyncStorage', AsyncStorage);
+
+    store.dispatch(Actions.confirmCloseAlbum());
+    expect(store.getActions()).toEqual([
+      { type: Album.RESET_ALBUM },
+      { type: NAVIGATION_BACK_ACTION }
+    ]);
+
+    await expect(AsyncStorage.getItem(ALBUM_ID_STORAGE)).resolves.toBe(JSON.stringify(null));
+    await expect(AsyncStorage.getItem(ALBUM_NAME_STORAGE)).resolves.toBe(JSON.stringify(null));
+    await expect(AsyncStorage.getItem(ALBUM_LINK_STORAGE)).resolves.toBe(JSON.stringify(null));
+  });
+
+  it('cancelJoinAlbum() dispatches NAVIGATION_BACK_ACTION', () => {
+    const store = mockStore({});
+    store.dispatch(Actions.cancelJoinAlbum());
     expect(store.getActions()).toEqual([
       { type: NAVIGATION_BACK_ACTION }
     ]);

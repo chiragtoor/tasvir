@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import * as Actions from '../actions/app';
+import * as Confirmation from '../actions/confirmation';
 
 function autoShare(state = false, action) {
   switch(action.type) {
@@ -50,12 +51,62 @@ function albumFormState(state = Actions.APP_ALBUM_FORM_STATE_INIT, action) {
   }
 }
 
+function confirmationAccept(state = null, action) {
+  switch(action.type) {
+    case Confirmation.CONFIRMATION_SET_CONFIRMATION_ACCEPT:
+      return action.accept;
+    default:
+      return state;
+  }
+}
+
+function confirmationReject(state = null, action) {
+  switch(action.type) {
+    case Confirmation.CONFIRMATION_SET_CONFIRMATION_REJECT:
+      return action.reject;
+    default:
+      return state;
+  }
+}
+
+function confirmationCopy(state = null, action) {
+  switch(action.type) {
+    case Actions.APP_SET_CONFIRMATION_COPY:
+      return action.copy;
+    default:
+      return state;
+  }
+}
+
+function confirmationAcceptCopy(state = null, action) {
+  switch(action.type) {
+    case Actions.APP_SET_CONFIRMATION_ACCEPT_COPY:
+      return action.copy;
+    default:
+      return state;
+  }
+}
+
+function confirmationRejectCopy(state = null, action) {
+  switch(action.type) {
+    case Actions.APP_SET_CONFIRMATION_REJECT_COPY:
+      return action.copy;
+    default:
+      return state;
+  }
+}
+
 const app = combineReducers({
   autoShare,
   senderId,
   savedPhotos,
   imageReceivedFlag,
-  albumFormState
+  albumFormState,
+  confirmationAccept,
+  confirmationReject,
+  confirmationCopy,
+  confirmationAcceptCopy,
+  confirmationRejectCopy
 });
 
 export default app;

@@ -15,31 +15,21 @@ import TasvirButton from '../components/TasvirButton';
 import TasvirDirections from '../components/TasvirDirections';
 
 class AlbumAction extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      closeAlbum: props.navigation.state.routeName === 'CloseAlbum'
-    }
-  }
   render() {
-    const directions = this.state.closeAlbum ?
-      "Are you sure you want to close the album ''" + this.props.albumName + "''?"
-      : "Do you want to join the album ''" + this.props.joinAlbumName + "''?";
     return (
       <View style={styles.page}>
-        <TasvirDirections directions={directions} />
+        <TasvirDirections directions={this.props.copy} />
         <View style={styles.margin} />
         <TasvirButton
-          onPress={() => this.state.closeAlbum ? this.props.keepAlbumOpen() : this.props.joinAlbum()}
+          onPress={() => this.props.reject()}
           disabled={false}
-          text={this.state.closeAlbum ? 'Keep Album Open': 'Yes'} />
+          text={this.props.rejectCopy} />
         <View style={styles.margin} />
         <TasvirButton
           secondary={true}
-          onPress={() => this.state.closeAlbum ? this.props.closeAlbum() : this.props.rejectAlbum()}
+          onPress={() => this.props.accept()}
           disabled={false}
-          text={this.state.closeAlbum ? 'Close Album' : 'No'} />
+          text={this.props.acceptCopy} />
       </View>
     );
   }
@@ -61,16 +51,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    albumName: state.album.name,
-    joinAlbumName: state.joinAlbumForm.name
+    copy: state.app.confirmationCopy,
+    acceptCopy: state.app.confirmationAcceptCopy,
+    rejectCopy: state.app.confirmationRejectCopy
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    keepAlbumOpen: () => dispatch(Actions.App.cancelCloseAlbum()),
-    closeAlbum: () => dispatch(Actions.App.confirmCloseAlbum()),
-    rejectAlbum: () => dispatch(Actions.JoinAlbumForm.rejectAlbum()),
-    joinAlbum: () => dispatch(Actions.JoinAlbumForm.joinAlbum())
+    accept: () => dispatch(Actions.App.confirmationAccept()),
+    reject: () => dispatch(Actions.App.confirmationReject())
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AlbumAction);

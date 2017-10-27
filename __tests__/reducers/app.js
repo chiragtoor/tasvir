@@ -1,4 +1,5 @@
 import * as Actions from '../../js/actions/app';
+import * as Confirmation from '../../js/actions/confirmation';
 import reducer from '../../js/reducers/app';
 
 describe('app_reducer', () => {
@@ -7,7 +8,12 @@ describe('app_reducer', () => {
     senderId: null,
     savedPhotos: [],
     imageReceivedFlag: false,
-    albumFormState: Actions.APP_ALBUM_FORM_STATE_INIT
+    albumFormState: Actions.APP_ALBUM_FORM_STATE_INIT,
+    confirmationAccept: null,
+    confirmationReject: null,
+    confirmationCopy: null,
+    confirmationAcceptCopy: null,
+    confirmationRejectCopy: null
   };
 
   it('initial state is as expected', () => {
@@ -109,6 +115,71 @@ describe('app_reducer', () => {
     ).toEqual({
       ...expectedInitialState,
       albumFormState: Actions.APP_ALBUM_FORM_STATE_INIT
+    });
+  });
+
+  it('handles APP_SET_CONFIRMATION_COPY properly', () => {
+    const testCopy = "some confirmation prompt";
+    expect(
+      reducer({  }, {
+        type: Actions.APP_SET_CONFIRMATION_COPY,
+        copy: testCopy
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      confirmationCopy: testCopy
+    });
+  });
+
+  it('handles APP_SET_CONFIRMATION_ACCEPT_COPY properly', () => {
+    const testCopy = "some confirmation prompt";
+    expect(
+      reducer({  }, {
+        type: Actions.APP_SET_CONFIRMATION_ACCEPT_COPY,
+        copy: testCopy
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      confirmationAcceptCopy: testCopy
+    });
+  });
+
+  it('handles APP_SET_CONFIRMATION_REJECT_COPY properly', () => {
+    const testCopy = "some confirmation prompt";
+    expect(
+      reducer({  }, {
+        type: Actions.APP_SET_CONFIRMATION_REJECT_COPY,
+        copy: testCopy
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      confirmationRejectCopy: testCopy
+    });
+  });
+
+  it('handles CONFIRMATION_SET_CONFIRMATION_ACCEPT properly', () => {
+    const acceptFun = () => 1;
+    expect(
+      reducer({  }, {
+        type: Confirmation.CONFIRMATION_SET_CONFIRMATION_ACCEPT,
+        accept: acceptFun
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      confirmationAccept: acceptFun
+    });
+  });
+
+  it('handles CONFIRMATION_SET_CONFIRMATION_REJECT properly', () => {
+    const rejectFun = () => 1;
+    expect(
+      reducer({  }, {
+        type: Confirmation.CONFIRMATION_SET_CONFIRMATION_REJECT,
+        reject: rejectFun
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      confirmationReject: rejectFun
     });
   });
 });
