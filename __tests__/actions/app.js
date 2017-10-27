@@ -8,7 +8,7 @@ import MockAsyncStorage from '../../__mocks__/mock_async_storage';
 
 import { AUTO_SHARE_STORAGE, SENDER_ID_STORAGE, CLOSE_ALBUM_ROUTE,
          NAVIGATION_ACTION, NAVIGATION_BACK_ACTION, ALBUM_ID_STORAGE,
-         ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE } from '../../js/constants';
+         ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE, JOIN_ALBUM_ROUTE } from '../../js/constants';
 
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares);
@@ -106,6 +106,11 @@ describe('app_actions', () => {
   });
 
   it('confirmCloseAlbum() dispatches NAVIGATION_ACTION', async () => {
+    const mockChannelLeaveAction = { type: "MOCK LEAVE CHANNEL" };
+    Album.leaveChannel = jest.fn(() => {
+      return mockChannelLeaveAction;
+    });
+
     const store = mockStore({ album: { id: "album id", name: "some album", link: "some link" } });
 
     const AsyncStorage = new MockAsyncStorage({});
@@ -114,6 +119,7 @@ describe('app_actions', () => {
     store.dispatch(Actions.confirmCloseAlbum());
     expect(store.getActions()).toEqual([
       { type: Album.RESET_ALBUM },
+        mockChannelLeaveAction,
       { type: NAVIGATION_BACK_ACTION }
     ]);
 
@@ -141,36 +147,51 @@ describe('app_actions', () => {
     });
 
     const albumName = "new york 2017";
-    const store = mockStore({ album: { name: albumName } });
+    const albumId = "some id";
+    const store = mockStore({ });
 
-    store.dispatch(Actions.closeAlbum());
+    store.dispatch(Actions.joinAlbum(albumName, albumId));
     expect(store.getActions()).toEqual([
-      { type: Actions.APP_SET_CONFIRMATION_COPY, copy: ("CLOSE ALBUM " + albumName + "?") },
-      { type: Actions.APP_SET_CONFIRMATION_ACCEPT_COPY, copy: "Close Album" },
-      { type: Actions.APP_SET_CONFIRMATION_REJECT_COPY, copy: "Keep Album Open" },
+      { type: Actions.APP_SET_CONFIRMATION_COPY, copy: ("JOIN ALBUM?") },
+      { type: Actions.APP_SET_CONFIRMATION_ACCEPT_COPY, copy: "No" },
+      { type: Actions.APP_SET_CONFIRMATION_REJECT_COPY, copy: "Yes" },
       mockAcceptAction,
       mockRejectAction,
-      { type: NAVIGATION_ACTION, routeName: CLOSE_ALBUM_ROUTE }
+      { type: NAVIGATION_ACTION, routeName: JOIN_ALBUM_ROUTE }
     ]);
   });
 
   it('confirmJoinAlbum() dispatches UPDATE_ALBUM_ID, UPDATE_ALBUM_NAME, ', async () => {
-    TasvirApi.loadAlbum
+    const mockApiAction = { type: "MOCK API CALL" };
+    TasvirApi.loadAlbum = jest.fn(() => {
+      return mockApiAction;
+    });
+    const mockChannelJoinAction = { type: "MOCK JOIN CHANNEL" };
+    Album.joinChannel = jest.fn(() => {
+      return mockChannelJoinAction;
+    });
 
-    const store = mockStore({ album: { id: "album id", name: "some album", link: "some link" } });
+    const albumName = "some album";
+    const albumId = "some album id";
+
+    // mockStore does not actually update redux state on dispatch, so preload the album fields
+    //  to mimick them as in the state so when joinChannel is called it can retrieve them
+    const store = mockStore({ album: { id: albumId, name: albumName } });
 
     const AsyncStorage = new MockAsyncStorage({});
     jest.setMock('AsyncStorage', AsyncStorage);
 
-    store.dispatch(Actions.confirmCloseAlbum());
+    store.dispatch(Actions.confirmJoinAlbum(albumName, albumId));
     expect(store.getActions()).toEqual([
-      { type: Album.RESET_ALBUM },
+      { type: Album.UPDATE_ALBUM_ID, id: albumId },
+      { type: Album.UPDATE_ALBUM_NAME, name: albumName },
+      mockApiAction,
+      mockChannelJoinAction,
       { type: NAVIGATION_BACK_ACTION }
     ]);
 
-    await expect(AsyncStorage.getItem(ALBUM_ID_STORAGE)).resolves.toBe(JSON.stringify(null));
-    await expect(AsyncStorage.getItem(ALBUM_NAME_STORAGE)).resolves.toBe(JSON.stringify(null));
-    await expect(AsyncStorage.getItem(ALBUM_LINK_STORAGE)).resolves.toBe(JSON.stringify(null));
+    await expect(AsyncStorage.getItem(ALBUM_ID_STORAGE)).resolves.toBe(JSON.stringify(albumId));
+    await expect(AsyncStorage.getItem(ALBUM_NAME_STORAGE)).resolves.toBe(JSON.stringify(albumName));
   });
 
   it('cancelJoinAlbum() dispatches NAVIGATION_BACK_ACTION', () => {

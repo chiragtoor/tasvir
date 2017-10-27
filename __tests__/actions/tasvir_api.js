@@ -8,7 +8,6 @@ import * as App from '../../js/actions/app';
 import * as Album from '../../js/actions/album';
 import * as Actions from '../../js/actions';
 import MockAsyncStorage from '../../__mocks__/mock_async_storage';
-import MockActions from '../../__mocks__/mock_actions';
 
 import { URL, ALBUMS_ENDPOINT, ALBUM_ID_STORAGE,
          ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE } from '../../js/constants';
@@ -34,7 +33,7 @@ describe('user_actions', () => {
     jest.setMock('AsyncStorage', AsyncStorage);
     // mock joinChannel due to internal phoenix js libraries used that will be
     //  undefined in test environment
-    Actions.joinChannel = jest.fn(() => {
+    Album.joinChannel = jest.fn(() => {
       return mockAction;
     });
 

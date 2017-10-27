@@ -27,39 +27,41 @@ export const GALLERY_INDEX = 0;
 export const CAMERA_INDEX = 1;
 export const PREVIEW_REEL_INDEX = 2;
 
-const socket = new Socket(SOCKET_URL);
-let chan = null;
-
-export function joinChannel() {
-  return (dispatch, getState) => {
-    const { album: { id }, app: { senderId } } = getState();
-    if(id != null) {
-      socket.connect();
-      chan = socket.channel("album:" + id, {});
-
-      chan.join();
-      chan.on("new:photo", msg => {
-        if(!(msg.sent_by === senderId)) {
-          CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
-            dispatch(Photos.loadGalleryImages());
-            dispatch(App.flagImageReceivedFromChannel());
-          });
-        }
-      });
-    }
-  }
-}
-
-export function leaveChannel() {
-  return (dispatch) => {
-    if(chan != null) {
-      chan.leave();
-    }
-    if(socket != null) {
-      socket.disconnect();
-    }
-  }
-}
+// const socket = new Socket(SOCKET_URL);
+// let chan = null;
+//
+// export function joinChannel() {
+//   return (dispatch, getState) => {
+//     console.log("HERE IN JOIN CHANNEL");
+//     const { album: { id }, app: { senderId } } = getState();
+//     if(id != null) {
+//       socket.connect();
+//       chan = socket.channel("album:" + id, {});
+//
+//       chan.join();
+//       chan.on("new:photo", msg => {
+//         if(!(msg.sent_by === senderId)) {
+//           CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
+//             dispatch(Photos.loadGalleryImages());
+//             dispatch(App.flagImageReceivedFromChannel());
+//           });
+//         }
+//       });
+//     }
+//   }
+// }
+//
+// export function leaveChannel() {
+//   return (dispatch) => {
+//     console.log("HERE IN LEAVE CHANNEL");
+//     if(chan != null) {
+//       chan.leave();
+//     }
+//     if(socket != null) {
+//       socket.disconnect();
+//     }
+//   }
+// }
 
 export function completeWalkthrough() {
   return (dispatch, getState) => {
@@ -116,7 +118,7 @@ export function loadAndDispatchState() {
         if(previewReel) dispatch(Reel.loadPreviewReel(previewReel));
         if (autoShare) dispatch(App.updateAutoShare(autoShare));
         dispatch(Reel.updateCurrentIndex(CAMERA_INDEX));
-        dispatch(joinChannel());
+        dispatch(Album.joinChannel());
       }
 
       if(getValue(value, WALKTHROUGH_FLAG_STORAGE)) {

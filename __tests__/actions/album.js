@@ -48,23 +48,4 @@ describe('album_actions', () => {
     }
     expect(Actions.reset()).toEqual(expectedAction);
   });
-
-  it('closeAlbum() dipatches RESET_ALBUM, Navigation/NAVIGATE', () => {
-    const store = mockStore({});
-    store.dispatch(Actions.closeAlbum());
-    expect(store.getActions()).toEqual([
-      { type: Actions.RESET_ALBUM },
-      { type: 'Navigation/BACK' }
-    ]);
-  });
-
-  it('keepAlbumOpen() navigates to App', () => {
-    const store = mockStore({});
-    expect(store.dispatch(Actions.keepAlbumOpen())).toEqual({ type: 'Navigation/NAVIGATE', routeName: 'App' });
-  });
-
-  it('attemptCloseAlbum() navigates to CloseAlbum', () => {
-    const store = mockStore({});
-    expect(store.dispatch(Actions.attemptCloseAlbum())).toEqual({ type: 'Navigation/NAVIGATE', routeName: 'CloseAlbum' });
-  });
 });

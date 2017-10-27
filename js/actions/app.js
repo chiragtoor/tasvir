@@ -4,8 +4,8 @@
 import { NavigationActions } from 'react-navigation';
 import thunk from 'redux-thunk';
 
-import { leaveChannel, joinChannel } from '../actions';
-import { CLOSE_ALBUM_ROUTE } from '../constants';
+import * as Actions from '../actions';
+import { CLOSE_ALBUM_ROUTE, JOIN_ALBUM_ROUTE } from '../constants';
 import * as TasvirApi from './tasvir_api';
 import * as Storage from '../storage';
 import * as Album from './album';
@@ -107,7 +107,7 @@ export function confirmCloseAlbum() {
     Storage.saveAlbumId(null);
     Storage.saveAlbumName(null);
     Storage.saveAlbumLink(null);
-    dispatch(leaveChannel());
+    dispatch(Album.leaveChannel());
     dispatch(NavigationActions.back({}));
   }
 }
@@ -136,8 +136,8 @@ export function confirmJoinAlbum(name, id) {
     dispatch(Album.updateName(name));
     Storage.saveAlbumName(name);
     dispatch(TasvirApi.loadAlbum());
-    dispatch(joinChannel());
-    dispatch(NavigationActions.navigate({ routeName: APP_ROUTE }));
+    dispatch(Album.joinChannel());
+    dispatch(NavigationActions.back({}));
   }
 }
 
