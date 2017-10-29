@@ -14,11 +14,11 @@ import * as App from './app';
 import * as TasvirApi from './tasvir_api';
 import * as Photos from './photos';
 
-export {Reel as Reel,
-        Album as Album,
-        App as App,
-        TasvirApi as TasvirApi,
-        Photos as Photos};
+export { Reel as Reel,
+         Album as Album,
+         App as App,
+         TasvirApi as TasvirApi,
+         Photos as Photos };
 
 export const GALLERY_INDEX = 0;
 export const CAMERA_INDEX = 1;

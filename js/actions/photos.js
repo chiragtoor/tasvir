@@ -24,12 +24,12 @@ export function loadGallery(galleryImages) {
 
 export function loadGalleryImages() {
   return (dispatch) => {
-    CameraRoll.getPhotos({
+    return CameraRoll.getPhotos({
       first: 1,
       assetType: 'Photos'
     }).then(roll => {
       dispatch(loadLatestImage(roll.edges[0].node.image.uri));
-      CameraRoll.getPhotos({
+      return CameraRoll.getPhotos({
         first: 100,
         assetType: 'Photos'
       }).then(roll => {
