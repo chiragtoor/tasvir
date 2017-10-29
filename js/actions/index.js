@@ -5,20 +5,17 @@ var DeviceInfo = require('react-native-device-info');
 
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
          AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, SOCKET_URL,
-         ALBUMS_ENDPOINT, DOWNLOADED_PHOTOS_STORAGE, SENDER_ID_STORAGE } from '../constants';
+         ALBUMS_ENDPOINT, DOWNLOADED_PHOTOS_STORAGE, SENDER_ID_STORAGE,
+         APP_ROUTE, WALKTHROUGH_ROUTE, MAIN_ROUTE } from '../constants';
 
 import * as Reel from './reel';
 import * as Album from './album';
-import * as JoinAlbumForm from './join_album_form';
 import * as App from './app';
 import * as TasvirApi from './tasvir_api';
 import * as Photos from './photos';
 
-import * as Storage from '../storage';
-
 export {Reel as Reel,
         Album as Album,
-        JoinAlbumForm as JoinAlbumForm,
         App as App,
         TasvirApi as TasvirApi,
         Photos as Photos};
@@ -26,55 +23,6 @@ export {Reel as Reel,
 export const GALLERY_INDEX = 0;
 export const CAMERA_INDEX = 1;
 export const PREVIEW_REEL_INDEX = 2;
-
-// const socket = new Socket(SOCKET_URL);
-// let chan = null;
-//
-// export function joinChannel() {
-//   return (dispatch, getState) => {
-//     console.log("HERE IN JOIN CHANNEL");
-//     const { album: { id }, app: { senderId } } = getState();
-//     if(id != null) {
-//       socket.connect();
-//       chan = socket.channel("album:" + id, {});
-//
-//       chan.join();
-//       chan.on("new:photo", msg => {
-//         if(!(msg.sent_by === senderId)) {
-//           CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
-//             dispatch(Photos.loadGalleryImages());
-//             dispatch(App.flagImageReceivedFromChannel());
-//           });
-//         }
-//       });
-//     }
-//   }
-// }
-//
-// export function leaveChannel() {
-//   return (dispatch) => {
-//     console.log("HERE IN LEAVE CHANNEL");
-//     if(chan != null) {
-//       chan.leave();
-//     }
-//     if(socket != null) {
-//       socket.disconnect();
-//     }
-//   }
-// }
-
-export function completeWalkthrough() {
-  return (dispatch, getState) => {
-    const { joinAlbumForm: { id, name } } = getState();
-    Storage.walkthroughCompleted();
-    dispatch(Photos.loadGalleryImages());
-    if(id && name) {
-      dispatch(NavigationActions.navigate({ routeName: 'JoinAlbum' }));
-    } else {
-      dispatch(NavigationActions.navigate({routeName: 'App'}));
-    }
-  }
-}
 
 export function saveImage(imageUrl) {
   return (dispatch, getState) => {
@@ -110,7 +58,9 @@ export function loadAndDispatchState() {
       } else {
         dispatch(App.updateSenderId(senderId));
       }
-      dispatch(App.loadSavedPhotos(savedPhotos));
+      if(savedPhotos) {
+        dispatch(App.loadSavedPhotos(savedPhotos));
+      }
 
       if(albumId) {
         dispatch(Album.updateId(albumId));
@@ -122,10 +72,10 @@ export function loadAndDispatchState() {
       }
 
       if(getValue(value, WALKTHROUGH_FLAG_STORAGE)) {
-        dispatch(NavigationActions.navigate({routeName: 'App'}));
         dispatch(Photos.loadGalleryImages());
+        dispatch(NavigationActions.navigate({routeName: MAIN_ROUTE}));
       } else {
-        dispatch(NavigationActions.navigate({routeName: 'Walkthrough'}));
+        dispatch(NavigationActions.navigate({routeName: WALKTHROUGH_ROUTE}));
       }
 
       if(albumId) {

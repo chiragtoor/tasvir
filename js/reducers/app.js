@@ -1,4 +1,7 @@
 import { combineReducers } from 'redux';
+import { NavigationActions } from 'react-navigation';
+
+import { MAIN_ROUTE } from '../constants';
 import * as Actions from '../actions/app';
 import * as Confirmation from '../actions/confirmation';
 
@@ -96,6 +99,15 @@ function confirmationRejectCopy(state = null, action) {
   }
 }
 
+function onCompleteWalkthrough(state = Actions.DEFAULT_WALKTHROUGH_COMPLETE, action) {
+  switch(action.type) {
+    case Actions.APP_SET_WALKTHROUGH_COMPLETE:
+      return action.complete;
+    default:
+      return state;
+  }
+}
+
 const app = combineReducers({
   autoShare,
   senderId,
@@ -106,7 +118,8 @@ const app = combineReducers({
   confirmationReject,
   confirmationCopy,
   confirmationAcceptCopy,
-  confirmationRejectCopy
+  confirmationRejectCopy,
+  onCompleteWalkthrough
 });
 
 export default app;

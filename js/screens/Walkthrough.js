@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Permissions from 'react-native-permissions';
 
-import * as Actions from '../actions';
+import * as App from '../actions/app';
 
 import TasvirButton from '../components/TasvirButton';
 
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    completeWalkthrough: () => dispatch(Actions.completeWalkthrough())
+    completeWalkthrough: () => dispatch(App.completeWalkthrough())
   };
 };
 export default connect(null, mapDispatchToProps)(Walkthrough);

@@ -19,7 +19,7 @@ import { URL_BASE } from '../constants';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-class App extends Component {
+class Main extends Component {
   componentDidMount() {
     this.scrollTo(Actions.CAMERA_INDEX);
   }
@@ -122,4 +122,4 @@ const mapDispatchToProps = (dispatch) => {
     removeImage: (index) => dispatch(Actions.Reel.removeImage(index))
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

@@ -24,27 +24,25 @@ import request from 'superagent';
  */
 import app from './reducers/app';
 import album from './reducers/album';
-import joinAlbumForm from './reducers/join_album_form';
 import reel from './reducers/reel';
 import photos from './reducers/photos';
 
 import Splash from './screens/Splash';
-import App from './screens/App';
+import Main from './screens/Main';
 import AlbumAction from './screens/AlbumAction';
 import Walkthrough from './screens/Walkthrough';
 
-import { loadAndDispatchState } from './actions';
-import * as JoinAlbumForm from './actions/join_album_form';
+import { loadAndDispatchState, App } from './actions';
 import * as Storage from './storage';
 
-import { WALKTHROUGH_FLAG_STORAGE, URL, ALBUMS_ENDPOINT } from './constants';
+import { WALKTHROUGH_FLAG_STORAGE, URL, ALBUMS_ENDPOINT, SPLASH_ROUTE } from './constants';
 
 const loggerMiddleware = createLogger({
   predicate: (getState, action) => __DEV__
 });
 
 const TasvirNavigator = StackNavigator({
-  App: {screen: App },
+  Main: {screen: Main },
   Splash: {screen: Splash},
   CloseAlbum: {screen: AlbumAction},
   JoinAlbum: {screen: AlbumAction},
@@ -64,7 +62,7 @@ const TasvirNavigator = StackNavigator({
 });
 
 const initialNavState = TasvirNavigator.router.getStateForAction(
-  TasvirNavigator.router.getActionForPathAndParams('Splash')
+  TasvirNavigator.router.getActionForPathAndParams(SPLASH_ROUTE)
 );
 
 const navReducer = (state = initialNavState, action) => {
@@ -76,7 +74,6 @@ const appReducer = combineReducers({
   nav: navReducer,
   reel: reel,
   album: album,
-  joinAlbumForm: joinAlbumForm,
   photos: photos,
   app: app
 });
@@ -125,11 +122,11 @@ branch.subscribe(async ({error, params}) => {
     const albumId = params['album_id'];
     const albumName = params['album_name'];
     if(albumId && albumName) {
-      store.dispatch(JoinAlbumForm.updateId(albumId));
-      store.dispatch(JoinAlbumForm.updateName(albumName));
       const walkthroughCompleted = await AsyncStorage.getItem(WALKTHROUGH_FLAG_STORAGE);
       if(walkthroughCompleted) {
-        store.dispatch(JoinAlbumForm.attemptJoinAlbum());
+        store.dispatch(App.joinAlbum(albumName, albumId));
+      } else {
+        store.dispatch(App.setWalkthroughComplete(() => App.joinAlbum(albumName, albumId)));
       }
     }
   }

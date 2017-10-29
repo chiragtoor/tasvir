@@ -3,6 +3,7 @@ import * as Confirmation from '../../js/actions/confirmation';
 import reducer from '../../js/reducers/app';
 
 describe('app_reducer', () => {
+
   const expectedInitialState = {
     autoShare: false,
     senderId: null,
@@ -13,7 +14,8 @@ describe('app_reducer', () => {
     confirmationReject: null,
     confirmationCopy: null,
     confirmationAcceptCopy: null,
-    confirmationRejectCopy: null
+    confirmationRejectCopy: null,
+    onCompleteWalkthrough: Actions.DEFAULT_WALKTHROUGH_COMPLETE
   };
 
   it('initial state is as expected', () => {

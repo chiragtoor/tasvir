@@ -46,8 +46,8 @@ export function joinChannel() {
       chan.on("new:photo", msg => {
         if(!(msg.sent_by === senderId)) {
           CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
-            dispatch(Photos.loadGalleryImages());
             dispatch(App.flagImageReceivedFromChannel());
+            dispatch(Photos.loadGalleryImages());
           });
         }
       });

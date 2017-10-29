@@ -5,11 +5,12 @@ import { NavigationActions } from 'react-navigation';
 import thunk from 'redux-thunk';
 
 import * as Actions from '../actions';
-import { CLOSE_ALBUM_ROUTE, JOIN_ALBUM_ROUTE } from '../constants';
+import { CLOSE_ALBUM_ROUTE, JOIN_ALBUM_ROUTE, MAIN_ROUTE } from '../constants';
 import * as TasvirApi from './tasvir_api';
 import * as Storage from '../storage';
 import * as Album from './album';
 import * as Confirmation from './confirmation';
+import * as Photos from './photos';
 
 export const APP_UPDATE_AUTO_SHARE = 'app/APP_UPDATE_AUTO_SHARE';
 export const APP_UPDATE_SENDER_ID = 'app/APP_UPDATE_SENDER_ID';
@@ -23,6 +24,7 @@ export const APP_SET_CONFIRMATION_REJECT = 'app/APP_SET_CONFIRMATION_REJECT';
 export const APP_SET_CONFIRMATION_COPY = 'app/APP_SET_CONFIRMATION_COPY';
 export const APP_SET_CONFIRMATION_ACCEPT_COPY = 'app/APP_SET_CONFIRMATION_ACCEPT_COPY';
 export const APP_SET_CONFIRMATION_REJECT_COPY = 'app/APP_SET_CONFIRMATION_REJECT_COPY';
+export const APP_SET_WALKTHROUGH_COMPLETE = 'app/APP_SET_WALKTHROUGH_COMPLETE';
 // form states for the album form
 export const APP_ALBUM_FORM_STATE_INIT = 0;
 export const APP_ALBUM_FORM_STATE_OPEN = 1;
@@ -119,7 +121,7 @@ export function cancelCloseAlbum() {
 }
 
 export function joinAlbum(name, id) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(setConfirmationCopy("JOIN ALBUM?"));
     dispatch(setConfirmationAcceptCopy("Yes"));
     dispatch(setConfirmationRejectCopy("No"));
@@ -144,5 +146,19 @@ export function confirmJoinAlbum(name, id) {
 export function cancelJoinAlbum() {
   return (dispatch) => {
     dispatch(NavigationActions.back({}));
+  }
+}
+
+export const DEFAULT_WALKTHROUGH_COMPLETE = () => NavigationActions.navigate({ routeName: MAIN_ROUTE });
+export function setWalkthroughComplete(complete) {
+  return { APP_SET_WALKTHROUGH_COMPLETE, complete };
+}
+
+export function completeWalkthrough() {
+  return (dispatch, getState) => {
+    const { app: { onCompleteWalkthrough } } = getState();
+    dispatch(Photos.loadGalleryImages());
+    Storage.walkthroughCompleted();
+    dispatch(onCompleteWalkthrough());
   }
 }
