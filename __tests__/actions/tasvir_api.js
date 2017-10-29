@@ -55,10 +55,8 @@ describe('tasvir_api_actions', () => {
     //  the reducer state is not updated, so trying to access album id will be a undefined error, to get
     //  around this setting id in the mockStore so that once that action is called it is present
     const store = mockStore({ album: { name: name, id: id }, app: { senderId: "idfv" } })
-    await store.dispatch(TasvirApi.createAlbum())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions)
-      })
+    await store.dispatch(TasvirApi.createAlbum());
+    expect(store.getActions()).toEqual(expectedActions)
 
     await expect(AsyncStorage.getItem(ALBUM_ID_STORAGE)).resolves.toBe(JSON.stringify(id));
     await expect(AsyncStorage.getItem(ALBUM_NAME_STORAGE)).resolves.toBe(JSON.stringify(name));
@@ -80,9 +78,7 @@ describe('tasvir_api_actions', () => {
     ]
     const store = mockStore({ album: { name: name } })
     await store.dispatch(TasvirApi.createAlbum())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions)
-      })
+    expect(store.getActions()).toEqual(expectedActions)
     await expect(AsyncStorage.getItem(ALBUM_ID_STORAGE)).resolves.toBe(null);
   });
 
@@ -101,9 +97,7 @@ describe('tasvir_api_actions', () => {
     ]
     const store = mockStore({ album: { name: name } })
     await store.dispatch(TasvirApi.createAlbum())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions)
-      })
+    expect(store.getActions()).toEqual(expectedActions)
     await expect(AsyncStorage.getItem(ALBUM_ID_STORAGE)).resolves.toBe(null);
   });
 
@@ -139,10 +133,8 @@ describe('tasvir_api_actions', () => {
     ];
 
     const store = mockStore({ album: { name: "some album", id: albumId }, app: { senderId: senderId, savedPhotos: [] } });
-    await store.dispatch(TasvirApi.loadAlbum())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions)
-      })
+    await store.dispatch(TasvirApi.loadAlbum());
+    expect(store.getActions()).toEqual(expectedActions);
   });
 
   it('does not save own images when loading an album', async() => {
@@ -171,9 +163,7 @@ describe('tasvir_api_actions', () => {
 
     const store = mockStore({ album: { name: "some album", id: albumId }, app: { senderId: senderId, savedPhotos: [] } });
     await store.dispatch(TasvirApi.loadAlbum())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions)
-      })
+    expect(store.getActions()).toEqual(expectedActions)
   });
 
   it('does not save own previously loaded images when loading an album', async() => {
@@ -204,9 +194,7 @@ describe('tasvir_api_actions', () => {
 
     const store = mockStore({ album: { name: "some album", id: albumId }, app: { senderId: senderId, savedPhotos: ["three"] } });
     await store.dispatch(TasvirApi.loadAlbum())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions)
-      })
+    expect(store.getActions()).toEqual(expectedActions)
   });
 
   it('correctly handles a error response when loading an album', async() => {
@@ -223,9 +211,7 @@ describe('tasvir_api_actions', () => {
     const expectedActions = [];
     const store = mockStore({ album: { name: "some album", id: albumId }, app: { senderId: senderId, savedPhotos: [] } });
     await store.dispatch(TasvirApi.loadAlbum())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions)
-      })
+    expect(store.getActions()).toEqual(expectedActions)
   });
 
   it('correctly handles a server error when loading an album', async() => {
@@ -242,9 +228,7 @@ describe('tasvir_api_actions', () => {
     const expectedActions = [];
     const store = mockStore({ album: { name: "some album", id: albumId }, app: { senderId: senderId, savedPhotos: [] } });
     await store.dispatch(TasvirApi.loadAlbum())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions)
-      })
+    expect(store.getActions()).toEqual(expectedActions)
   });
 
 });

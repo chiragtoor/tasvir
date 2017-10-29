@@ -28,13 +28,15 @@ export function loadGalleryImages() {
       first: 1,
       assetType: 'Photos'
     }).then(roll => {
-      dispatch(loadLatestImage(roll.edges[0].node.image.uri));
-      return CameraRoll.getPhotos({
-        first: 100,
-        assetType: 'Photos'
-      }).then(roll => {
-        dispatch(loadGallery(roll.edges));
-      });
+      if(roll.edges && roll.edges.length > 0) {
+        dispatch(loadLatestImage(roll.edges[0].node.image.uri));
+        return CameraRoll.getPhotos({
+          first: 100,
+          assetType: 'Photos'
+        }).then(roll => {
+          dispatch(loadGallery(roll.edges));
+        });
+      }
     });
   }
 }

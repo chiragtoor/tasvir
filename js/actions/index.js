@@ -1,11 +1,11 @@
 import { NavigationActions } from 'react-navigation';
 import { AsyncStorage, CameraRoll } from 'react-native';
 import { Socket } from 'phoenix';
-var DeviceInfo = require('react-native-device-info');
+import DeviceInfo from 'react-native-device-info';
 
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
          AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, SOCKET_URL,
-         ALBUMS_ENDPOINT, DOWNLOADED_PHOTOS_STORAGE, SENDER_ID_STORAGE,
+         ALBUMS_ENDPOINT, SAVED_PHOTOS_STORAGE, SENDER_ID_STORAGE,
          APP_ROUTE, WALKTHROUGH_ROUTE, MAIN_ROUTE } from '../constants';
 
 import * as Reel from './reel';
@@ -37,7 +37,7 @@ export function loadAndDispatchState() {
   return (dispatch) => {
     return AsyncStorage.multiGet([PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE,
             ALBUM_NAME_STORAGE, AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE,
-            SENDER_ID_STORAGE, DOWNLOADED_PHOTOS_STORAGE]).then((value) => {
+            SENDER_ID_STORAGE, SAVED_PHOTOS_STORAGE]).then((value) => {
       const getValue = (arr, key) => {
         for (var i = 0; i < arr.length; i++) {
           if(arr[i][0] === key) {
@@ -51,22 +51,20 @@ export function loadAndDispatchState() {
       const autoShare = getValue(value, AUTO_SHARE_STORAGE);
       const previewReel = getValue(value, PREVIEW_REEL_STORAGE);
       const senderId = getValue(value, SENDER_ID_STORAGE);
-      const savedPhotos = getValue(value, DOWNLOADED_PHOTOS_STORAGE);
+      const savedPhotos = getValue(value, SAVED_PHOTOS_STORAGE);
 
       if(senderId == null) {
         dispatch(App.updateSenderId(DeviceInfo.getUniqueID(), true));
       } else {
         dispatch(App.updateSenderId(senderId));
       }
-      if(savedPhotos) {
-        dispatch(App.loadSavedPhotos(savedPhotos));
-      }
+      if(savedPhotos) dispatch(App.loadSavedPhotos(savedPhotos));
+      if (autoShare) dispatch(App.updateAutoShare(autoShare));
 
       if(albumId) {
         dispatch(Album.updateId(albumId));
         dispatch(Album.updateName(getValue(value, ALBUM_NAME_STORAGE)));
         if(previewReel) dispatch(Reel.loadPreviewReel(previewReel));
-        if (autoShare) dispatch(App.updateAutoShare(autoShare));
         dispatch(Reel.updateCurrentIndex(CAMERA_INDEX));
         dispatch(Album.joinChannel());
       }

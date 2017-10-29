@@ -10,7 +10,7 @@ export const ALBUM_ID_STORAGE = 'albumId';
 export const ALBUM_NAME_STORAGE = 'albumName';
 export const AUTO_SHARE_STORAGE = 'autoShare';
 export const WALKTHROUGH_FLAG_STORAGE = 'walkthrough';
-export const DOWNLOADED_PHOTOS_STORAGE = 'downloadedPhotos';
+export const SAVED_PHOTOS_STORAGE = 'savedPhotos';
 export const ALBUM_LINK_STORAGE = 'albumLink';
 export const SENDER_ID_STORAGE = 'senderId';
 

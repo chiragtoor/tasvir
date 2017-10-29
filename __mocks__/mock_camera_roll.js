@@ -7,16 +7,15 @@
  */
 
 export default class MockCameraRoll {
-  constructor() {
-    this.cameraRoll = [];
+  constructor(roll = []) {
+    this.cameraRoll = roll.map((photo) => this.buildEntry(photo));
   }
 
   saveToCameraRoll = jest.fn((photo) => {
     return new Promise((resolve, reject) => {
-      const entry = { node: { image: { uri: photo } } };
       return (typeof photo !== 'string')
         ? reject(new Error('photo must be string'))
-        : resolve(this.cameraRoll = [entry, ...this.cameraRoll]);
+        : resolve(this.cameraRoll = [this.buildEntry(photo), ...this.cameraRoll]);
     });
   });
 
@@ -25,5 +24,9 @@ export default class MockCameraRoll {
       resolve({ edges: this.cameraRoll });
     });
   });
+
+  buildEntry(photo) {
+    return { node: { image: { uri: photo } } };
+  }
 
 }

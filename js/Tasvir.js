@@ -112,8 +112,8 @@ const store = createStore(appReducer, {},
 store.subscribe(() => {
   const previewReel = store.getState().reel.previewReel;
   Storage.savePreviewReel(previewReel);
-  const savedPhotoIds = store.getState().app.savedPhotos;
-  Storage.saveDownloadedPhotos(savedPhotoIds);
+  const savedPhotos = store.getState().app.savedPhotos;
+  Storage.saveDownloadedPhotos(savedPhotos);
 });
 
 branch.subscribe(async ({error, params}) => {
