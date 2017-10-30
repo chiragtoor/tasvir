@@ -38,6 +38,7 @@ export function loadAndDispatchState() {
     return AsyncStorage.multiGet([PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE,
             ALBUM_NAME_STORAGE, AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE,
             SENDER_ID_STORAGE, SAVED_PHOTOS_STORAGE]).then((value) => {
+
       const getValue = (arr, key) => {
         for (var i = 0; i < arr.length; i++) {
           if(arr[i][0] === key) {
@@ -79,6 +80,7 @@ export function loadAndDispatchState() {
       if(albumId) {
         dispatch(TasvirApi.loadAlbum());
       }
+
     }).catch((error) => {
       console.error(error);
     });

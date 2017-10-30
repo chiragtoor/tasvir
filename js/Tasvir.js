@@ -106,6 +106,7 @@ const customConfig = {
 
 const store = createStore(appReducer, {},
   compose(applyMiddleware(thunkMiddleware), offline(customConfig)));
+// const store = createStore(appReducer, {}, compose(applyMiddleware(thunkMiddleware)));
 
 // in order to persist the reel to state since actions fire before the change
 //   and reducers are meant to be pure, no side-effects

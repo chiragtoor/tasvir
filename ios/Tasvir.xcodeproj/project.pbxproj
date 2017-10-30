@@ -618,7 +618,7 @@
 				1C64A810EB4749589DB7D350 /* libRNDeviceInfo.a */,
 				430B8B54492E43E2BC561584 /* libRNDeviceInfo-tvOS.a */,
 				DBAC41DEE7B9421180D362AF /* libRNBackgroundFetch.a */,
-				A974795026D0464293A6555E /* libCodePush.a */,
+				53213DF31C614C54BE19BBE7 /* libCodePush.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
