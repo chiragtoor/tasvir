@@ -2,7 +2,7 @@ import { CameraRoll } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
 import * as Album from './album';
-import * as Photos from './photos';
+import * as Gallery from './gallery';
 import * as App from './app';
 import * as Reel from './reel';
 
@@ -70,7 +70,7 @@ export function loadAlbum() {
             dispatch(App.addSavedPhoto(photo.id));
           }
         }
-        return dispatch(Photos.loadGalleryImages());
+        return dispatch(Gallery.loadGallery());;
       }
     });
   }

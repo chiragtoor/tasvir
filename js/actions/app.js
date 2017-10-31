@@ -10,7 +10,7 @@ import * as TasvirApi from './tasvir_api';
 import * as Storage from '../storage';
 import * as Album from './album';
 import * as Confirmation from './confirmation';
-import * as Photos from './photos';
+import * as Gallery from './gallery';
 
 export const APP_UPDATE_AUTO_SHARE = 'app/APP_UPDATE_AUTO_SHARE';
 export const APP_UPDATE_SENDER_ID = 'app/APP_UPDATE_SENDER_ID';
@@ -157,7 +157,7 @@ export function setWalkthroughComplete(complete) {
 export function completeWalkthrough() {
   return (dispatch, getState) => {
     const { app: { onCompleteWalkthrough } } = getState();
-    dispatch(Photos.loadGalleryImages());
+    dispatch(Gallery.loadGallery());
     Storage.walkthroughCompleted();
     dispatch(onCompleteWalkthrough());
   }
