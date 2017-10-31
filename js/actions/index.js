@@ -12,13 +12,13 @@ import * as Reel from './reel';
 import * as Album from './album';
 import * as App from './app';
 import * as TasvirApi from './tasvir_api';
-import * as Photos from './photos';
+import * as Gallery from './gallery';
 
 export { Reel as Reel,
          Album as Album,
          App as App,
          TasvirApi as TasvirApi,
-         Photos as Photos };
+         Gallery as Gallery };
 
 export const GALLERY_INDEX = 0;
 export const CAMERA_INDEX = 1;
@@ -28,7 +28,7 @@ export function saveImage(imageUrl) {
   return (dispatch, getState) => {
     const { album: { id } } = getState();
     CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
-      dispatch(Photos.loadGalleryImages());
+      dispatch(Gallery.loadGallery());
     });
   }
 }
@@ -71,7 +71,7 @@ export function loadAndDispatchState() {
       }
 
       if(getValue(value, WALKTHROUGH_FLAG_STORAGE)) {
-        dispatch(Photos.loadGalleryImages());
+        dispatch(Gallery.loadGallery());
         dispatch(NavigationActions.navigate({routeName: MAIN_ROUTE}));
       } else {
         dispatch(NavigationActions.navigate({routeName: WALKTHROUGH_ROUTE}));

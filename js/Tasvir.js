@@ -25,7 +25,7 @@ import request from 'superagent';
 import app from './reducers/app';
 import album from './reducers/album';
 import reel from './reducers/reel';
-import photos from './reducers/photos';
+import gallery from './reducers/gallery';
 
 import Splash from './screens/Splash';
 import Main from './screens/Main';
@@ -74,8 +74,8 @@ const appReducer = combineReducers({
   nav: navReducer,
   reel: reel,
   album: album,
-  photos: photos,
-  app: app
+  app: app,
+  gallery: gallery
 });
 
 class NavWrapper extends React.Component {

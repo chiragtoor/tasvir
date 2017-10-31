@@ -80,7 +80,6 @@ class TasvirCamera extends Component {
 
   render() {
     const hasPreviewReel = this.props.previewReel.length > 0;
-    const hasGallery = this.props.galleryImages.length > 0;
     let galleryStyle = {position: 'absolute', left: 2, top: 2, transform: [{scale: this.state.galleryAnim}]};
     return (
       <View
@@ -108,7 +107,7 @@ class TasvirCamera extends Component {
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
-                {hasGallery ?
+                {this.props.hasGalleryImages ?
                   <View style={{width: 38, height: 38}}>
                     <TasvirIconButton
                       style={{zIndex: 0}}
@@ -210,8 +209,8 @@ const mapStateToProps = (state) => {
   previewReel: state.reel.previewReel,
   autoShare: state.app.autoShare,
   // photos state
-  galleryImages: state.photos.galleryImages,
-  latestImage: state.photos.latestImage,
+  hasGalleryImages: (state.gallery.images.length > 0),
+  latestImage: state.gallery.buttonImage,
   imageReceivedFlag: state.app.imageReceivedFlag
   };
 };

@@ -4,7 +4,7 @@ import * as Actions from '../../js/actions';
 import * as Album from '../../js/actions/album';
 import * as App from '../../js/actions/app';
 import * as Reel from '../../js/actions/reel';
-import * as Photos from '../../js/actions/photos';
+import * as Gallery from '../../js/actions/gallery';
 import * as Confirmation from '../../js/actions/confirmation';
 import * as TasvirApi from '../../js/actions/tasvir_api';
 import MockAsyncStorage from '../../__mocks__/mock_async_storage';
@@ -93,8 +93,8 @@ describe('app_actions', () => {
 
     const AsyncStorage = new MockAsyncStorage({ senderId: JSON.stringify(senderId), walkthrough: JSON.stringify(true) });
     jest.setMock('AsyncStorage', AsyncStorage);
-    const mockGalleryLoadAction = { type: Photos.LOAD_GALLERY_PHOTOS, data: "MOCK LOAD" };
-    Photos.loadGalleryImages  = jest.fn((fun) => {
+    const mockGalleryLoadAction = { type: Gallery.LOAD_IMAGES, data: "MOCK LOAD" };
+    Gallery.loadGallery  = jest.fn((fun) => {
       return mockGalleryLoadAction;
     });
 

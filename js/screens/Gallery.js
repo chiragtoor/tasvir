@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-  galleryImages: state.photos.galleryImages
+  galleryImages: state.gallery.images
   };
 };
 export default connect(mapStateToProps, null)(Gallery);

@@ -2,7 +2,7 @@ import { CameraRoll } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { Socket } from 'phoenix';
 
-import * as Photos from './photos';
+import * as Gallery from './gallery';
 import * as App from './app';
 import { SOCKET_URL } from '../constants';
 
@@ -47,7 +47,7 @@ export function joinChannel() {
         if(!(msg.sent_by === senderId)) {
           CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
             dispatch(App.flagImageReceivedFromChannel());
-            dispatch(Photos.loadGalleryImages());
+            dispatch(Gallery.loadGallery());
           });
         }
       });
