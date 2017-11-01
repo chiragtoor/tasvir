@@ -2,6 +2,7 @@ import { CameraRoll } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { Socket } from 'phoenix';
 
+import * as TasvirApi from './tasvir_api';
 import * as Gallery from './gallery';
 import * as App from './app';
 import { SOCKET_URL } from '../constants';
@@ -9,12 +10,8 @@ import { SOCKET_URL } from '../constants';
 export const UPDATE_ALBUM_ID = 'album/UPDATE_ALBUM_ID';
 export const UPDATE_ALBUM_NAME = 'album/UPDATE_ALBUM_NAME';
 export const LOAD_LINK = 'album/LOAD_LINK';
-export const UPDATE_CHANNEL_IMAGE = 'album/UPDATE_CHANNEL_IMAGE';
 export const RESET_ALBUM = 'album/RESET_ALBUM';
-
-export function updateLatestChannelImage(id) {
-  return { type: UPDATE_CHANNEL_IMAGE, id };
-}
+export const SET_HISTORY = 'album/SET_HISTORY';
 
 export function updateId(id) {
   return { type: UPDATE_ALBUM_ID, id };
@@ -30,6 +27,23 @@ export function updateLink(link) {
 
 export function reset() {
   return { type: RESET_ALBUM };
+}
+
+export function setHistory(history) {
+  return { type: SET_HISTORY, history };
+}
+
+export function openAlbum(index) {
+  return (dispatch, getState) => {
+    let { album: { history } } = getState();
+    const album = history[index];
+    dispatch(reset());
+    dispatch(updateId(album.id));
+    dispatch(updateName(album.name));
+    dispatch(TasvirApi.loadAlbum());
+    history.splice(index, 1);
+    dispatch(setHistory(history));
+  }
 }
 
 const socket = new Socket(SOCKET_URL);

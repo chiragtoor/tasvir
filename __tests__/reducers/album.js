@@ -7,12 +7,12 @@ describe('album_reducer', () => {
     id: null,
     name: null,
     link: null,
-    latestChannelImage: null
+    history: []
   };
 
   it('initial state is as expected', () => {
     expect(
-      reducer(undefined, {})
+      reducer(undefined, { })
     ).toEqual(expectedInitialState);
   });
 
@@ -55,29 +55,28 @@ describe('album_reducer', () => {
     });
   });
 
-  it('handles UPDATE_CHANNEL_IMAGE properly', () => {
-    const id = "some id";
-    expect(
-      reducer({}, {
-        type: Actions.UPDATE_CHANNEL_IMAGE,
-        id: id
-      })
-    ).toEqual({
-      ...expectedInitialState,
-      latestChannelImage: id
-    });
-  });
-
   it('handles RESET_ALBUM properly', () => {
     expect(
       reducer({
         id: "some id",
         name: "an album",
-        link: "branch link",
-        latestChannelImage: "latest image id"
+        link: "branch link"
       }, {
         type: Actions.RESET_ALBUM
       })
     ).toEqual(expectedInitialState);
+  });
+
+  it('handles SET_HISTORY properly', () => {
+    const albumHistory = [{id: "old id", name: "old album 1"}, {id: "old id 2", name: "old name 2"}];
+    expect(
+      reducer({ }, {
+        type: Actions.SET_HISTORY,
+        history: albumHistory
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      history: albumHistory
+    });
   });
 });

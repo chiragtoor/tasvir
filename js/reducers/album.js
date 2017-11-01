@@ -34,12 +34,10 @@ function link(state = null, action) {
   }
 }
 
-function latestChannelImage(state = null, action) {
+function history(state = [], action) {
   switch(action.type) {
-    case Actions.UPDATE_CHANNEL_IMAGE:
-      return action.id;
-    case Actions.RESET_ALBUM:
-      return null;
+    case Actions.SET_HISTORY:
+      return action.history;
     default:
       return state;
   }
@@ -49,7 +47,7 @@ const album = combineReducers({
   id,
   name,
   link,
-  latestChannelImage
+  history
 });
 
 export default album;

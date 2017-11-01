@@ -1,4 +1,5 @@
 import * as Actions from '../../js/actions/album';
+import * as TasvirApi from '../../js/actions/tasvir_api';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
@@ -24,15 +25,6 @@ describe('album_actions', () => {
     expect(Actions.updateName(name)).toEqual(expectedAction);
   });
 
-  it('updateLatestChannelImage() dipatches UPDATE_CHANNEL_IMAGE', () => {
-    const id = "album_id_hash";
-    const expectedAction = {
-      type: Actions.UPDATE_CHANNEL_IMAGE,
-      id
-    }
-    expect(Actions.updateLatestChannelImage(id)).toEqual(expectedAction);
-  });
-
   it('updateLink() dipatches LOAD_LINK', () => {
     const link = "branch link";
     const expectedAction = {
@@ -48,4 +40,32 @@ describe('album_actions', () => {
     }
     expect(Actions.reset()).toEqual(expectedAction);
   });
+
+  it('setHistory() dipatches SET_HISTORY', () => {
+    const albumHistory = [{id: "old id", name: "old album 1"}, {id: "old id 2", name: "old name 2"}];
+    const expectedAction = {
+      type: Actions.SET_HISTORY,
+      history: albumHistory
+    }
+    expect(Actions.setHistory(albumHistory)).toEqual(expectedAction);
+  });
+
+  it('openAlbum opens album at index, loads via API, removes from history', () => {
+    const albumHistory = [{id: "old id", name: "old album 1"}, {id: "old id 2", name: "old name 2"}];
+    const mockAction = { type: "MOCK_ACTION" };
+    TasvirApi.loadAlbum = jest.fn(() => {
+      return mockAction;
+    });
+
+    const expectedActions = [
+      { type: Actions.RESET_ALBUM },
+      { type: Actions.UPDATE_ALBUM_ID, id: "old id" },
+      { type: Actions.UPDATE_ALBUM_NAME, name: "old album 1" },
+      mockAction,
+      { type: Actions.SET_HISTORY, history: [{id: "old id 2", name: "old name 2"}]}
+    ];
+    const store = mockStore({ album: { history: albumHistory } });
+    store.dispatch(Actions.openAlbum(0));
+    expect(store.getActions()).toEqual(expectedActions);
+  })
 });

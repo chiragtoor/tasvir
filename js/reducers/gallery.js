@@ -30,10 +30,10 @@ function cursor(state = null, action) {
   }
 }
 
-const album = combineReducers({
+const gallery = combineReducers({
   buttonImage,
   images,
   cursor
 });
 
-export default album;
+export default gallery;
