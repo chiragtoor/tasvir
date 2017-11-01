@@ -7,7 +7,7 @@ import * as TasvirApi from '../../js/actions/tasvir_api';
 import * as App from '../../js/actions/app';
 import * as Album from '../../js/actions/album';
 import * as Actions from '../../js/actions';
-import * as Photos from '../../js/actions/photos';
+import * as Gallery from '../../js/actions/gallery';
 import MockAsyncStorage from '../../__mocks__/mock_async_storage';
 import MockCameraRoll from '../../__mocks__/mock_camera_roll';
 
@@ -124,8 +124,8 @@ describe('tasvir_api_actions', () => {
       { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
       { type: App.APP_ADD_SAVED_PHOTO, photo: "two" },
       { type: App.APP_ADD_SAVED_PHOTO, photo: "three" },
-      { type: Photos.LOAD_LATEST_IMAGE, latestImage: "three"},
-      { type: Photos.LOAD_GALLERY_PHOTOS, galleryImages: [
+      { type: Gallery.SET_GALLERY_BUTTON_IMAGE, image: "three"},
+      { type: Gallery.LOAD_IMAGES, images: [
                                             { node: { image: { uri: "three" } } },
                                             { node: { image: { uri: "two" } } },
                                             { node: { image: { uri: "one" } } }
@@ -155,8 +155,8 @@ describe('tasvir_api_actions', () => {
     const expectedActions = [
       { type: Album.LOAD_LINK, link: albumLink },
       { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
-      { type: Photos.LOAD_LATEST_IMAGE, latestImage: "one"},
-      { type: Photos.LOAD_GALLERY_PHOTOS, galleryImages: [
+      { type: Gallery.SET_GALLERY_BUTTON_IMAGE, image: "one"},
+      { type: Gallery.LOAD_IMAGES, images: [
                                             { node: { image: { uri: "one" } } }
                                           ]}
     ];
@@ -185,8 +185,8 @@ describe('tasvir_api_actions', () => {
         { type: Album.LOAD_LINK, link: albumLink },
         { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
         { type: App.APP_ADD_SAVED_PHOTO, photo: "two" },
-        { type: Photos.LOAD_LATEST_IMAGE, latestImage: "two"},
-        { type: Photos.LOAD_GALLERY_PHOTOS, galleryImages: [
+        { type: Gallery.SET_GALLERY_BUTTON_IMAGE, image: "two"},
+        { type: Gallery.LOAD_IMAGES, images: [
                                               { node: { image: { uri: "two" } } },
                                               { node: { image: { uri: "one" } } }
                                             ]}
