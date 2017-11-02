@@ -11,10 +11,9 @@ import MockAsyncStorage from '../../__mocks__/mock_async_storage';
 import MockCameraRoll from '../../__mocks__/mock_camera_roll';
 import DeviceInfo from 'react-native-device-info';
 
-import { AUTO_SHARE_STORAGE, SENDER_ID_STORAGE, CLOSE_ALBUM_ROUTE,
+import { AUTO_SHARE_STORAGE, SENDER_ID_STORAGE,
          NAVIGATION_ACTION, NAVIGATION_BACK_ACTION, ALBUM_ID_STORAGE,
-         ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE, JOIN_ALBUM_ROUTE,
-         WALKTHROUGH_ROUTE, MAIN_ROUTE } from '../../js/constants';
+         ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE, ROUTES } from '../../js/constants';
 
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares);
@@ -37,7 +36,7 @@ describe('app_actions', () => {
     await store.dispatch(Actions.loadAndDispatchState());
     expect(store.getActions()).toEqual([
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
-      { type: NAVIGATION_ACTION, routeName: WALKTHROUGH_ROUTE }
+      { type: NAVIGATION_ACTION, routeName: ROUTES.WALKTHROUGH }
     ]);
 
     await expect(AsyncStorage.getItem(SENDER_ID_STORAGE)).resolves.toBe(JSON.stringify(senderId));
@@ -53,7 +52,7 @@ describe('app_actions', () => {
     await store.dispatch(Actions.loadAndDispatchState());
     expect(store.getActions()).toEqual([
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
-      { type: NAVIGATION_ACTION, routeName: WALKTHROUGH_ROUTE }
+      { type: NAVIGATION_ACTION, routeName: ROUTES.WALKTHROUGH }
     ]);
   });
 
@@ -69,7 +68,7 @@ describe('app_actions', () => {
     expect(store.getActions()).toEqual([
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
       { type: App.APP_LOAD_SAVED_PHOTOS, savedPhotos: savedPhotos },
-      { type: NAVIGATION_ACTION, routeName: WALKTHROUGH_ROUTE }
+      { type: NAVIGATION_ACTION, routeName: ROUTES.WALKTHROUGH }
     ]);
   });
 
@@ -83,7 +82,7 @@ describe('app_actions', () => {
     await store.dispatch(Actions.loadAndDispatchState());
     expect(store.getActions()).toEqual([
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
-      { type: NAVIGATION_ACTION, routeName: WALKTHROUGH_ROUTE }
+      { type: NAVIGATION_ACTION, routeName: ROUTES.WALKTHROUGH }
     ]);
   });
 
@@ -102,7 +101,7 @@ describe('app_actions', () => {
     expect(store.getActions()).toEqual([
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
       mockGalleryLoadAction,
-      { type: NAVIGATION_ACTION, routeName: MAIN_ROUTE }
+      { type: NAVIGATION_ACTION, routeName: ROUTES.MAIN }
     ]);
   });
 
@@ -117,7 +116,7 @@ describe('app_actions', () => {
     expect(store.getActions()).toEqual([
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
       { type: App.APP_UPDATE_AUTO_SHARE, autoShare: true },
-      { type: NAVIGATION_ACTION, routeName: WALKTHROUGH_ROUTE }
+      { type: NAVIGATION_ACTION, routeName: ROUTES.WALKTHROUGH }
     ]);
   });
 
@@ -147,7 +146,7 @@ describe('app_actions', () => {
       { type: Album.UPDATE_ALBUM_NAME, name: albumName },
       { type: Reel.UPDATE_CURRENT_INDEX, currentIndex: Actions.CAMERA_INDEX },
       mockJoinChannel,
-      { type: NAVIGATION_ACTION, routeName: WALKTHROUGH_ROUTE },
+      { type: NAVIGATION_ACTION, routeName: ROUTES.WALKTHROUGH },
       mockLoadAlbum
     ]);
   });

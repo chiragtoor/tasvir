@@ -6,7 +6,7 @@ import DeviceInfo from 'react-native-device-info';
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
          AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, SOCKET_URL,
          ALBUMS_ENDPOINT, SAVED_PHOTOS_STORAGE, SENDER_ID_STORAGE,
-         APP_ROUTE, WALKTHROUGH_ROUTE, MAIN_ROUTE } from '../constants';
+         ROUTES } from '../constants';
 
 import * as Reel from './reel';
 import * as Album from './album';
@@ -72,9 +72,9 @@ export function loadAndDispatchState() {
 
       if(getValue(value, WALKTHROUGH_FLAG_STORAGE)) {
         dispatch(Gallery.loadGallery());
-        dispatch(NavigationActions.navigate({routeName: MAIN_ROUTE}));
+        dispatch(NavigationActions.navigate({ routeName: ROUTES.MAIN }));
       } else {
-        dispatch(NavigationActions.navigate({routeName: WALKTHROUGH_ROUTE}));
+        dispatch(NavigationActions.navigate({ routeName: ROUTES.WALKTHROUGH }));
       }
 
       if(albumId) {

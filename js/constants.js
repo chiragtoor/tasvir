@@ -15,11 +15,13 @@ export const ALBUM_LINK_STORAGE = 'albumLink';
 export const SENDER_ID_STORAGE = 'senderId';
 
 // routes
-export const SPLASH_ROUTE = 'Splash';
-export const MAIN_ROUTE = 'Main';
-export const CLOSE_ALBUM_ROUTE = 'CloseAlbum';
-export const JOIN_ALBUM_ROUTE = 'JoinAlbum';
-export const WALKTHROUGH_ROUTE = 'Walkthrough';
+export const ROUTES = {
+  ALBUM_LIST: 'AlbumList',
+  MAIN: 'Main',
+  CLOSE_ALBUM: 'CloseAlbum',
+  JOIN_ALBUM: 'JoinAblum',
+  WALKTHROUGH: 'Walkthrough'
+}
 
 export const NAVIGATION_ACTION = "Navigation/NAVIGATE";
 export const NAVIGATION_BACK_ACTION = "Navigation/BACK";

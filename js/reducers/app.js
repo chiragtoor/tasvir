@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 import { NavigationActions } from 'react-navigation';
 
-import { MAIN_ROUTE } from '../constants';
 import * as Actions from '../actions/app';
 import * as Confirmation from '../actions/confirmation';
 

@@ -31,11 +31,12 @@ import Splash from './screens/Splash';
 import Main from './screens/Main';
 import AlbumAction from './screens/AlbumAction';
 import Walkthrough from './screens/Walkthrough';
+import AlbumList from './screens/AlbumList';
 
 import { loadAndDispatchState, App } from './actions';
 import * as Storage from './storage';
 
-import { WALKTHROUGH_FLAG_STORAGE, URL, ALBUMS_ENDPOINT, SPLASH_ROUTE } from './constants';
+import { WALKTHROUGH_FLAG_STORAGE, URL, ALBUMS_ENDPOINT, ROUTES } from './constants';
 
 const loggerMiddleware = createLogger({
   predicate: (getState, action) => __DEV__
@@ -46,7 +47,8 @@ const TasvirNavigator = StackNavigator({
   Splash: {screen: Splash},
   CloseAlbum: {screen: AlbumAction},
   JoinAlbum: {screen: AlbumAction},
-  Walkthrough: {screen: Walkthrough}
+  Walkthrough: {screen: Walkthrough},
+  AlbumList: {screen: AlbumList}
 }, {
   // on iOS screens coming from bottom up look better, no effect on Android
   mode: 'modal',
@@ -62,7 +64,7 @@ const TasvirNavigator = StackNavigator({
 });
 
 const initialNavState = TasvirNavigator.router.getStateForAction(
-  TasvirNavigator.router.getActionForPathAndParams(SPLASH_ROUTE)
+  TasvirNavigator.router.getActionForPathAndParams(ROUTES.SPLASH)
 );
 
 const navReducer = (state = initialNavState, action) => {

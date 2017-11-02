@@ -5,7 +5,7 @@ import { NavigationActions } from 'react-navigation';
 import thunk from 'redux-thunk';
 
 import * as Actions from '../actions';
-import { CLOSE_ALBUM_ROUTE, JOIN_ALBUM_ROUTE, MAIN_ROUTE } from '../constants';
+import { ROUTES } from '../constants';
 import * as TasvirApi from './tasvir_api';
 import * as Storage from '../storage';
 import * as Album from './album';
@@ -99,7 +99,7 @@ export function closeAlbum() {
     dispatch(setConfirmationRejectCopy("Keep Album Open"));
     dispatch(Confirmation.setConfirmationAcceptAction(() => confirmCloseAlbum()));
     dispatch(Confirmation.setConfirmationRejectAction(() => cancelCloseAlbum()));
-    dispatch(NavigationActions.navigate({ routeName: CLOSE_ALBUM_ROUTE }));
+    dispatch(NavigationActions.navigate({ routeName: ROUTES.CLOSE_ALBUM }));
   }
 }
 
@@ -127,7 +127,7 @@ export function joinAlbum(name, id) {
     dispatch(setConfirmationRejectCopy("No"));
     dispatch(Confirmation.setConfirmationAcceptAction(() => confirmJoinAlbum(name, id)));
     dispatch(Confirmation.setConfirmationRejectAction(() => cancelCloseAlbum()));
-    dispatch(NavigationActions.navigate({ routeName: JOIN_ALBUM_ROUTE }));
+    dispatch(NavigationActions.navigate({ routeName: ROUTES.JOIN_ALBUM }));
   }
 }
 
@@ -149,7 +149,7 @@ export function cancelJoinAlbum() {
   }
 }
 
-export const DEFAULT_WALKTHROUGH_COMPLETE = () => NavigationActions.navigate({ routeName: MAIN_ROUTE });
+export const DEFAULT_WALKTHROUGH_COMPLETE = () => NavigationActions.navigate({ routeName: ROUTES.MAIN });
 export function setWalkthroughComplete(complete) {
   return { APP_SET_WALKTHROUGH_COMPLETE, complete };
 }

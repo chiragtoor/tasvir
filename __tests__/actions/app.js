@@ -6,9 +6,9 @@ import * as Confirmation from '../../js/actions/confirmation';
 import * as TasvirApi from '../../js/actions/tasvir_api';
 import MockAsyncStorage from '../../__mocks__/mock_async_storage';
 
-import { AUTO_SHARE_STORAGE, SENDER_ID_STORAGE, CLOSE_ALBUM_ROUTE,
+import { AUTO_SHARE_STORAGE, SENDER_ID_STORAGE,
          NAVIGATION_ACTION, NAVIGATION_BACK_ACTION, ALBUM_ID_STORAGE,
-         ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE, JOIN_ALBUM_ROUTE } from '../../js/constants';
+         ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE, ROUTES } from '../../js/constants';
 
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares);
@@ -101,7 +101,7 @@ describe('app_actions', () => {
       { type: Actions.APP_SET_CONFIRMATION_REJECT_COPY, copy: "Keep Album Open" },
       mockAcceptAction,
       mockRejectAction,
-      { type: NAVIGATION_ACTION, routeName: CLOSE_ALBUM_ROUTE }
+      { type: NAVIGATION_ACTION, routeName: ROUTES.CLOSE_ALBUM }
     ]);
   });
 
@@ -157,7 +157,7 @@ describe('app_actions', () => {
       { type: Actions.APP_SET_CONFIRMATION_REJECT_COPY, copy: "No" },
       mockAcceptAction,
       mockRejectAction,
-      { type: NAVIGATION_ACTION, routeName: JOIN_ALBUM_ROUTE }
+      { type: NAVIGATION_ACTION, routeName: ROUTES.JOIN_ALBUM }
     ]);
   });
 
