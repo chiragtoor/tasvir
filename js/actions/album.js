@@ -1,4 +1,4 @@
-import { CameraRoll } from 'react-native';
+import { CameraRoll, Image } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { Socket } from 'phoenix';
 
@@ -10,6 +10,8 @@ import { SOCKET_URL } from '../constants';
 export const UPDATE_ALBUM_ID = 'album/UPDATE_ALBUM_ID';
 export const UPDATE_ALBUM_NAME = 'album/UPDATE_ALBUM_NAME';
 export const LOAD_LINK = 'album/LOAD_LINK';
+export const LOAD_IMAGES = 'album/LOAD_IMAGES';
+export const ADD_IMAGE = 'album/ADD_IMAGE';
 export const RESET_ALBUM = 'album/RESET_ALBUM';
 export const SET_HISTORY = 'album/SET_HISTORY';
 
@@ -23,6 +25,20 @@ export function updateName(name) {
 
 export function updateLink(link) {
   return { type: LOAD_LINK, link };
+}
+
+export function loadImages(images) {
+  return { type: LOAD_IMAGES, images };
+}
+
+export function addImage(image) {
+  return (dispatch) => {
+    Image.getSize(image, (imageWidth, imageHeight) => {
+      dispatch({ type: ADD_IMAGE, image: { uri: image, width: imageWidth, height: imageHeight } });
+    }, (error) => {
+      console.error(error);
+    });
+  }
 }
 
 export function reset() {
@@ -60,6 +76,7 @@ export function joinChannel() {
       chan.on("new:photo", msg => {
         if(!(msg.sent_by === senderId)) {
           CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
+            dispatch(addImage(uri));
             dispatch(App.flagImageReceivedFromChannel());
             dispatch(Gallery.loadGallery());
           });

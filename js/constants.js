@@ -1,5 +1,5 @@
 // export const URL_BASE = __DEV__ ? 'https://c3b305e6.ngrok.io/' : 'https://www.tasvirapp.com/';
-export const URL_BASE = 'https://a7c4f609.ngrok.io/';
+export const URL_BASE = 'https://2f74c21f.ngrok.io/';
 // export const URL_BASE = 'https://www.tasvirapp.com/';
 export const URL = URL_BASE + 'api';
 export const SOCKET_URL = URL_BASE + 'socket';
@@ -13,6 +13,7 @@ export const WALKTHROUGH_FLAG_STORAGE = 'walkthrough';
 export const SAVED_PHOTOS_STORAGE = 'savedPhotos';
 export const ALBUM_LINK_STORAGE = 'albumLink';
 export const SENDER_ID_STORAGE = 'senderId';
+export const ALBUM_IMAGES_STORAGE = 'ablumImages';
 
 // routes
 export const ROUTES = {

@@ -12,10 +12,10 @@ class Gallery extends Component {
   formatImages = (arr) => {
     return arr.map((p) => {
       return {
-        image: p.node.image.uri,
-        width: p.node.image.width,
-        height: p.node.image.height,
-        aspectRatio: (p.node.image.width / p.node.image.height)
+        image: p.uri,
+        width: p.width,
+        height: p.height,
+        aspectRatio: (p.width / p.height)
       }
     }).reduce(function(result, value, index, array) {
       if (index % 2 === 0)
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-  galleryImages: state.gallery.images
+    galleryImages: (state.album.images.length > 0) ? state.album.images : state.gallery.images
   };
 };
 export default connect(mapStateToProps, null)(Gallery);

@@ -66,7 +66,7 @@ export function loadAlbum() {
           // do not want to save own captured pictures or previously saved images,
           //  both these cases will be duplicates in the camera roll
           if(!(senderId === photo.sent_by || savedPhotos.includes(photo.id))) {
-            CameraRoll.saveToCameraRoll(photo.photo);
+            dispatch(Actions.saveImage(photo.photo));
             dispatch(App.addSavedPhoto(photo.id));
           }
         }

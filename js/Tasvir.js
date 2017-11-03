@@ -43,12 +43,12 @@ const loggerMiddleware = createLogger({
 });
 
 const TasvirNavigator = StackNavigator({
-  Main: {screen: Main },
-  Splash: {screen: Splash},
-  CloseAlbum: {screen: AlbumAction},
-  JoinAlbum: {screen: AlbumAction},
-  Walkthrough: {screen: Walkthrough},
-  AlbumList: {screen: AlbumList}
+  Splash: { screen: Splash },
+  Main: { screen: Main },
+  CloseAlbum: { screen: AlbumAction },
+  JoinAlbum: { screen: AlbumAction },
+  Walkthrough: { screen: Walkthrough },
+  AlbumList: { screen: AlbumList }
 }, {
   // on iOS screens coming from bottom up look better, no effect on Android
   mode: 'modal',
@@ -106,9 +106,9 @@ const customConfig = {
   }
 };
 
-const store = createStore(appReducer, {},
-  compose(applyMiddleware(thunkMiddleware), offline(customConfig)));
-// const store = createStore(appReducer, {}, compose(applyMiddleware(thunkMiddleware)));
+// const store = createStore(appReducer, {},
+  // compose(applyMiddleware(thunkMiddleware), offline(customConfig)));
+const store = createStore(appReducer, {}, compose(applyMiddleware(thunkMiddleware)));
 
 // in order to persist the reel to state since actions fire before the change
 //   and reducers are meant to be pure, no side-effects
@@ -117,6 +117,8 @@ store.subscribe(() => {
   Storage.savePreviewReel(previewReel);
   const savedPhotos = store.getState().app.savedPhotos;
   Storage.saveDownloadedPhotos(savedPhotos);
+  const albumImages = store.getState().album.images;
+  Storage.saveAlbumImages(albumImages);
 });
 
 branch.subscribe(async ({error, params}) => {

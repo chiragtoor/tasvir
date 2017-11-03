@@ -23,7 +23,7 @@ export function setGalleryButtonImage(image) {
 }
 
 export function loadGallery() {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     return CameraRoll.getPhotos({
       first: 1,
       assetType: 'Photos'
@@ -34,7 +34,15 @@ export function loadGallery() {
           first: 100,
           assetType: 'Photos'
         }).then(roll => {
-          dispatch(loadImages(roll.edges));
+          const images = roll.edges.map((data) => {
+            const image = data.node.image;
+            return {
+              uri: image.uri,
+              width: image.width,
+              height: image.height
+            }
+          })
+          dispatch(loadImages(images));
         });
       }
     });

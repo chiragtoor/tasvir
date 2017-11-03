@@ -104,7 +104,7 @@ export function closeAlbum() {
 }
 
 export function confirmCloseAlbum() {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(Album.reset());
     Storage.saveAlbumId(null);
     Storage.saveAlbumName(null);
