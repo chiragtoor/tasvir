@@ -11,6 +11,7 @@ import { Socket } from 'phoenix';
 
 import TasvirCamera from './TasvirCamera';
 import Gallery from './Gallery';
+import AlbumList from './AlbumList';
 import ImageScreen from './ImageScreen';
 import Menu from './Menu';
 
@@ -38,7 +39,7 @@ class Main extends Component {
           vertical={true}
           showsPagination={false}
           index={0}
-          scrollEnabled={this.props.currentIndex == 1}>
+          scrollEnabled={this.props.currentIndex == Actions.CAMERA_INDEX}>
           <ScrollView
             style={styles.scrollContainer}
             ref={(ref) => this.ref = ref}
@@ -55,6 +56,7 @@ class Main extends Component {
                 this.props.updateCurrentIndex(page);
               }
             }}>
+            <AlbumList />
             <Gallery key={'GALLERY'} />
             <TasvirCamera
               key={'CAMERA'}
@@ -103,7 +105,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   swiper: {
-    backgroundColor: "#48B2E2"
+    // backgroundColor: "#48B2E2"
   }
 });
 

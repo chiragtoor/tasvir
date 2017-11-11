@@ -14,6 +14,7 @@ export const SAVED_PHOTOS_STORAGE = 'savedPhotos';
 export const ALBUM_LINK_STORAGE = 'albumLink';
 export const SENDER_ID_STORAGE = 'senderId';
 export const ALBUM_IMAGES_STORAGE = 'ablumImages';
+export const ALBUM_HISTORY_STORAGE = 'albumHistory';
 
 // routes
 export const ROUTES = {

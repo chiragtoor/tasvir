@@ -6,7 +6,7 @@ import DeviceInfo from 'react-native-device-info';
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
          AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, SOCKET_URL,
          ALBUMS_ENDPOINT, SAVED_PHOTOS_STORAGE, SENDER_ID_STORAGE,
-         ROUTES, ALBUM_IMAGES_STORAGE } from '../constants';
+         ROUTES, ALBUM_IMAGES_STORAGE, ALBUM_HISTORY_STORAGE } from '../constants';
 
 import * as Reel from './reel';
 import * as Album from './album';
@@ -20,9 +20,9 @@ export { Reel as Reel,
          TasvirApi as TasvirApi,
          Gallery as Gallery };
 
-export const GALLERY_INDEX = 0;
-export const CAMERA_INDEX = 1;
-export const PREVIEW_REEL_INDEX = 2;
+export const GALLERY_INDEX = 1;
+export const CAMERA_INDEX = 2;
+export const PREVIEW_REEL_INDEX = 3;
 
 export function saveImage(imageUrl) {
   return (dispatch, getState) => {
@@ -40,7 +40,8 @@ export function loadAndDispatchState() {
   return (dispatch) => {
     return AsyncStorage.multiGet([PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE,
             ALBUM_NAME_STORAGE, AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE,
-            SENDER_ID_STORAGE, SAVED_PHOTOS_STORAGE, ALBUM_IMAGES_STORAGE]).then((value) => {
+            SENDER_ID_STORAGE, SAVED_PHOTOS_STORAGE, ALBUM_IMAGES_STORAGE,
+            ALBUM_HISTORY_STORAGE]).then((value) => {
 
       const getValue = (arr, key) => {
         for (var i = 0; i < arr.length; i++) {
@@ -57,6 +58,15 @@ export function loadAndDispatchState() {
       const senderId = getValue(value, SENDER_ID_STORAGE);
       const savedPhotos = getValue(value, SAVED_PHOTOS_STORAGE);
       const albumImages = getValue(value, ALBUM_IMAGES_STORAGE);
+      const albumHistory = getValue(value, ALBUM_HISTORY_STORAGE);
+
+      if(albumHistory) {
+        dispatch(Album.setHistory(albumHistory));
+      } else {
+        dispatch(Album.setHistory([]));
+      }
+      console.log("ALBUM HISTORY");
+      console.log(albumHistory);
 
       if(senderId == null) {
         dispatch(App.updateSenderId(DeviceInfo.getUniqueID(), true));

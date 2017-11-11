@@ -59,6 +59,7 @@ export function openAlbum(index) {
     dispatch(TasvirApi.loadAlbum());
     history.splice(index, 1);
     dispatch(setHistory(history));
+    Storage.saveAlbumHistory(history);
   }
 }
 
