@@ -126,9 +126,9 @@ describe('tasvir_api_actions', () => {
       { type: App.APP_ADD_SAVED_PHOTO, photo: "three" },
       { type: Gallery.SET_GALLERY_BUTTON_IMAGE, image: "three"},
       { type: Gallery.LOAD_IMAGES, images: [
-                                            { node: { image: { uri: "three" } } },
-                                            { node: { image: { uri: "two" } } },
-                                            { node: { image: { uri: "one" } } }
+                                            { uri: "three", width: 9, height: 16 },
+                                            { uri: "two", width: 9, height: 16 },
+                                            { uri: "one", width: 9, height: 16 }
                                           ]}
     ];
 
@@ -157,7 +157,7 @@ describe('tasvir_api_actions', () => {
       { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
       { type: Gallery.SET_GALLERY_BUTTON_IMAGE, image: "one"},
       { type: Gallery.LOAD_IMAGES, images: [
-                                            { node: { image: { uri: "one" } } }
+                                            { uri: "one", width: 9, height: 16 }
                                           ]}
     ];
 
@@ -187,8 +187,8 @@ describe('tasvir_api_actions', () => {
         { type: App.APP_ADD_SAVED_PHOTO, photo: "two" },
         { type: Gallery.SET_GALLERY_BUTTON_IMAGE, image: "two"},
         { type: Gallery.LOAD_IMAGES, images: [
-                                              { node: { image: { uri: "two" } } },
-                                              { node: { image: { uri: "one" } } }
+                                              { uri: "two", width: 9, height: 16 },
+                                              { uri: "one", width: 9, height: 16 }
                                             ]}
       ];
 

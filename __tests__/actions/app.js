@@ -111,13 +111,14 @@ describe('app_actions', () => {
       return mockChannelLeaveAction;
     });
 
-    const store = mockStore({ album: { id: "album id", name: "some album", link: "some link" } });
+    const store = mockStore({ album: { id: "album id", name: "some album", link: "some link", history: [], images: [] } });
 
     const AsyncStorage = new MockAsyncStorage({});
     jest.setMock('AsyncStorage', AsyncStorage);
 
     store.dispatch(Actions.confirmCloseAlbum());
     expect(store.getActions()).toEqual([
+      { type: Album.SET_HISTORY, history: [{ id: "album id", name: "some album", images: [] }] },
       { type: Album.RESET_ALBUM },
         mockChannelLeaveAction,
       { type: NAVIGATION_BACK_ACTION }

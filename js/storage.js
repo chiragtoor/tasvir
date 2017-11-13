@@ -34,8 +34,6 @@ export function saveAlbumImages(albumImages) {
 }
 
 export function saveAlbumHistory(history) {
-  console.log("SAVING ALBUM HISTORY");
-  console.log(history);
   persist(ALBUM_HISTORY_STORAGE, history);
 }
 

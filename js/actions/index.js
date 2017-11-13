@@ -20,18 +20,16 @@ export { Reel as Reel,
          TasvirApi as TasvirApi,
          Gallery as Gallery };
 
-export const GALLERY_INDEX = 1;
-export const CAMERA_INDEX = 2;
-export const PREVIEW_REEL_INDEX = 3;
+export const GALLERY_INDEX = 0;
+export const CAMERA_INDEX = 1;
+export const PREVIEW_REEL_INDEX = 2;
 
-export function saveImage(imageUrl) {
+export function saveImage(imageUrl, loadGallery = true) {
   return (dispatch, getState) => {
     const { album: { id } } = getState();
     CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
-      if(id) {
-        dispatch(Album.addImage(uri));
-      }
-      dispatch(Gallery.loadGallery());
+      if(id) dispatch(Album.addImage(uri));
+      if(loadGAllery) dispatch(Gallery.loadGallery());
     });
   }
 }
@@ -65,8 +63,6 @@ export function loadAndDispatchState() {
       } else {
         dispatch(Album.setHistory([]));
       }
-      console.log("ALBUM HISTORY");
-      console.log(albumHistory);
 
       if(senderId == null) {
         dispatch(App.updateSenderId(DeviceInfo.getUniqueID(), true));

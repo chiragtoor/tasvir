@@ -35,6 +35,7 @@ describe('app_actions', () => {
 
     await store.dispatch(Actions.loadAndDispatchState());
     expect(store.getActions()).toEqual([
+      { type: Album.SET_HISTORY, history: [] },
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
       { type: NAVIGATION_ACTION, routeName: ROUTES.WALKTHROUGH }
     ]);
@@ -51,6 +52,7 @@ describe('app_actions', () => {
 
     await store.dispatch(Actions.loadAndDispatchState());
     expect(store.getActions()).toEqual([
+      { type: Album.SET_HISTORY, history: [] },
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
       { type: NAVIGATION_ACTION, routeName: ROUTES.WALKTHROUGH }
     ]);
@@ -66,6 +68,7 @@ describe('app_actions', () => {
 
     await store.dispatch(Actions.loadAndDispatchState());
     expect(store.getActions()).toEqual([
+      { type: Album.SET_HISTORY, history: [] },
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
       { type: App.APP_LOAD_SAVED_PHOTOS, savedPhotos: savedPhotos },
       { type: NAVIGATION_ACTION, routeName: ROUTES.WALKTHROUGH }
@@ -81,6 +84,7 @@ describe('app_actions', () => {
 
     await store.dispatch(Actions.loadAndDispatchState());
     expect(store.getActions()).toEqual([
+      { type: Album.SET_HISTORY, history: [] },
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
       { type: NAVIGATION_ACTION, routeName: ROUTES.WALKTHROUGH }
     ]);
@@ -99,6 +103,7 @@ describe('app_actions', () => {
 
     await store.dispatch(Actions.loadAndDispatchState());
     expect(store.getActions()).toEqual([
+      { type: Album.SET_HISTORY, history: [] },
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
       mockGalleryLoadAction,
       { type: NAVIGATION_ACTION, routeName: ROUTES.MAIN }
@@ -114,6 +119,7 @@ describe('app_actions', () => {
 
     await store.dispatch(Actions.loadAndDispatchState());
     expect(store.getActions()).toEqual([
+      { type: Album.SET_HISTORY, history: [] },
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
       { type: App.APP_UPDATE_AUTO_SHARE, autoShare: true },
       { type: NAVIGATION_ACTION, routeName: ROUTES.WALKTHROUGH }
@@ -141,6 +147,7 @@ describe('app_actions', () => {
 
     await store.dispatch(Actions.loadAndDispatchState());
     expect(store.getActions()).toEqual([
+      { type: Album.SET_HISTORY, history: [] },
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
       { type: Album.UPDATE_ALBUM_ID, id: albumId },
       { type: Album.UPDATE_ALBUM_NAME, name: albumName },

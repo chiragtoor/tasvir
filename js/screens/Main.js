@@ -11,7 +11,6 @@ import { Socket } from 'phoenix';
 
 import TasvirCamera from './TasvirCamera';
 import Gallery from './Gallery';
-import AlbumList from './AlbumList';
 import ImageScreen from './ImageScreen';
 import Menu from './Menu';
 
@@ -56,7 +55,6 @@ class Main extends Component {
                 this.props.updateCurrentIndex(page);
               }
             }}>
-            <AlbumList />
             <Gallery key={'GALLERY'} />
             <TasvirCamera
               key={'CAMERA'}

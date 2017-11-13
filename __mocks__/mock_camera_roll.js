@@ -26,7 +26,7 @@ export default class MockCameraRoll {
   });
 
   buildEntry(photo) {
-    return { node: { image: { uri: photo } } };
+    return { node: { image: { uri: photo, width: 9, height: 16 } } };
   }
 
 }

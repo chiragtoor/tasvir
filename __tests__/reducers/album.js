@@ -7,7 +7,8 @@ describe('album_reducer', () => {
     id: null,
     name: null,
     link: null,
-    history: []
+    history: [],
+    images: []
   };
 
   it('initial state is as expected', () => {

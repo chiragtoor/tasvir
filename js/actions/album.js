@@ -6,6 +6,7 @@ import * as TasvirApi from './tasvir_api';
 import * as Gallery from './gallery';
 import * as App from './app';
 import { SOCKET_URL } from '../constants';
+import * as Storage from '../storage';
 
 export const UPDATE_ALBUM_ID = 'album/UPDATE_ALBUM_ID';
 export const UPDATE_ALBUM_NAME = 'album/UPDATE_ALBUM_NAME';
