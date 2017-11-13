@@ -82,6 +82,8 @@ export function uploadImage(image) {
 
     dispatch(saveImage(image));
 
+    console.log("ACTION UPLOAD IMAGE");
+
     const file = {
       uri: image,
       name: 'photo.jpg',

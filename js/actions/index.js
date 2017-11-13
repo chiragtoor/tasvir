@@ -29,7 +29,7 @@ export function saveImage(imageUrl, loadGallery = true) {
     const { album: { id } } = getState();
     CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
       if(id) dispatch(Album.addImage(uri));
-      if(loadGAllery) dispatch(Gallery.loadGallery());
+      if(loadGallery) dispatch(Gallery.loadGallery());
     });
   }
 }

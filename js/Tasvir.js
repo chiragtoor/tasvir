@@ -98,15 +98,17 @@ const AppWithNavigationState = connect(mapStateToProps)(NavWrapper);
 const customConfig = {
   ...offlineConfig,
   effect: (effect, action) => {
+    console.log("HERE UPLOADING IMAGE");
     return request.post(URL + ALBUMS_ENDPOINT + '/' + effect.id + '/photo')
       .field('sent_by', effect.sent_by)
       .attach('photo', effect.photo);
-  }
+  },
+  persistOptions: { whitelist: ["offline"] }
 };
 
-// const store = createStore(appReducer, {},
-  // compose(applyMiddleware(thunkMiddleware), offline(customConfig)));
-const store = createStore(appReducer, {}, compose(applyMiddleware(thunkMiddleware)));
+const store = createStore(appReducer, {},
+  compose(applyMiddleware(thunkMiddleware), offline(customConfig)));
+// const store = createStore(appReducer, {}, compose(applyMiddleware(thunkMiddleware)));
 
 // in order to persist the reel to state since actions fire before the change
 //   and reducers are meant to be pure, no side-effects
