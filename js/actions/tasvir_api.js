@@ -38,6 +38,8 @@ export function createAlbum() {
         Storage.saveAlbumId(responseJson.album);
         dispatch(Album.updateLink(responseJson.link));
         Storage.saveAlbumLink(responseJson.link);
+        dispatch(Album.updateAlbumDate(responseJson.album_date));
+        Storage.saveAlbumDate(responseJson.album_date);
         dispatch(App.resetAlbumForm());
         dispatch(Album.joinChannel());
       } else {

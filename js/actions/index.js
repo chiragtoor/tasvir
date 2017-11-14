@@ -6,7 +6,8 @@ import DeviceInfo from 'react-native-device-info';
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
          AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, SOCKET_URL,
          ALBUMS_ENDPOINT, SAVED_PHOTOS_STORAGE, SENDER_ID_STORAGE,
-         ROUTES, ALBUM_IMAGES_STORAGE, ALBUM_HISTORY_STORAGE } from '../constants';
+         ROUTES, ALBUM_IMAGES_STORAGE, ALBUM_HISTORY_STORAGE,
+         ALBUM_DATE_STORAGE } from '../constants';
 
 import * as Reel from './reel';
 import * as Album from './album';
@@ -39,7 +40,7 @@ export function loadAndDispatchState() {
     return AsyncStorage.multiGet([PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE,
             ALBUM_NAME_STORAGE, AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE,
             SENDER_ID_STORAGE, SAVED_PHOTOS_STORAGE, ALBUM_IMAGES_STORAGE,
-            ALBUM_HISTORY_STORAGE]).then((value) => {
+            ALBUM_HISTORY_STORAGE, ALBUM_DATE_STORAGE]).then((value) => {
 
       const getValue = (arr, key) => {
         for (var i = 0; i < arr.length; i++) {
@@ -75,6 +76,7 @@ export function loadAndDispatchState() {
       if(albumId) {
         dispatch(Album.updateId(albumId));
         dispatch(Album.updateName(getValue(value, ALBUM_NAME_STORAGE)));
+        dispatch(Album.updateAlbumDate(getValue(value, ALBUM_DATE_STORAGE)));
         if(albumImages) dispatch(Album.loadImages(albumImages));
         if(previewReel) dispatch(Reel.loadPreviewReel(previewReel));
         dispatch(Reel.updateCurrentIndex(CAMERA_INDEX));

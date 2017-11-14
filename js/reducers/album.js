@@ -47,6 +47,15 @@ function images(state = [], action) {
   }
 }
 
+function albumDate(state = null, action) {
+  switch(action.type) {
+    case Actions.LOAD_DATE:
+      return action.date;
+    default:
+      return state;
+  }
+}
+
 function history(state = [], action) {
   switch(action.type) {
     case Actions.SET_HISTORY:
@@ -61,6 +70,7 @@ const album = combineReducers({
   name,
   link,
   images,
+  albumDate,
   history
 });
 

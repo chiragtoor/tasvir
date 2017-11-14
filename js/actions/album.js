@@ -15,6 +15,7 @@ export const LOAD_IMAGES = 'album/LOAD_IMAGES';
 export const ADD_IMAGE = 'album/ADD_IMAGE';
 export const RESET_ALBUM = 'album/RESET_ALBUM';
 export const SET_HISTORY = 'album/SET_HISTORY';
+export const LOAD_DATE = 'album/LOAD_DATE';
 
 export function updateId(id) {
   return { type: UPDATE_ALBUM_ID, id };
@@ -26,6 +27,10 @@ export function updateName(name) {
 
 export function updateLink(link) {
   return { type: LOAD_LINK, link };
+}
+
+export function updateAlbumDate(date) {
+  return { type: LOAD_DATE, date };
 }
 
 export function loadImages(images) {

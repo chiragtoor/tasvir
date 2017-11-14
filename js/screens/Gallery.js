@@ -148,10 +148,13 @@ class Gallery extends Component {
   renderAlbumList = () => {
     const albums = this.props.albumHistory.map((album) => {
       const image = album.images[0];
+      console.log("ALBUM LIST");
+      console.log(album.albumDate);
+      console.log(album);
       return {
         name: album.name,
         id: album.id,
-        startDate: "DATE",
+        startDate: album.albumDate,
         photoCount: album.images.length,
         image: {
           uri: image ? image.uri : "",
