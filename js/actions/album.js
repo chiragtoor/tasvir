@@ -14,7 +14,6 @@ export const LOAD_LINK = 'album/LOAD_LINK';
 export const LOAD_IMAGES = 'album/LOAD_IMAGES';
 export const ADD_IMAGE = 'album/ADD_IMAGE';
 export const RESET_ALBUM = 'album/RESET_ALBUM';
-export const SET_HISTORY = 'album/SET_HISTORY';
 export const LOAD_DATE = 'album/LOAD_DATE';
 
 export function updateId(id) {
@@ -51,10 +50,6 @@ export function reset() {
   return { type: RESET_ALBUM };
 }
 
-export function setHistory(history) {
-  return { type: SET_HISTORY, history };
-}
-
 export function openAlbum(index) {
   return (dispatch, getState) => {
     let { album: { history } } = getState();
@@ -64,7 +59,7 @@ export function openAlbum(index) {
     dispatch(updateName(album.name));
     dispatch(TasvirApi.loadAlbum());
     history.splice(index, 1);
-    dispatch(setHistory(history));
+    dispatch(App.setHistory(history));
     Storage.saveAlbumHistory(history);
   }
 }

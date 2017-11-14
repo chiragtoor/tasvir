@@ -241,7 +241,7 @@ const mapStateToProps = (state) => {
   return {
     albumName: state.album.name,
     galleryImages: (state.album.images.length > 0) ? state.album.images : state.gallery.images,
-    albumHistory: state.album.history
+    albumHistory: state.app.albumHistory
   };
 };
 export default connect(mapStateToProps, null)(Gallery);

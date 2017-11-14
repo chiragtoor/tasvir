@@ -56,22 +56,12 @@ function albumDate(state = null, action) {
   }
 }
 
-function history(state = [], action) {
-  switch(action.type) {
-    case Actions.SET_HISTORY:
-      return action.history;
-    default:
-      return state;
-  }
-}
-
 const album = combineReducers({
   id,
   name,
   link,
   images,
-  albumDate,
-  history
+  albumDate
 });
 
 export default album;

@@ -53,6 +53,15 @@ describe('app_actions', () => {
     await expect(AsyncStorage.getItem(SENDER_ID_STORAGE)).resolves.toBe(JSON.stringify(senderId));
   });
 
+  it('setHistory() dipatches SET_HISTORY', () => {
+    const albumHistory = [{id: "old id", name: "old album 1"}, {id: "old id 2", name: "old name 2"}];
+    const expectedAction = {
+      type: Actions.SET_HISTORY,
+      history: albumHistory
+    }
+    expect(Actions.setHistory(albumHistory)).toEqual(expectedAction);
+  });
+
   it('loadSavedPhotos() dispatches APP_LOAD_SAVED_PHOTOS', () => {
     const savedPhotos = ["photo one", "photo two"];
     expect(Actions.loadSavedPhotos(savedPhotos)).toEqual({
@@ -111,14 +120,14 @@ describe('app_actions', () => {
       return mockChannelLeaveAction;
     });
 
-    const store = mockStore({ album: { id: "album id", name: "some album", link: "some link", history: [], images: [] } });
+    const store = mockStore({ album: { id: "album id", name: "some album", link: "some link", images: [] }, app: { albumHistory: [] } });
 
     const AsyncStorage = new MockAsyncStorage({});
     jest.setMock('AsyncStorage', AsyncStorage);
 
     store.dispatch(Actions.confirmCloseAlbum());
     expect(store.getActions()).toEqual([
-      { type: Album.SET_HISTORY, history: [{ id: "album id", name: "some album", images: [] }] },
+      { type: Actions.SET_HISTORY, history: [{ id: "album id", name: "some album", images: [], link: "some link" }] },
       { type: Album.RESET_ALBUM },
         mockChannelLeaveAction,
       { type: NAVIGATION_BACK_ACTION }

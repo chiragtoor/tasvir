@@ -60,9 +60,9 @@ export function loadAndDispatchState() {
       const albumHistory = getValue(value, ALBUM_HISTORY_STORAGE);
 
       if(albumHistory) {
-        dispatch(Album.setHistory(albumHistory));
+        dispatch(App.setHistory(albumHistory));
       } else {
-        dispatch(Album.setHistory([]));
+        dispatch(App.setHistory([]));
       }
 
       if(senderId == null) {

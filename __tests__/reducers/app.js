@@ -8,6 +8,7 @@ describe('app_reducer', () => {
     autoShare: false,
     senderId: null,
     savedPhotos: [],
+    albumHistory: [],
     imageReceivedFlag: false,
     albumFormState: Actions.APP_ALBUM_FORM_STATE_INIT,
     confirmationAccept: null,
@@ -22,6 +23,19 @@ describe('app_reducer', () => {
     expect(
       reducer(undefined, {})
     ).toEqual(expectedInitialState);
+  });
+
+  it('handles SET_HISTORY properly', () => {
+    const albumHistory = [{id: "old id", name: "old album 1"}, {id: "old id 2", name: "old name 2"}];
+    expect(
+      reducer({ }, {
+        type: Actions.SET_HISTORY,
+        history: albumHistory
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      albumHistory: albumHistory
+    });
   });
 
   it('handles APP_UPDATE_AUTO_SHARE properly', () => {

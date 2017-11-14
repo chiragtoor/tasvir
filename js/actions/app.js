@@ -25,6 +25,7 @@ export const APP_SET_CONFIRMATION_COPY = 'app/APP_SET_CONFIRMATION_COPY';
 export const APP_SET_CONFIRMATION_ACCEPT_COPY = 'app/APP_SET_CONFIRMATION_ACCEPT_COPY';
 export const APP_SET_CONFIRMATION_REJECT_COPY = 'app/APP_SET_CONFIRMATION_REJECT_COPY';
 export const APP_SET_WALKTHROUGH_COMPLETE = 'app/APP_SET_WALKTHROUGH_COMPLETE';
+export const SET_HISTORY = 'app/SET_HISTORY';
 // form states for the album form
 export const APP_ALBUM_FORM_STATE_INIT = 0;
 export const APP_ALBUM_FORM_STATE_OPEN = 1;
@@ -59,6 +60,10 @@ export function acknowledgeFlagImageReceivedFromChannel() {
 
 export function openAlbumForm() {
   return { type: APP_OPEN_ALBUM_FORM };
+}
+
+export function setHistory(history) {
+  return { type: SET_HISTORY, history };
 }
 
 export function resetAlbumForm() {
@@ -105,10 +110,10 @@ export function closeAlbum() {
 
 export function confirmCloseAlbum() {
   return (dispatch, getState) => {
-    const { album: { history, images, name, id, albumDate } } = getState();
-    const newHistory = [{name: name, id: id, images: images, albumDate: albumDate}, ...history];
+    const { album: album, app: { albumHistory } } = getState();
+    const newHistory = [album, ...albumHistory];
     Storage.saveAlbumHistory(newHistory);
-    dispatch(Album.setHistory(newHistory));
+    dispatch(setHistory(newHistory));
     dispatch(Album.reset());
     Storage.saveAlbumId(null);
     Storage.saveAlbumName(null);

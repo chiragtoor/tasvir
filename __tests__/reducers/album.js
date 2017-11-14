@@ -7,7 +7,6 @@ describe('album_reducer', () => {
     id: null,
     name: null,
     link: null,
-    history: [],
     images: [],
     albumDate: null
   };
@@ -80,18 +79,5 @@ describe('album_reducer', () => {
         type: Actions.RESET_ALBUM
       })
     ).toEqual(expectedInitialState);
-  });
-
-  it('handles SET_HISTORY properly', () => {
-    const albumHistory = [{id: "old id", name: "old album 1"}, {id: "old id 2", name: "old name 2"}];
-    expect(
-      reducer({ }, {
-        type: Actions.SET_HISTORY,
-        history: albumHistory
-      })
-    ).toEqual({
-      ...expectedInitialState,
-      history: albumHistory
-    });
   });
 });

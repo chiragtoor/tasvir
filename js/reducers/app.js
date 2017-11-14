@@ -107,12 +107,22 @@ function onCompleteWalkthrough(state = Actions.DEFAULT_WALKTHROUGH_COMPLETE, act
   }
 }
 
+function albumHistory(state = [], action) {
+  switch(action.type) {
+    case Actions.SET_HISTORY:
+      return action.history;
+    default:
+      return state;
+  }
+}
+
 const app = combineReducers({
   autoShare,
   senderId,
   savedPhotos,
   imageReceivedFlag,
   albumFormState,
+  albumHistory,
   confirmationAccept,
   confirmationReject,
   confirmationCopy,
