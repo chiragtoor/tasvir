@@ -29,6 +29,7 @@ describe('tasvir_api_actions', () => {
     const name = "some album";
     const id = "album id";
     const link = "branch link";
+    const date = "Jan. 10th, 2017";
     const mockAction = { type: "MOCK_ACTION" };
 
     const AsyncStorage = new MockAsyncStorage({});
@@ -41,11 +42,12 @@ describe('tasvir_api_actions', () => {
 
     nock(URL)
       .post(ALBUMS_ENDPOINT)
-      .reply(201, { success: 1, album: id, link: link })
+      .reply(201, { success: 1, album: id, link: link, album_date: date })
 
     const expectedActions = [
       { type: Album.UPDATE_ALBUM_ID, id },
       { type: Album.LOAD_LINK, link },
+      { type: Album.LOAD_DATE, date },
       { type: App.APP_RESET_ALBUM_FORM },
       mockAction
     ];

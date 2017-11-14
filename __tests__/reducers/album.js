@@ -8,7 +8,8 @@ describe('album_reducer', () => {
     name: null,
     link: null,
     history: [],
-    images: []
+    images: [],
+    albumDate: null
   };
 
   it('initial state is as expected', () => {
@@ -53,6 +54,19 @@ describe('album_reducer', () => {
     ).toEqual({
       ...expectedInitialState,
       link: link
+    });
+  });
+
+  it('handles LOAD_DATE properly', () => {
+    const date = "some date"
+    expect(
+      reducer({}, {
+        type: Actions.LOAD_DATE,
+        date
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      albumDate: date
     });
   });
 

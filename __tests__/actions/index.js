@@ -153,10 +153,12 @@ describe('app_actions', () => {
     const albumId = "some id";
     const albumName = "some name";
     const senderId = "ASIDF-354BAS";
+    const albumDate = "Jan. 10th, 2017";
 
     const AsyncStorage = new MockAsyncStorage({ senderId: JSON.stringify(senderId),
                                                 albumId: JSON.stringify(albumId),
-                                                albumName: JSON.stringify(albumName) });
+                                                albumName: JSON.stringify(albumName),
+                                                albumDate: JSON.stringify(albumDate)});
     jest.setMock('AsyncStorage', AsyncStorage);
     const mockJoinChannel = { type: "MOCK JOIN CHANNEL" };
     Album.joinChannel  = jest.fn((fun) => {
@@ -173,6 +175,7 @@ describe('app_actions', () => {
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
       { type: Album.UPDATE_ALBUM_ID, id: albumId },
       { type: Album.UPDATE_ALBUM_NAME, name: albumName },
+      { type: Album.LOAD_DATE, date: albumDate },
       { type: Reel.UPDATE_CURRENT_INDEX, currentIndex: Actions.CAMERA_INDEX },
       mockJoinChannel,
       { type: NAVIGATION_ACTION, routeName: ROUTES.WALKTHROUGH },

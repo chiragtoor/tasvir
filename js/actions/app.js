@@ -108,7 +108,6 @@ export function confirmCloseAlbum() {
     const { album: { history, images, name, id, albumDate } } = getState();
     const newHistory = [{name: name, id: id, images: images, albumDate: albumDate}, ...history];
     Storage.saveAlbumHistory(newHistory);
-    console.log(newHistory);
     dispatch(Album.setHistory(newHistory));
     dispatch(Album.reset());
     Storage.saveAlbumId(null);
