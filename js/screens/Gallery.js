@@ -40,7 +40,7 @@ class Gallery extends Component {
         return [{...p[0], width: widthOne, height: (widthOne / p[0].aspectRatio)},
                 {...p[1], width: widthTwo, height: (widthTwo / p[1].aspectRatio)}];
       } else {
-        return [{...p[0], width: WIDTH, height: (WIDTH / p.aspectRatio)}];
+        return [{...p[0], width: (WIDTH / 2), height: ((WIDTH / 2) / p[0].aspectRatio)}];
       }
     });
   }
@@ -68,7 +68,7 @@ class Gallery extends Component {
         <ScrollView style={{flex: 1}}>
           {photos.map((p, i) => {
             return (
-              <View key={i} style={{flex: 1, flexDirection: 'row'}}>
+              <View key={i} style={{flex: 1, flexDirection: 'row', width: WIDTH}}>
                 <Image
                   style={{
                     width:  p[0].width,
@@ -148,9 +148,6 @@ class Gallery extends Component {
   renderAlbumList = () => {
     const albums = this.props.albumHistory.map((album) => {
       const image = album.images[0];
-      console.log("ALBUM LIST");
-      console.log(album.albumDate);
-      console.log(album);
       return {
         name: album.name,
         id: album.id,
