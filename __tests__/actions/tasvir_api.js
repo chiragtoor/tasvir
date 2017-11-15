@@ -10,6 +10,7 @@ import * as Actions from '../../js/actions';
 import * as Gallery from '../../js/actions/gallery';
 import MockAsyncStorage from '../../__mocks__/mock_async_storage';
 import MockCameraRoll from '../../__mocks__/mock_camera_roll';
+import MockImage from '../../__mocks__/mock_image';
 
 import { URL, ALBUMS_ENDPOINT, ALBUM_ID_STORAGE,
          ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE } from '../../js/constants';
@@ -110,12 +111,14 @@ describe('tasvir_api_actions', () => {
     const albumId = "CAafsfs988";
     const albumLink = "album branch link";
     const senderId = "this user";
-    const responsePhotos = [{sent_by: "some user", photo: 'one', id: "one"},
-                            {sent_by: "some user", photo: 'two', id: "two"},
-                            {sent_by: "some other user", photo: 'three', id: "three"}];
+    const responsePhotos = [{sent_by: "some user", photo: 'one', id: "one", width: 9, height: 16},
+                            {sent_by: "some user", photo: 'two', id: "two", width: 9, height: 16},
+                            {sent_by: "some other user", photo: 'three', id: "three", width: 9, height: 16}];
 
     const CameraRoll = new MockCameraRoll();
     jest.setMock('CameraRoll', CameraRoll);
+    const Image = new MockImage();
+    jest.setMock('Image', Image);
 
     nock(URL)
       .get(ALBUMS_ENDPOINT + "/" + albumId)
@@ -123,9 +126,13 @@ describe('tasvir_api_actions', () => {
 
     const expectedActions = [
       { type: Album.LOAD_LINK, link: albumLink },
+      /* due to mock promises, these actions resolve first in the test */
       { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
       { type: App.APP_ADD_SAVED_PHOTO, photo: "two" },
       { type: App.APP_ADD_SAVED_PHOTO, photo: "three" },
+      { type: Album.ADD_IMAGE, image: { uri: "one", width: 9, height: 16 } },
+      { type: Album.ADD_IMAGE, image: { uri: "two", width: 9, height: 16 } },
+      { type: Album.ADD_IMAGE, image: { uri: "three", width: 9, height: 16 } },
       { type: Gallery.SET_GALLERY_BUTTON_IMAGE, image: "three"},
       { type: Gallery.LOAD_IMAGES, images: [
                                             { uri: "three", width: 9, height: 16 },
@@ -143,9 +150,9 @@ describe('tasvir_api_actions', () => {
     const albumId = "CAafsfs988";
     const albumLink = "album branch link";
     const senderId = "this user";
-    const responsePhotos = [{sent_by: "some user", photo: 'one', id: "one"},
-                            {sent_by: senderId, photo: 'two', id: "two"},
-                            {sent_by: senderId, photo: 'three', id: "three"}];
+    const responsePhotos = [{sent_by: "some user", photo: 'one', id: "one", width: 9, height: 16},
+                            {sent_by: senderId, photo: 'two', id: "two", width: 9, height: 16},
+                            {sent_by: senderId, photo: 'three', id: "three", width: 9, height: 16}];
 
     const CameraRoll = new MockCameraRoll();
     jest.setMock('CameraRoll', CameraRoll);
@@ -157,6 +164,7 @@ describe('tasvir_api_actions', () => {
     const expectedActions = [
       { type: Album.LOAD_LINK, link: albumLink },
       { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
+      { type: Album.ADD_IMAGE, image: { uri: "one", width: 9, height: 16 } },
       { type: Gallery.SET_GALLERY_BUTTON_IMAGE, image: "one"},
       { type: Gallery.LOAD_IMAGES, images: [
                                             { uri: "one", width: 9, height: 16 }
@@ -172,9 +180,9 @@ describe('tasvir_api_actions', () => {
     const albumId = "CAafsfs988";
     const albumLink = "album branch link";
     const senderId = "this user";
-    const responsePhotos = [{sent_by: "some user", photo: 'one', id: "one"},
-                            {sent_by: "some user", photo: 'two', id: "two"},
-                            {sent_by: "some user", photo: 'three', id: "three"}];
+    const responsePhotos = [{sent_by: "some user", photo: 'one', id: "one", width: 9, height: 16},
+                            {sent_by: "some user", photo: 'two', id: "two", width: 9, height: 16},
+                            {sent_by: "some user", photo: 'three', id: "three", width: 9, height: 16}];
 
     const CameraRoll = new MockCameraRoll();
     jest.setMock('CameraRoll', CameraRoll);
@@ -187,6 +195,8 @@ describe('tasvir_api_actions', () => {
         { type: Album.LOAD_LINK, link: albumLink },
         { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
         { type: App.APP_ADD_SAVED_PHOTO, photo: "two" },
+        { type: Album.ADD_IMAGE, image: { uri: "one", width: 9, height: 16 } },
+        { type: Album.ADD_IMAGE, image: { uri: "two", width: 9, height: 16 } },
         { type: Gallery.SET_GALLERY_BUTTON_IMAGE, image: "two"},
         { type: Gallery.LOAD_IMAGES, images: [
                                               { uri: "two", width: 9, height: 16 },
@@ -232,5 +242,4 @@ describe('tasvir_api_actions', () => {
     await store.dispatch(TasvirApi.loadAlbum())
     expect(store.getActions()).toEqual(expectedActions)
   });
-
 });

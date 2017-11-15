@@ -13,9 +13,8 @@ export default class MockCameraRoll {
 
   saveToCameraRoll = jest.fn((photo) => {
     return new Promise((resolve, reject) => {
-      return (typeof photo !== 'string')
-        ? reject(new Error('photo must be string'))
-        : resolve(this.cameraRoll = [this.buildEntry(photo), ...this.cameraRoll]);
+      this.cameraRoll = [this.buildEntry(photo), ...this.cameraRoll]
+      resolve(photo);
     });
   });
 
