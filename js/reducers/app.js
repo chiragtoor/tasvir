@@ -116,6 +116,15 @@ function albumHistory(state = [], action) {
   }
 }
 
+function galleryState(state = Actions.APP_GALLERY_STATE_LIST, action) {
+  switch(action.type) {
+    case Actions.SET_GALLERY_STATE:
+      return action.state;
+    default:
+      return state;
+  }
+}
+
 const app = combineReducers({
   autoShare,
   senderId,
@@ -128,7 +137,8 @@ const app = combineReducers({
   confirmationCopy,
   confirmationAcceptCopy,
   confirmationRejectCopy,
-  onCompleteWalkthrough
+  onCompleteWalkthrough,
+  galleryState
 });
 
 export default app;

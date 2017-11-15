@@ -26,13 +26,27 @@ export const APP_SET_CONFIRMATION_ACCEPT_COPY = 'app/APP_SET_CONFIRMATION_ACCEPT
 export const APP_SET_CONFIRMATION_REJECT_COPY = 'app/APP_SET_CONFIRMATION_REJECT_COPY';
 export const APP_SET_WALKTHROUGH_COMPLETE = 'app/APP_SET_WALKTHROUGH_COMPLETE';
 export const SET_HISTORY = 'app/SET_HISTORY';
+export const SET_GALLERY_STATE = 'app/SET_GALLERY_STATE';
 // form states for the album form
 export const APP_ALBUM_FORM_STATE_INIT = 0;
 export const APP_ALBUM_FORM_STATE_OPEN = 1;
+// states for the gallery
+export const APP_GALLERY_STATE_LIST = 0;
+export const APP_GALLERY_STATE_IMAGES = 1;
 
 export function updateAutoShare(autoShare) {
   Storage.saveAutoShare(autoShare);
   return { type: APP_UPDATE_AUTO_SHARE, autoShare };
+}
+
+export function galleryListAlbums() {
+  console.log("LIST ALBUMS");
+  return { type: SET_GALLERY_STATE, state: APP_GALLERY_STATE_LIST };
+}
+
+export function galleryViewAlbum() {
+  console.log("VIEW ALBUM");
+  return { type: SET_GALLERY_STATE, state: APP_GALLERY_STATE_IMAGES };
 }
 
 export function updateSenderId(senderId, persist = false) {

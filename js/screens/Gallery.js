@@ -11,15 +11,6 @@ const HEIGHT = Dimensions.get('window').height;
 const LOGO = require('../../img/tasvir_logo.png');
 
 class Gallery extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      inListMode: props.albumName == null,
-    }
-  }
-
   formatImages = (arr) => {
     return arr.map((p) => {
       return {
@@ -51,7 +42,7 @@ class Gallery extends Component {
       <View style={{flex: 1, backgroundColor: "#48B2E2", paddingTop: 19}}>
         {this.props.albumName ?
           <View style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
-            <TouchableOpacity onPress={() => this.setState({inListMode: true})} style={{alignItems: 'flex-start'}}>
+            <TouchableOpacity onPress={() => this.props.listAlbums()} style={{alignItems: 'flex-start'}}>
               <View style={{borderRadius: 19, height: 38, width: 38, alignItems: 'center', justifyContent: 'center', backgroundColor: "#FFFFFF"}}>
                 <View style={{alignItems: 'center',justifyContent: 'center',borderRadius: 16, height: 32,width: 32,backgroundColor: "#FF2C55"}}>
                   <FontAwesome style={{color: "#FFFFFF"}}>{Icons.times}</FontAwesome>
@@ -102,7 +93,7 @@ class Gallery extends Component {
   renderAlbumTile = (album, index) => {
     return (
       <View key={index}>
-        <TouchableOpacity onPress={() => this.setState({inListMode: false})} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
+        <TouchableOpacity onPress={() => this.props.viewAlbum()} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
           <View style={{height: 100, width: (WIDTH * 0.3), alignItems: 'center', justifyContent: 'center'}}>
             {album.image.aspectRatio > 1 ?
               <Image
@@ -175,7 +166,7 @@ class Gallery extends Component {
   }
 
   render() {
-    if(this.state.inListMode) {
+    if(this.props.inListMode) {
       return this.renderAlbumList();
     } else {
       return this.renderImages();
@@ -234,11 +225,20 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = (state) => {
+const mapDispatchToProps = (dispatch) => {
   return {
+    viewAlbum: () => dispatch(Actions.App.galleryViewAlbum()),
+    listAlbums: () => dispatch(Actions.App.galleryListAlbums())
+  };
+};
+
+const mapStateToProps = (state) => {
+  console.log(state.app.galleryState);
+  return {
+    inListMode: state.app.galleryState == Actions.App.APP_GALLERY_STATE_LIST,
     albumName: state.album.name,
     galleryImages: (state.album.images.length > 0) ? state.album.images : state.gallery.images,
     albumHistory: state.app.albumHistory
   };
 };
-export default connect(mapStateToProps, null)(Gallery);
+export default connect(mapStateToProps, mapDispatchToProps)(Gallery);
