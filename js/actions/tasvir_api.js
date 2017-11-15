@@ -1,4 +1,4 @@
-import { CameraRoll } from 'react-native';
+import { CameraRoll, Image } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
 import * as Album from './album';
@@ -68,7 +68,7 @@ export function loadAlbum() {
           // do not want to save own captured pictures or previously saved images,
           //  both these cases will be duplicates in the camera roll
           if(!(senderId === photo.sent_by || savedPhotos.includes(photo.id))) {
-            dispatch(saveImage(photo.photo, false));
+            dispatch(saveImage(photo.photo, photo.width, photo.height, false));
             dispatch(App.addSavedPhoto(photo.id));
           }
         }
@@ -82,20 +82,21 @@ export function uploadImage(image) {
   return (dispatch, getState) => {
     const { album: { id }, app: { senderId } } = getState();
 
-    dispatch(saveImage(image));
+    Image.getSize(image, (imageWidth, imageHeight) => {
+      dispatch(saveImage(image, imageWidth, imageHeight));
 
-    console.log("ACTION UPLOAD IMAGE");
+      const file = {
+        uri: image,
+        name: 'photo.jpg',
+        type : 'image/jpg'
+      }
 
-    const file = {
-      uri: image,
-      name: 'photo.jpg',
-      type : 'image/jpg'
-    }
-
-    dispatch({type: 'NO_REDUCER_STUB_UPLOAD_IMAGE', meta: { offline: {
-      effect: { photo: file, sent_by: senderId, id: id },
-      commit: { type: 'NO_REDUCER_STUB_IMAGE_UPLOADED', meta: {  } },
-    }}});
-
+      dispatch({type: 'NO_REDUCER_STUB_UPLOAD_IMAGE', meta: { offline: {
+        effect: { photo: file, sent_by: senderId, id: id, width: imageWidth, height: imageHeight },
+        commit: { type: 'NO_REDUCER_STUB_IMAGE_UPLOADED', meta: {  } },
+      }}});
+    }, (error) => {
+      console.error(error);
+    });
   }
 }

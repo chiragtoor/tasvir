@@ -101,6 +101,8 @@ const customConfig = {
     console.log("HERE UPLOADING IMAGE");
     return request.post(URL + ALBUMS_ENDPOINT + '/' + effect.id + '/photo')
       .field('sent_by', effect.sent_by)
+      .field('width', effect.width)
+      .field('height', effect.height)
       .attach('photo', effect.photo);
   },
   persistOptions: { whitelist: ["offline"] }

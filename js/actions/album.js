@@ -36,13 +36,9 @@ export function loadImages(images) {
   return { type: LOAD_IMAGES, images };
 }
 
-export function addImage(image) {
+export function addImage(image, imageWidth, imageHeight) {
   return (dispatch) => {
-    Image.getSize(image, (imageWidth, imageHeight) => {
-      dispatch({ type: ADD_IMAGE, image: { uri: image, width: imageWidth, height: imageHeight } });
-    }, (error) => {
-      console.error(error);
-    });
+    dispatch({ type: ADD_IMAGE, image: { uri: image, width: imageWidth, height: imageHeight } });
   }
 }
 
