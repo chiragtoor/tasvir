@@ -114,7 +114,7 @@ class TasvirCamera extends Component {
                       onPress={this.props.goToGallery}
                       content={<Image
                                   style={styles.imageButton}
-                                  source={{uri: this.props.latestImage}}>
+                                  source={{uri: this.props.latestImage.uri}}>
                                   <View style={styles.imageButtonText}>
                                     <FontAwesome style={{color: "#FFFFFF"}}>{Icons.th}</FontAwesome>
                                   </View>

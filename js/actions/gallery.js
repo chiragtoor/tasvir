@@ -34,7 +34,8 @@ export function loadGallery() {
       assetType: 'Photos'
     }).then(roll => {
       if(roll.edges && roll.edges.length > 0) {
-        dispatch(setGalleryButtonImage(roll.edges[0].node.image.uri));
+        const buttonImage = roll.edges[0].node.image;
+        dispatch(setGalleryButtonImage({uri: buttonImage.uri, aspectRatio: (buttonImage.width / buttonImage.height)}));
         return CameraRoll.getPhotos({
           first: 100,
           assetType: 'Photos'

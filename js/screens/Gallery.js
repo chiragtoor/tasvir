@@ -91,7 +91,7 @@ class Gallery extends Component {
   }
 
   renderImage = (image) => {
-    if (image.aspectRatio > 1) {
+    if (image && image.aspectRatio > 1) {
       return (
         <Image
           style={{
@@ -103,7 +103,7 @@ class Gallery extends Component {
           source={{uri: image.uri}}
           resizeMode='contain' />
       );
-    } else {
+    } else if(image) {
       console.log("AR < 1");
       return (
         <Image
@@ -116,6 +116,8 @@ class Gallery extends Component {
           source={{uri: image.uri}}
           resizeMode='contain' />
       );
+    } else {
+      return (null);
     }
   }
 
@@ -183,6 +185,21 @@ class Gallery extends Component {
         <ScrollView style={{backgroundColor: "#E8E8EE"}}>
           { currentAlbum ? this.renderAlbumTile(currentAlbum, 0) : null }
           { albums.map((album, index) => this.renderAlbumTile(album, index + 1)) }
+          <View key={-1}>
+            <TouchableOpacity onPress={() => this.props.viewAlbum({name: "All Images", images: this.props.allImages})} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
+              <View style={{height: 100, width: (WIDTH * 0.3), alignItems: 'center', justifyContent: 'center'}}>
+                {this.renderImage(this.props.allImagesShow)}
+              </View>
+              <View style={{height: 100, width: (WIDTH * 0.7)}}>
+                <View style={{height: 100, width: (WIDTH * 0.7), alignItems: 'flex-start', justifyContent: 'center', marginBottom: 2, marginLeft: 15}}>
+                  <Text style={styles.message}>
+                    {"All Images"}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+            <View style={styles.menuDivider} />
+          </View>
         </ScrollView>
       </View>
     );
@@ -264,7 +281,9 @@ const mapStateToProps = (state) => {
     inListMode: state.app.galleryState == Actions.App.APP_GALLERY_STATE_LIST,
     currentAlbum: state.album.id ? state.album : null,
     viewingAlbum: state.gallery.viewingAlbum,
-    albumHistory: state.app.albumHistory
+    albumHistory: state.app.albumHistory,
+    allImages: state.gallery.images,
+    allImagesShow: state.gallery.buttonImage
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Gallery);
