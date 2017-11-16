@@ -37,10 +37,10 @@ class Gallery extends Component {
   }
 
   renderImages = () => {
-    const photos = this.formatImages(this.props.galleryImages);
+    const photos = this.formatImages(this.props.viewingAlbum.images);
     return (
       <View style={{flex: 1, backgroundColor: "#48B2E2", paddingTop: 19}}>
-        {this.props.currentAlbum ?
+        {this.props.viewingAlbum ?
           <View style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
             <TouchableOpacity onPress={() => this.props.listAlbums()} style={{alignItems: 'flex-start'}}>
               <View style={{borderRadius: 19, height: 38, width: 38, alignItems: 'center', justifyContent: 'center', backgroundColor: "#FFFFFF"}}>
@@ -50,7 +50,7 @@ class Gallery extends Component {
               </View>
             </TouchableOpacity>
             <Text style={{flex: 1, textAlign: 'center', paddingRight: 38, alignItems: 'center', color: "#FFF", textDecorationLine: 'underline', fontSize: 25, fontWeight: 'bold'}}>
-              {this.props.currentAlbum.name}
+              {this.props.viewingAlbum.name}
             </Text>
           </View>
         :
@@ -90,32 +90,41 @@ class Gallery extends Component {
     );
   }
 
+  renderImage = (image) => {
+    if (image.aspectRatio > 1) {
+      return (
+        <Image
+          style={{
+            width:  ((WIDTH * 0.3) * 0.8),
+            height:  (((WIDTH * 0.3) * 0.8) / image.aspectRatio),
+            borderColor: "#48B2E2",
+            borderWidth: 2
+          }}
+          source={{uri: image.uri}}
+          resizeMode='contain' />
+      );
+    } else {
+      console.log("AR < 1");
+      return (
+        <Image
+          style={{
+            width:  (80 * image.aspectRatio),
+            height:  80,
+            borderColor: "#48B2E2",
+            borderWidth: 2
+          }}
+          source={{uri: image.uri}}
+          resizeMode='contain' />
+      );
+    }
+  }
+
   renderAlbumTile = (album, index) => {
     return (
       <View key={index}>
-        <TouchableOpacity onPress={() => this.props.viewAlbum(album.images)} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
+        <TouchableOpacity onPress={() => this.props.viewAlbum(album)} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
           <View style={{height: 100, width: (WIDTH * 0.3), alignItems: 'center', justifyContent: 'center'}}>
-            {album.image.aspectRatio > 1 ?
-              <Image
-                style={{
-                  width:  ((WIDTH * 0.3) * 0.8),
-                  height:  (((WIDTH * 0.3) * 0.8) / album.image.aspectRatio),
-                  borderColor: "#48B2E2",
-                  borderWidth: 2
-                }}
-                source={{uri: album.image.uri}}
-                resizeMode='contain' />
-            :
-              <Image
-                style={{
-                  width:  (80 * album.image.aspectRatio),
-                  height:  80,
-                  borderColor: "#48B2E2",
-                  borderWidth: 2
-                }}
-                source={{uri: album.image.uri}}
-                resizeMode='contain' />
-            }
+            {album.image ? this.renderImage(album.image) : null}
           </View>
           <View style={{height: 100, width: (WIDTH * 0.7)}}>
             <View style={{height: 50, width: (WIDTH * 0.7), alignItems: 'flex-start', justifyContent: 'flex-end', marginBottom: 2, marginLeft: 15}}>
@@ -126,7 +135,7 @@ class Gallery extends Component {
             <View style={styles.albumDivider} />
             <View style={{height: 50, width: (WIDTH * 0.7), alignItems: 'flex-start', justifyContent: 'flex-start', marginTop: 2, marginLeft: 15}}>
               <Text style={styles.explanation}>
-                {album.startDate + " - " + album.photoCount + " Photos"}
+                {album.albumDate + " - " + album.photoCount + " Photos"}
               </Text>
               {index == 0 ?
                 <Text style={styles.currentAlbum}>
@@ -143,39 +152,28 @@ class Gallery extends Component {
     );
   }
 
-  renderAlbumList = () => {
-    const albums = this.props.albumHistory.map((album) => {
-      const image = album.images[0];
-      return {
-        name: album.name,
-        id: album.id,
-        startDate: album.albumDate,
-        photoCount: album.images.length,
-        image: {
-          uri: image ? image.uri : "",
-          width: image ? image.width : 0,
-          height: image ? image.height : 0,
-          aspectRatio: image ? (image.width / image.height) : 1
-        },
-        images: album.images
-      }
-    })
-
-    var currentAlbum = this.props.currentAlbum;
-    if(currentAlbum != null) {
-      const currentAlbumImage = currentAlbum.images[0]
-      currentAlbum = {
-        image: {
-          uri: currentAlbumImage ? currentAlbumImage.uri : "",
-          width: currentAlbumImage ? currentAlbumImage.width : 0,
-          height: currentAlbumImage ? currentAlbumImage.height : 0,
-          aspectRatio: currentAlbumImage ? (currentAlbumImage.width / currentAlbumImage.height) : 1
-        },
-        startDate: currentAlbum.albumDate,
-        photoCount: currentAlbum.images.length,
-        ...currentAlbum
-      };
+  formatAlbum = (album) => {
+    const image = album.images[0];
+    return {
+      name: album.name,
+      id: album.id,
+      startDate: album.albumDate,
+      photoCount: album.images.length,
+      image: image ? {
+        uri: image.uri,
+        width: image.width,
+        height: image.height,
+        aspectRatio: (image.width / image.height)
+      } : null,
+      images: album.images,
+      ...album
     }
+  }
+
+  renderAlbumList = () => {
+    const albums = this.props.albumHistory.map((album) => this.formatAlbum(album));
+    const currentAlbum = this.props.currentAlbum ? this.formatAlbum(this.props.currentAlbum) : null;
+
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -256,7 +254,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    viewAlbum: (images) => dispatch(Actions.App.galleryViewAlbum(images)),
+    viewAlbum: (album) => dispatch(Actions.App.galleryViewAlbum(album)),
     listAlbums: () => dispatch(Actions.App.galleryListAlbums())
   };
 };
@@ -264,8 +262,8 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
   return {
     inListMode: state.app.galleryState == Actions.App.APP_GALLERY_STATE_LIST,
-    currentAlbum: state.album.id == null ? null : state.album,
-    galleryImages: state.gallery.images,
+    currentAlbum: state.album.id ? state.album : null,
+    viewingAlbum: state.gallery.viewingAlbum,
     albumHistory: state.app.albumHistory
   };
 };

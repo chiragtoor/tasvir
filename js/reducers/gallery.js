@@ -30,10 +30,20 @@ function cursor(state = null, action) {
   }
 }
 
+function viewingAlbum(state = null, action) {
+  switch(action.type) {
+    case Actions.SET_VIEWING_ALBUM:
+      return action.album;
+    default:
+      return state;
+  }
+}
+
 const gallery = combineReducers({
   buttonImage,
   images,
-  cursor
+  cursor,
+  viewingAlbum
 });
 
 export default gallery;

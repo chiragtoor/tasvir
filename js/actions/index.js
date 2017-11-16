@@ -36,7 +36,7 @@ export function saveImage(imageUrl, imageWidth, imageHeight, loadGallery = true)
 }
 
 export function loadAndDispatchState() {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     return AsyncStorage.multiGet([PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE,
             ALBUM_NAME_STORAGE, AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE,
             SENDER_ID_STORAGE, SAVED_PHOTOS_STORAGE, ALBUM_IMAGES_STORAGE,
@@ -78,6 +78,7 @@ export function loadAndDispatchState() {
         dispatch(Album.updateName(getValue(value, ALBUM_NAME_STORAGE)));
         dispatch(Album.updateAlbumDate(getValue(value, ALBUM_DATE_STORAGE)));
         if(albumImages) dispatch(Album.loadImages(albumImages));
+        dispatch(App.galleryViewAlbum(getState().album));
         if(previewReel) dispatch(Reel.loadPreviewReel(previewReel));
         dispatch(Reel.updateCurrentIndex(CAMERA_INDEX));
         dispatch(Album.joinChannel());

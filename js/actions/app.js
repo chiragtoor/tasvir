@@ -43,9 +43,9 @@ export function galleryListAlbums() {
   return { type: SET_GALLERY_STATE, state: APP_GALLERY_STATE_LIST };
 }
 
-export function galleryViewAlbum(images) {
+export function galleryViewAlbum(album) {
   return (dispatch) => {
-    dispatch(Gallery.loadImages(images));
+    dispatch(Gallery.viewAlbum(album));
     dispatch({ type: SET_GALLERY_STATE, state: APP_GALLERY_STATE_IMAGES });
   }
 }
