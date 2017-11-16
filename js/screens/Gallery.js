@@ -40,7 +40,7 @@ class Gallery extends Component {
     const photos = this.formatImages(this.props.galleryImages);
     return (
       <View style={{flex: 1, backgroundColor: "#48B2E2", paddingTop: 19}}>
-        {this.props.albumName ?
+        {this.props.currentAlbum ?
           <View style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
             <TouchableOpacity onPress={() => this.props.listAlbums()} style={{alignItems: 'flex-start'}}>
               <View style={{borderRadius: 19, height: 38, width: 38, alignItems: 'center', justifyContent: 'center', backgroundColor: "#FFFFFF"}}>
@@ -50,7 +50,7 @@ class Gallery extends Component {
               </View>
             </TouchableOpacity>
             <Text style={{flex: 1, textAlign: 'center', paddingRight: 38, alignItems: 'center', color: "#FFF", textDecorationLine: 'underline', fontSize: 25, fontWeight: 'bold'}}>
-              {this.props.albumName}
+              {this.props.currentAlbum.name}
             </Text>
           </View>
         :
@@ -93,7 +93,7 @@ class Gallery extends Component {
   renderAlbumTile = (album, index) => {
     return (
       <View key={index}>
-        <TouchableOpacity onPress={() => this.props.viewAlbum()} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
+        <TouchableOpacity onPress={() => this.props.viewAlbum(album.images)} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
           <View style={{height: 100, width: (WIDTH * 0.3), alignItems: 'center', justifyContent: 'center'}}>
             {album.image.aspectRatio > 1 ?
               <Image
@@ -128,6 +128,13 @@ class Gallery extends Component {
               <Text style={styles.explanation}>
                 {album.startDate + " - " + album.photoCount + " Photos"}
               </Text>
+              {index == 0 ?
+                <Text style={styles.currentAlbum}>
+                  {"Currently Active"}
+                </Text>
+              :
+                null
+              }
             </View>
           </View>
         </TouchableOpacity>
@@ -149,9 +156,26 @@ class Gallery extends Component {
           width: image ? image.width : 0,
           height: image ? image.height : 0,
           aspectRatio: image ? (image.width / image.height) : 1
-        }
+        },
+        images: album.images
       }
     })
+
+    var currentAlbum = this.props.currentAlbum;
+    if(currentAlbum != null) {
+      const currentAlbumImage = currentAlbum.images[0]
+      currentAlbum = {
+        image: {
+          uri: currentAlbumImage ? currentAlbumImage.uri : "",
+          width: currentAlbumImage ? currentAlbumImage.width : 0,
+          height: currentAlbumImage ? currentAlbumImage.height : 0,
+          aspectRatio: currentAlbumImage ? (currentAlbumImage.width / currentAlbumImage.height) : 1
+        },
+        startDate: currentAlbum.albumDate,
+        photoCount: currentAlbum.images.length,
+        ...currentAlbum
+      };
+    }
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -159,6 +183,7 @@ class Gallery extends Component {
             source={LOGO}/>
         </View>
         <ScrollView style={{backgroundColor: "#E8E8EE"}}>
+          { currentAlbum ? this.renderAlbumTile(currentAlbum, 0) : null }
           { albums.map((album, index) => this.renderAlbumTile(album, index + 1)) }
         </ScrollView>
       </View>
@@ -222,22 +247,25 @@ const styles = StyleSheet.create({
   explanation: {
     fontSize: 12,
     color: '#9B9B9B'
+  },
+  currentAlbum: {
+    fontSize: 12,
+    color: '#48B2E2'
   }
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    viewAlbum: () => dispatch(Actions.App.galleryViewAlbum()),
+    viewAlbum: (images) => dispatch(Actions.App.galleryViewAlbum(images)),
     listAlbums: () => dispatch(Actions.App.galleryListAlbums())
   };
 };
 
 const mapStateToProps = (state) => {
-  console.log(state.app.galleryState);
   return {
     inListMode: state.app.galleryState == Actions.App.APP_GALLERY_STATE_LIST,
-    albumName: state.album.name,
-    galleryImages: (state.album.images.length > 0) ? state.album.images : state.gallery.images,
+    currentAlbum: state.album.id == null ? null : state.album,
+    galleryImages: state.gallery.images,
     albumHistory: state.app.albumHistory
   };
 };

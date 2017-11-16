@@ -40,13 +40,14 @@ export function updateAutoShare(autoShare) {
 }
 
 export function galleryListAlbums() {
-  console.log("LIST ALBUMS");
   return { type: SET_GALLERY_STATE, state: APP_GALLERY_STATE_LIST };
 }
 
-export function galleryViewAlbum() {
-  console.log("VIEW ALBUM");
-  return { type: SET_GALLERY_STATE, state: APP_GALLERY_STATE_IMAGES };
+export function galleryViewAlbum(images) {
+  return (dispatch) => {
+    dispatch(Gallery.loadImages(images));
+    dispatch({ type: SET_GALLERY_STATE, state: APP_GALLERY_STATE_IMAGES });
+  }
 }
 
 export function updateSenderId(senderId, persist = false) {
