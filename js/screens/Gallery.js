@@ -41,7 +41,7 @@ class Gallery extends Component {
     return (
       <View style={{flex: 1, backgroundColor: "#48B2E2", paddingTop: 19}}>
         {this.props.viewingAlbum ?
-          <View style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
+          <View style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 10, paddingRight: 10, marginBottom: 5}}>
             <TouchableOpacity onPress={() => this.props.listAlbums()} style={{alignItems: 'flex-start'}}>
               <View style={{borderRadius: 19, height: 38, width: 38, alignItems: 'center', justifyContent: 'center', backgroundColor: "#FFFFFF"}}>
                 <View style={{alignItems: 'center',justifyContent: 'center',borderRadius: 16, height: 32,width: 32,backgroundColor: "#FF2C55"}}>
