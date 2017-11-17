@@ -16,7 +16,8 @@ describe('app_reducer', () => {
     confirmationCopy: null,
     confirmationAcceptCopy: null,
     confirmationRejectCopy: null,
-    onCompleteWalkthrough: Actions.DEFAULT_WALKTHROUGH_COMPLETE
+    onCompleteWalkthrough: Actions.DEFAULT_WALKTHROUGH_COMPLETE,
+    galleryState: Actions.APP_GALLERY_STATE_LIST
   };
 
   it('initial state is as expected', () => {
@@ -196,6 +197,18 @@ describe('app_reducer', () => {
     ).toEqual({
       ...expectedInitialState,
       confirmationReject: rejectFun
+    });
+  });
+
+  it('handles SET_GALLERY_STATE properly', () => {
+    expect(
+      reducer({  }, {
+        type: Actions.SET_GALLERY_STATE,
+        state: Actions.APP_GALLERY_STATE_IMAGES
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      galleryState: Actions.APP_GALLERY_STATE_IMAGES
     });
   });
 });

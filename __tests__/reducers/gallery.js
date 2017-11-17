@@ -6,7 +6,8 @@ describe('gallery_reducer', () => {
   const expectedInitialState = {
     buttonImage: null,
     images: [],
-    cursor: null
+    cursor: null,
+    viewingAlbum: null
   };
 
   it('initial state is as expected', () => {
@@ -74,6 +75,21 @@ describe('gallery_reducer', () => {
       {
         ...expectedInitialState,
         buttonImage: image
+      }
+    );
+  });
+
+  it('handles SET_VIEWING_ALBUM properly', () => {
+    const album = {name: "album", image: { uri: "uri", width: 9, height: 16 }, images: [1, 2, 3], albumDate: "Jan. 1st, 2017"};
+    expect(
+      reducer({ }, {
+        type: Actions.SET_VIEWING_ALBUM,
+        album
+      })
+    ).toEqual(
+      {
+        ...expectedInitialState,
+        viewingAlbum: album
       }
     );
   });

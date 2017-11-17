@@ -133,7 +133,7 @@ describe('tasvir_api_actions', () => {
       { type: Album.ADD_IMAGE, image: { uri: "one", width: 9, height: 16 } },
       { type: Album.ADD_IMAGE, image: { uri: "two", width: 9, height: 16 } },
       { type: Album.ADD_IMAGE, image: { uri: "three", width: 9, height: 16 } },
-      { type: Gallery.SET_GALLERY_BUTTON_IMAGE, image: "three"},
+      { type: Gallery.SET_GALLERY_BUTTON_IMAGE, image: {uri: "three", aspectRatio: (9/16)}},
       { type: Gallery.LOAD_IMAGES, images: [
                                             { uri: "three", width: 9, height: 16 },
                                             { uri: "two", width: 9, height: 16 },

@@ -18,7 +18,7 @@ import { AUTO_SHARE_STORAGE, SENDER_ID_STORAGE,
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares);
 
-describe('app_actions', () => {
+describe('index_actions', () => {
   afterEach(() => {
     jest.resetModules();
   });
@@ -149,7 +149,9 @@ describe('app_actions', () => {
   });
 
   it('loads stored album state, joins channel, and syncs with endpoint if in album', async () => {
-    const store = mockStore({});
+    // preload viewing album in state as in tests dispatches do not really update
+    const viewingAlbum = {name: "album", image: { uri: "uri", width: 9, height: 16 }, images: [1, 2, 3], albumDate: "Jan. 1st, 2017"};
+    const store = mockStore({album: viewingAlbum});
     const albumId = "some id";
     const albumName = "some name";
     const senderId = "ASIDF-354BAS";
@@ -176,6 +178,8 @@ describe('app_actions', () => {
       { type: Album.UPDATE_ALBUM_ID, id: albumId },
       { type: Album.UPDATE_ALBUM_NAME, name: albumName },
       { type: Album.LOAD_DATE, date: albumDate },
+      { type: Gallery.SET_VIEWING_ALBUM, album: viewingAlbum },
+      { type: App.SET_GALLERY_STATE, state: App.APP_GALLERY_STATE_IMAGES},
       { type: Reel.UPDATE_CURRENT_INDEX, currentIndex: Actions.CAMERA_INDEX },
       mockJoinChannel,
       { type: NAVIGATION_ACTION, routeName: ROUTES.WALKTHROUGH },
