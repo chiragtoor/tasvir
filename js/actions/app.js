@@ -27,6 +27,8 @@ export const APP_SET_CONFIRMATION_REJECT_COPY = 'app/APP_SET_CONFIRMATION_REJECT
 export const APP_SET_WALKTHROUGH_COMPLETE = 'app/APP_SET_WALKTHROUGH_COMPLETE';
 export const SET_HISTORY = 'app/SET_HISTORY';
 export const SET_GALLERY_STATE = 'app/SET_GALLERY_STATE';
+export const SET_ALBUM_REEL_INDEX = 'app/SET_ALBUM_REEL_INDEX';
+export const SET_ALBUM_REEL_IMAGES = 'app/SET_ALBUM_REEL_IMAGES';
 // form states for the album form
 export const APP_ALBUM_FORM_STATE_INIT = 0;
 export const APP_ALBUM_FORM_STATE_OPEN = 1;
@@ -47,6 +49,22 @@ export function galleryViewAlbum(album) {
   return (dispatch) => {
     dispatch(Gallery.viewAlbum(album));
     dispatch({ type: SET_GALLERY_STATE, state: APP_GALLERY_STATE_IMAGES });
+  }
+}
+
+export function viewAlbumReel(index, images) {
+  return (dispatch) => {
+    console.log("viewAlbumReel");
+    console.log("index: ", index);
+    dispatch({ type: SET_ALBUM_REEL_INDEX, index });
+    dispatch({ type: SET_ALBUM_REEL_IMAGES, images });
+    dispatch(NavigationActions.navigate({ routeName: ROUTES.ALBUM_REEL }));
+  }
+}
+
+export function closeAlbumReel() {
+  return (dispatch) => {
+    dispatch(NavigationActions.back({}));
   }
 }
 

@@ -31,6 +31,7 @@ import Splash from './screens/Splash';
 import Main from './screens/Main';
 import AlbumAction from './screens/AlbumAction';
 import Walkthrough from './screens/Walkthrough';
+import AlbumReel from './screens/AlbumReel';
 
 import { loadAndDispatchState, App } from './actions';
 import * as Storage from './storage';
@@ -46,7 +47,8 @@ const TasvirNavigator = StackNavigator({
   Main: { screen: Main },
   CloseAlbum: { screen: AlbumAction },
   JoinAlbum: { screen: AlbumAction },
-  Walkthrough: { screen: Walkthrough }
+  Walkthrough: { screen: Walkthrough },
+  AlbumReel: { screen: AlbumReel }
 }, {
   // on iOS screens coming from bottom up look better, no effect on Android
   mode: 'modal',
@@ -98,7 +100,6 @@ const AppWithNavigationState = connect(mapStateToProps)(NavWrapper);
 const customConfig = {
   ...offlineConfig,
   effect: (effect, action) => {
-    console.log("HERE UPLOADING IMAGE");
     return request.post(URL + ALBUMS_ENDPOINT + '/' + effect.id + '/photo')
       .field('sent_by', effect.sent_by)
       .field('width', effect.width)

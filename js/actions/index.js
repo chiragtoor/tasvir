@@ -25,7 +25,7 @@ export const GALLERY_INDEX = 0;
 export const CAMERA_INDEX = 1;
 export const PREVIEW_REEL_INDEX = 2;
 
-export function saveImage(imageUrl, imageWidth, imageHeight, loadGallery = true) {
+export function saveImage(imageUrl, loadGallery = true) {
   return (dispatch, getState) => {
     const { album: { id } } = getState();
     CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {

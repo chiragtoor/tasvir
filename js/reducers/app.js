@@ -125,7 +125,27 @@ function galleryState(state = Actions.APP_GALLERY_STATE_LIST, action) {
   }
 }
 
+function albumReelIndex(state = 0, action) {
+  switch(action.type) {
+    case Actions.SET_ALBUM_REEL_INDEX:
+      return action.index;
+    default:
+      return state;
+  }
+}
+
+function albumReelImages(state = [], action) {
+  switch(action.type) {
+    case Actions.SET_ALBUM_REEL_IMAGES:
+      return action.images;
+    default:
+      return state;
+  }
+}
+
 const app = combineReducers({
+  albumReelIndex,
+  albumReelImages,
   autoShare,
   senderId,
   savedPhotos,

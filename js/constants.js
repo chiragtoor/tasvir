@@ -23,7 +23,8 @@ export const ROUTES = {
   MAIN: 'Main',
   CLOSE_ALBUM: 'CloseAlbum',
   JOIN_ALBUM: 'JoinAblum',
-  WALKTHROUGH: 'Walkthrough'
+  WALKTHROUGH: 'Walkthrough',
+  ALBUM_REEL: 'AlbumReel'
 }
 
 export const NAVIGATION_ACTION = "Navigation/NAVIGATE";

@@ -37,12 +37,13 @@ class Gallery extends Component {
   }
 
   renderImages = () => {
-    var photos;
+    var images = this.props.viewingAlbum.images;
     if(this.props.viewingAlbum.id === this.props.currentAlbumId) {
-      photos = this.formatImages(this.props.currentAlbum.images);
-    } else {
-      photos = this.formatImages(this.props.viewingAlbum.images);
+      images = this.props.currentAlbum.images;
     }
+
+    const photos = this.formatImages(images);
+
     return (
       <View style={{flex: 1, backgroundColor: "#48B2E2", paddingTop: 19}}>
         {this.props.viewingAlbum ?
@@ -65,25 +66,29 @@ class Gallery extends Component {
           {photos.map((p, i) => {
             return (
               <View key={i} style={{flex: 1, flexDirection: 'row', width: WIDTH}}>
-                <Image
-                  style={{
-                    width:  p[0].width,
-                    height:  p[0].height,
-                    borderColor: "#48B2E2",
-                    borderWidth: 5
-                  }}
-                  source={{uri: p[0].image}}
-                  resizeMode='contain' />
-                {p[1] != null ?
+                <TouchableOpacity onPress={() => this.props.viewAlbumReel((i * 2), images)}>
                   <Image
                     style={{
-                      width:  p[1].width,
-                      height:  p[1].height,
+                      width:  p[0].width,
+                      height:  p[0].height,
                       borderColor: "#48B2E2",
                       borderWidth: 5
                     }}
-                    source={{uri: p[1].image}}
+                    source={{uri: p[0].image}}
                     resizeMode='contain' />
+                </TouchableOpacity>
+                {p[1] != null ?
+                  <TouchableOpacity onPress={() => this.props.viewAlbumReel((i * 2) + 1, images)}>
+                    <Image
+                      style={{
+                        width:  p[1].width,
+                        height:  p[1].height,
+                        borderColor: "#48B2E2",
+                        borderWidth: 5
+                      }}
+                      source={{uri: p[1].image}}
+                      resizeMode='contain' />
+                  </TouchableOpacity>
                 :
                   false
                 }
@@ -284,7 +289,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     viewAlbum: (album) => dispatch(Actions.App.galleryViewAlbum(album)),
     listAlbums: () => dispatch(Actions.App.galleryListAlbums()),
-    openAlbum: (album) => dispatch(Actions.App.openAlbum(album))
+    openAlbum: (album) => dispatch(Actions.App.openAlbum(album)),
+    viewAlbumReel: (index, images) => dispatch(Actions.App.viewAlbumReel(index, images))
   };
 };
 
