@@ -53,7 +53,7 @@ class ImageScreen extends Component {
       this.state.scale,
       {toValue: 0, duration: 250}
     ).start(() => {
-      this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + this.props.data, "NO_ALBUM");
+      this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + this.props.data, true, false);
       this.props.onFinish();
     });
   }
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => {
   return {
     uploadImage: (image) => dispatch(Actions.TasvirApi.uploadImage(image)),
-    saveImage: (photo, photoId) => dispatch(Actions.saveImage(photo, photoId))
+    saveImage: (photo, loadGallery, addToAblum) => dispatch(Actions.saveImage(photo, loadGallery, addToAblum))
   };
 };
 export default connect(null, mapDispatchToProps)(ImageScreen);

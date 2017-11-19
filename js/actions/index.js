@@ -25,7 +25,7 @@ export const GALLERY_INDEX = 0;
 export const CAMERA_INDEX = 1;
 export const PREVIEW_REEL_INDEX = 2;
 
-export function saveImage(imageUrl, loadGallery = true) {
+export function saveImage(imageUrl, loadGallery = true, addToAblum = true) {
   return (dispatch, getState) => {
     const { album: { id } } = getState();
     CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
@@ -36,7 +36,7 @@ export function saveImage(imageUrl, loadGallery = true) {
         if(roll.edges && roll.edges.length > 0) {
           const image = roll.edges[0].node.image;
           if(image.uri === uri) {
-            if(id) dispatch(Album.addImage(uri, image.width, image.height));
+            if(id && addToAblum) dispatch(Album.addImage(uri, image.width, image.height));
             if(loadGallery) dispatch(Gallery.loadGallery());
           } else {
             console.log("NOT SAME IMAGE");
