@@ -28,11 +28,7 @@ export const PREVIEW_REEL_INDEX = 2;
 export function saveImage(imageUrl, imageWidth, imageHeight, loadGallery = true) {
   return (dispatch, getState) => {
     const { album: { id } } = getState();
-    console.log("END");
     CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
-      console.log("saveImage() called");
-      console.log("Image.getSize -> imageWidth: ", imageWidth);
-      console.log("Image.getSize -> imageHeight: ", imageHeight);
       CameraRoll.getPhotos({
         first: 1,
         assetType: 'Photos'
@@ -42,8 +38,6 @@ export function saveImage(imageUrl, imageWidth, imageHeight, loadGallery = true)
           if(image.uri === uri) {
             if(id) dispatch(Album.addImage(uri, image.width, image.height));
             if(loadGallery) dispatch(Gallery.loadGallery());
-            console.log("CameraRoll.getPhotos -> imageWidth: ", image.width);
-            console.log("CameraRoll.getPhotos -> imageHeight: ", image.height);
           } else {
             console.log("NOT SAME IMAGE");
           }

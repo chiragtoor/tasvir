@@ -111,6 +111,62 @@ export function confirmationReject() {
   }
 }
 
+export function openAlbum(album) {
+  return (dispatch, getState) => {
+    dispatch(setConfirmationCopy("RE-OPEN ALBUM " + album.name + "?"));
+    dispatch(setConfirmationAcceptCopy("Yes"));
+    dispatch(setConfirmationRejectCopy("No"));
+    dispatch(Confirmation.setConfirmationAcceptAction(() => confirmOpenAlbum(album)));
+    dispatch(Confirmation.setConfirmationRejectAction(() => cancelOpenAlbum()));
+    dispatch(NavigationActions.navigate({ routeName: ROUTES.CLOSE_ALBUM }));
+  }
+}
+
+export function confirmOpenAlbum(openAlbum) {
+  return (dispatch, getState) => {
+    const { album: album, app: { albumHistory } } = getState();
+    if(album.id != null) {
+      const newHistory = [album, ...albumHistory];
+      Storage.saveAlbumHistory(newHistory);
+      dispatch(setHistory(newHistory));
+      dispatch(Album.reset());
+      Storage.saveAlbumId(null);
+      Storage.saveAlbumName(null);
+      Storage.saveAlbumLink(null);
+      dispatch(Album.leaveChannel());
+    }
+    var editableAlbumHistory = getState().app.albumHistory;
+    var removeIndex = null;
+    for(var index = 0; index < editableAlbumHistory.length; index++) {
+      const historicalAlbum = editableAlbumHistory[index];
+      if(openAlbum.id == historicalAlbum.id) {
+        removeIndex = index;
+      }
+    }
+    editableAlbumHistory.splice(removeIndex, 1);
+    Storage.saveAlbumHistory(editableAlbumHistory);
+    dispatch(setHistory(editableAlbumHistory));
+
+    dispatch(Album.updateId(openAlbum.id));
+    Storage.saveAlbumId(openAlbum.id);
+    dispatch(Album.updateName(openAlbum.name));
+    Storage.saveAlbumName(openAlbum.name);
+    dispatch(Album.updateAlbumDate(openAlbum.albumDate));
+    Storage.saveAlbumDate(openAlbum.albumDate);
+    dispatch(Album.loadImages(openAlbum.images));
+    Storage.saveAlbumImages(openAlbum.images);
+    dispatch(TasvirApi.loadAlbum());
+    dispatch(Album.joinChannel());
+    dispatch(NavigationActions.back({}));
+  }
+}
+
+export function cancelOpenAlbum() {
+  return (dispatch) => {
+    dispatch(NavigationActions.back({}));
+  }
+}
+
 export function closeAlbum() {
   return (dispatch, getState) => {
     const { album: { name } } = getState();

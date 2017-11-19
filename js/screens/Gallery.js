@@ -37,7 +37,12 @@ class Gallery extends Component {
   }
 
   renderImages = () => {
-    const photos = this.formatImages(this.props.viewingAlbum.images);
+    var photos;
+    if(this.props.viewingAlbum.id === this.props.currentAlbumId) {
+      photos = this.formatImages(this.props.currentAlbum.images);
+    } else {
+      photos = this.formatImages(this.props.viewingAlbum.images);
+    }
     return (
       <View style={{flex: 1, backgroundColor: "#48B2E2", paddingTop: 19}}>
         {this.props.viewingAlbum ?
@@ -56,7 +61,7 @@ class Gallery extends Component {
         :
           null
         }
-        <ScrollView style={{flex: 1}}>
+        <ScrollView style={{flex: 1, width: WIDTH}}>
           {photos.map((p, i) => {
             return (
               <View key={i} style={{flex: 1, flexDirection: 'row', width: WIDTH}}>
@@ -86,6 +91,13 @@ class Gallery extends Component {
             );
           })}
         </ScrollView>
+        {this.props.viewingAlbum.id && (this.props.currentAlbumId != this.props.viewingAlbum.id) ?
+          <TouchableOpacity onPress={() => this.props.openAlbum(this.props.viewingAlbum)} style={{backgroundColor: "#FF2C55", width: WIDTH, height: 50, borderTopWidth: 5, borderColor: "#48B2E2", alignItems: "center", justifyContent: "center"}}>
+            <Text style={{color: "#FFF", fontSize: 18, fontWeight: 'bold'}}>Open Album</Text>
+          </TouchableOpacity>
+        :
+          null
+        }
       </View>
     );
   }
@@ -104,7 +116,6 @@ class Gallery extends Component {
           resizeMode='contain' />
       );
     } else if(image) {
-      console.log("AR < 1");
       return (
         <Image
           style={{
@@ -272,7 +283,8 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => {
   return {
     viewAlbum: (album) => dispatch(Actions.App.galleryViewAlbum(album)),
-    listAlbums: () => dispatch(Actions.App.galleryListAlbums())
+    listAlbums: () => dispatch(Actions.App.galleryListAlbums()),
+    openAlbum: (album) => dispatch(Actions.App.openAlbum(album))
   };
 };
 
@@ -280,6 +292,7 @@ const mapStateToProps = (state) => {
   return {
     inListMode: state.app.galleryState == Actions.App.APP_GALLERY_STATE_LIST,
     currentAlbum: state.album.id ? state.album : null,
+    currentAlbumId: state.album.id ? state.album.id : null,
     viewingAlbum: state.gallery.viewingAlbum,
     albumHistory: state.app.albumHistory,
     allImages: state.gallery.images,
