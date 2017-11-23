@@ -2,13 +2,15 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import * as Actions from '../../js/actions/app';
 import * as Album from '../../js/actions/album';
+import * as Gallery from '../../js/actions/gallery';
 import * as Confirmation from '../../js/actions/confirmation';
 import * as TasvirApi from '../../js/actions/tasvir_api';
 import MockAsyncStorage from '../../__mocks__/mock_async_storage';
 
 import { AUTO_SHARE_STORAGE, SENDER_ID_STORAGE, ALBUM_HISTORY_STORAGE,
          NAVIGATION_ACTION, NAVIGATION_BACK_ACTION, ALBUM_ID_STORAGE,
-         ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE, ROUTES } from '../../js/constants';
+         ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE, ROUTES,
+         WALKTHROUGH_FLAG_STORAGE } from '../../js/constants';
 
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares);
@@ -160,5 +162,66 @@ describe('app_actions', () => {
       complete
     }
     expect(Actions.setWalkthroughComplete(complete)).toEqual(expectedAction);
+  });
+
+  it('completeWalkthrough() calls the onCompleteWalkthrough function in state', async () => {
+    const AsyncStorage = new MockAsyncStorage({});
+    jest.setMock('AsyncStorage', AsyncStorage);
+    const mockGalleryLoad = { type: "MOCK GALLERY LOAD" };
+    Gallery.loadGallery = jest.fn(() => {
+      return mockGalleryLoad;
+    });
+    const action = { type: "COMPLETE WALKTHROUGH" };
+    const complete = () => action;
+
+    const store = mockStore({ app: { onCompleteWalkthrough: complete } });
+    const expectedActions = [
+      mockGalleryLoad,
+      action,
+    ];
+
+    await store.dispatch(Actions.completeWalkthrough());
+    expect(store.getActions()).toEqual(expectedActions);
+    await expect(AsyncStorage.getItem(WALKTHROUGH_FLAG_STORAGE)).resolves.toBe(JSON.stringify(true));
+  });
+
+  it('galleryListAlbums() dispatches SET_GALLERY_STATE', () => {
+    expect(Actions.galleryListAlbums()).toEqual({
+      type: Actions.SET_GALLERY_STATE,
+      state: Actions.APP_GALLERY_STATE_LIST
+    });
+  });
+
+  it('galleryViewAlbum() dispatches SET_GALLERY_STATE and views album', async () => {
+    const mockViewAlbum = { type: "MOCK VIEW ALBUM" };
+    Gallery.viewAlbum = jest.fn((album) => {
+      return mockViewAlbum;
+    });
+    const store = mockStore({ });
+    const expectedActions = [
+      mockViewAlbum,
+      { type: Actions.SET_GALLERY_STATE, state: Actions.APP_GALLERY_STATE_IMAGES }
+    ];
+
+    await store.dispatch(Actions.galleryViewAlbum({ }));
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  it('viewAlbumReel() dispatches actions to view a album at a index', async () => {
+    const mockViewAlbum = { type: "MOCK VIEW ALBUM" };
+    Gallery.viewAlbum = jest.fn((album) => {
+      return mockViewAlbum;
+    });
+    const index = 5;
+    const images = [0, 1, 2, 3, 4, 5, 6];
+    const store = mockStore({ });
+    const expectedActions = [
+      { type: Actions.SET_ALBUM_REEL_INDEX, index },
+      { type: Actions.SET_ALBUM_REEL_IMAGES, images },
+      { type: NAVIGATION_ACTION, routeName: ROUTES.ALBUM_REEL }
+    ];
+
+    await store.dispatch(Actions.viewAlbumReel(index, images));
+    expect(store.getActions()).toEqual(expectedActions);
   });
 });

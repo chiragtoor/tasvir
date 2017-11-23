@@ -113,14 +113,6 @@ export function setWalkthroughComplete(complete) {
   return { type: APP_SET_WALKTHROUGH_COMPLETE, complete };
 }
 
-
-
-
-
-
-
-
-
 export function completeWalkthrough() {
   return (dispatch, getState) => {
     const { app: { onCompleteWalkthrough } } = getState();
@@ -129,6 +121,9 @@ export function completeWalkthrough() {
     dispatch(onCompleteWalkthrough());
   }
 }
+
+
+
 
 export function galleryListAlbums() {
   return { type: SET_GALLERY_STATE, state: APP_GALLERY_STATE_LIST };
@@ -143,8 +138,6 @@ export function galleryViewAlbum(album) {
 
 export function viewAlbumReel(index, images) {
   return (dispatch) => {
-    console.log("viewAlbumReel");
-    console.log("index: ", index);
     dispatch({ type: SET_ALBUM_REEL_INDEX, index });
     dispatch({ type: SET_ALBUM_REEL_IMAGES, images });
     dispatch(NavigationActions.navigate({ routeName: ROUTES.ALBUM_REEL }));
