@@ -122,9 +122,6 @@ export function completeWalkthrough() {
   }
 }
 
-
-
-
 export function galleryListAlbums() {
   return { type: SET_GALLERY_STATE, state: APP_GALLERY_STATE_LIST };
 }

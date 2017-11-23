@@ -177,7 +177,7 @@ describe('index_actions', () => {
       { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
       { type: Album.UPDATE_ALBUM_ID, id: albumId },
       { type: Album.UPDATE_ALBUM_NAME, name: albumName },
-      { type: Album.LOAD_DATE, date: albumDate },
+      { type: Album.LOAD_ALBUM_DATE, albumDate: albumDate },
       { type: Gallery.SET_VIEWING_ALBUM, album: viewingAlbum },
       { type: App.SET_GALLERY_STATE, state: App.APP_GALLERY_STATE_IMAGES},
       { type: Reel.UPDATE_CURRENT_INDEX, currentIndex: Actions.CAMERA_INDEX },

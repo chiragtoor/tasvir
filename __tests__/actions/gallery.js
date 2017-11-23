@@ -10,6 +10,15 @@ describe('gallery_actions', () => {
     expect(Actions.loadImages(images)).toEqual(expectedAction);
   });
 
+  it('viewAlbum() dispatches SET_VIEWING_ALBUM', () => {
+    const album = "album";
+    const expectedAction = {
+      type: Actions.SET_VIEWING_ALBUM,
+      album
+    }
+    expect(Actions.viewAlbum(album)).toEqual(expectedAction);
+  });
+
   it('addImages() dispatches ADD_IMAGES', () => {
     const images = ["one", "two", "three"];
     const expectedAction = {

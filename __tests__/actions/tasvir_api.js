@@ -30,7 +30,7 @@ describe('tasvir_api_actions', () => {
     const name = "some album";
     const id = "album id";
     const link = "branch link";
-    const date = "Jan. 10th, 2017";
+    const albumDate = "Jan. 10th, 2017";
     const mockAction = { type: "MOCK_ACTION" };
 
     const AsyncStorage = new MockAsyncStorage({});
@@ -43,12 +43,12 @@ describe('tasvir_api_actions', () => {
 
     nock(URL)
       .post(ALBUMS_ENDPOINT)
-      .reply(201, { success: 1, album: id, link: link, album_date: date })
+      .reply(201, { success: 1, album: id, link: link, album_date: albumDate })
 
     const expectedActions = [
       { type: Album.UPDATE_ALBUM_ID, id },
       { type: Album.LOAD_LINK, link },
-      { type: Album.LOAD_DATE, date },
+      { type: Album.LOAD_ALBUM_DATE, albumDate },
       { type: App.APP_RESET_ALBUM_FORM },
       mockAction
     ];
@@ -108,9 +108,18 @@ describe('tasvir_api_actions', () => {
    * Tests for loading a album
    */
   it('correctly handles a success response when loading an album', async() => {
+    const saveImageMock = (image) => { return { type: "SAVE_IMAGE", uri: image } };
+    Actions.saveImage = jest.fn((uri, loadGallery, addToAlbum) => {
+      return saveImageMock(uri);
+    });
+    const loadGallery = { type: "LOAD GALLERY" };
+    Gallery.loadGallery = jest.fn(() => {
+      return loadGallery;
+    });
     const albumId = "CAafsfs988";
     const albumLink = "album branch link";
     const senderId = "this user";
+    const albumDate = "Jan. 10th, 2017";
     const responsePhotos = [{sent_by: "some user", photo: 'one', id: "one", width: 9, height: 16},
                             {sent_by: "some user", photo: 'two', id: "two", width: 9, height: 16},
                             {sent_by: "some other user", photo: 'three', id: "three", width: 9, height: 16}];
@@ -122,23 +131,19 @@ describe('tasvir_api_actions', () => {
 
     nock(URL)
       .get(ALBUMS_ENDPOINT + "/" + albumId)
-      .reply(201, { success: 1, photos: responsePhotos, link: albumLink });
+      .reply(201, { success: 1, photos: responsePhotos, link: albumLink, album_date: albumDate });
 
     const expectedActions = [
       { type: Album.LOAD_LINK, link: albumLink },
+      { type: Album.LOAD_ALBUM_DATE, albumDate },
       /* due to mock promises, these actions resolve first in the test */
+      saveImageMock("one"),
       { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
+      saveImageMock("two"),
       { type: App.APP_ADD_SAVED_PHOTO, photo: "two" },
+      saveImageMock("three"),
       { type: App.APP_ADD_SAVED_PHOTO, photo: "three" },
-      { type: Album.ADD_IMAGE, image: { uri: "one", width: 9, height: 16 } },
-      { type: Album.ADD_IMAGE, image: { uri: "two", width: 9, height: 16 } },
-      { type: Album.ADD_IMAGE, image: { uri: "three", width: 9, height: 16 } },
-      { type: Gallery.SET_GALLERY_BUTTON_IMAGE, image: {uri: "three", aspectRatio: (9/16)}},
-      { type: Gallery.LOAD_IMAGES, images: [
-                                            { uri: "three", width: 9, height: 16 },
-                                            { uri: "two", width: 9, height: 16 },
-                                            { uri: "one", width: 9, height: 16 }
-                                          ]}
+      loadGallery
     ];
 
     const store = mockStore({ album: { name: "some album", id: albumId }, app: { senderId: senderId, savedPhotos: [] } });
@@ -147,9 +152,18 @@ describe('tasvir_api_actions', () => {
   });
 
   it('does not save own images when loading an album', async() => {
+    const saveImageMock = (image) => { return { type: "SAVE_IMAGE", uri: image } };
+    Actions.saveImage = jest.fn((uri, loadGallery, addToAlbum) => {
+      return saveImageMock(uri);
+    });
+    const loadGallery = { type: "LOAD GALLERY" };
+    Gallery.loadGallery = jest.fn(() => {
+      return loadGallery;
+    });
     const albumId = "CAafsfs988";
     const albumLink = "album branch link";
     const senderId = "this user";
+    const albumDate = "Jan. 10th, 2017";
     const responsePhotos = [{sent_by: "some user", photo: 'one', id: "one", width: 9, height: 16},
                             {sent_by: senderId, photo: 'two', id: "two", width: 9, height: 16},
                             {sent_by: senderId, photo: 'three', id: "three", width: 9, height: 16}];
@@ -159,16 +173,14 @@ describe('tasvir_api_actions', () => {
 
     nock(URL)
       .get(ALBUMS_ENDPOINT + "/" + albumId)
-      .reply(201, { success: 1, photos: responsePhotos, link: albumLink });
+      .reply(201, { success: 1, photos: responsePhotos, link: albumLink, album_date: albumDate });
 
     const expectedActions = [
       { type: Album.LOAD_LINK, link: albumLink },
+      { type: Album.LOAD_ALBUM_DATE, albumDate },
+      saveImageMock("one"),
       { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
-      { type: Album.ADD_IMAGE, image: { uri: "one", width: 9, height: 16 } },
-      { type: Gallery.SET_GALLERY_BUTTON_IMAGE, image: "one"},
-      { type: Gallery.LOAD_IMAGES, images: [
-                                            { uri: "one", width: 9, height: 16 }
-                                          ]}
+      loadGallery
     ];
 
     const store = mockStore({ album: { name: "some album", id: albumId }, app: { senderId: senderId, savedPhotos: [] } });
@@ -177,9 +189,18 @@ describe('tasvir_api_actions', () => {
   });
 
   it('does not save own previously loaded images when loading an album', async() => {
+    const saveImageMock = (image) => { return { type: "SAVE_IMAGE", uri: image } };
+    Actions.saveImage = jest.fn((uri, loadGallery, addToAlbum) => {
+      return saveImageMock(uri);
+    });
+    const loadGallery = { type: "LOAD GALLERY" };
+    Gallery.loadGallery = jest.fn(() => {
+      return loadGallery;
+    });
     const albumId = "CAafsfs988";
     const albumLink = "album branch link";
     const senderId = "this user";
+    const albumDate = "Jan. 10th, 2017";
     const responsePhotos = [{sent_by: "some user", photo: 'one', id: "one", width: 9, height: 16},
                             {sent_by: "some user", photo: 'two', id: "two", width: 9, height: 16},
                             {sent_by: "some user", photo: 'three', id: "three", width: 9, height: 16}];
@@ -189,19 +210,16 @@ describe('tasvir_api_actions', () => {
 
     nock(URL)
       .get(ALBUMS_ENDPOINT + "/" + albumId)
-      .reply(201, { success: 1, photos: responsePhotos, link: albumLink });
+      .reply(201, { success: 1, photos: responsePhotos, link: albumLink, album_date: albumDate });
 
       const expectedActions = [
         { type: Album.LOAD_LINK, link: albumLink },
+        { type: Album.LOAD_ALBUM_DATE, albumDate },
+        saveImageMock("one"),
         { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
+        saveImageMock("two"),
         { type: App.APP_ADD_SAVED_PHOTO, photo: "two" },
-        { type: Album.ADD_IMAGE, image: { uri: "one", width: 9, height: 16 } },
-        { type: Album.ADD_IMAGE, image: { uri: "two", width: 9, height: 16 } },
-        { type: Gallery.SET_GALLERY_BUTTON_IMAGE, image: "two"},
-        { type: Gallery.LOAD_IMAGES, images: [
-                                              { uri: "two", width: 9, height: 16 },
-                                              { uri: "one", width: 9, height: 16 }
-                                            ]}
+        loadGallery
       ];
 
     const store = mockStore({ album: { name: "some album", id: albumId }, app: { senderId: senderId, savedPhotos: ["three"] } });
