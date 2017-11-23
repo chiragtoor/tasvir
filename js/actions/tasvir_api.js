@@ -2,6 +2,7 @@ import { CameraRoll, Image } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
 import * as Album from './album';
+import * as AlbumChannel from './album_channel';
 import * as Gallery from './gallery';
 import * as App from './app';
 import * as Reel from './reel';
@@ -41,7 +42,7 @@ export function createAlbum() {
         dispatch(Album.updateAlbumDate(responseJson.album_date));
         Storage.saveAlbumDate(responseJson.album_date);
         dispatch(App.resetAlbumForm());
-        dispatch(Album.joinChannel());
+        dispatch(AlbumChannel.joinChannel());
       } else {
         dispatch(App.resetAlbumForm());
       }

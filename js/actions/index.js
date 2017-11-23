@@ -11,6 +11,7 @@ import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
 
 import * as Reel from './reel';
 import * as Album from './album';
+import * as AlbumChannel from './album_channel';
 import * as App from './app';
 import * as TasvirApi from './tasvir_api';
 import * as Gallery from './gallery';
@@ -44,6 +45,8 @@ export function saveImage(imageUrl, loadGallery = true, addToAblum = true) {
             }
           }
         });
+      } else if(id == null) {
+        dispatch(Gallery.loadGallery());
       }
     });
   }
@@ -95,7 +98,7 @@ export function loadAndDispatchState() {
         dispatch(App.galleryViewAlbum(getState().album));
         if(previewReel) dispatch(Reel.loadPreviewReel(previewReel));
         dispatch(Reel.updateCurrentIndex(CAMERA_INDEX));
-        dispatch(Album.joinChannel());
+        dispatch(AlbumChannel.joinChannel());
       }
 
       if(getValue(value, WALKTHROUGH_FLAG_STORAGE)) {

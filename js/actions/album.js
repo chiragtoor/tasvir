@@ -8,8 +8,10 @@ import * as Confirmation from './confirmation';
 import * as Reel from './reel';
 import * as Storage from '../storage';
 import * as AlbumChannel from './album_channel';
+import { saveImage } from './index';
 import { ROUTES } from '../constants';
 
+var RNFS = require('react-native-fs');
 /*
  * Below actions deal with the state of the current ablum
  */
@@ -86,6 +88,7 @@ export function confirmCloseAlbum() {
     dispatch(App.setHistory(newHistory));
     // close the album with the utitlity method
     dispatch(_closeAlbum());
+    dispatch(App.galleryListAlbums());
     dispatch(finishAlbumAction());
   }
 }
@@ -175,7 +178,7 @@ export function _closeAlbum() {
     dispatch(reset());
     dispatch(AlbumChannel.leaveChannel());
      previewReel.forEach((image) => {
-       dispatch(Actions.saveImage(RNFS.DocumentDirectoryPath + '/' + image,
+       dispatch(saveImage(RNFS.DocumentDirectoryPath + '/' + image,
                                   false, false));
      });
      dispatch(Reel.reset());
