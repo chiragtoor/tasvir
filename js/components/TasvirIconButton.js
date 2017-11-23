@@ -25,11 +25,11 @@ TasvirIconButton.getDefaultProps = {
   sizeLarge: false
 }
 
-TasvirIconButton.propTypes = {
-  onPress: React.PropTypes.func.isRequired,
-  content: React.PropTypes.element,
-  sizeLarge: React.PropTypes.bool
-}
+// TasvirIconButton.propTypes = {
+//   onPress: React.PropTypes.func.isRequired,
+//   content: React.PropTypes.element,
+//   sizeLarge: React.PropTypes.bool
+// }
 
 const styles = StyleSheet.create({
   buttonBorder: {

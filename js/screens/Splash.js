@@ -26,7 +26,7 @@ export default class Splash extends Component {
 
 Splash.getDefaultProps = { }
 
-Splash.propTypes = { }
+// Splash.propTypes = { }
 
 const styles = StyleSheet.create({
   page: {

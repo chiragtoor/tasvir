@@ -112,13 +112,14 @@ class TasvirCamera extends Component {
                     <TasvirIconButton
                       style={{zIndex: 0}}
                       onPress={this.props.goToGallery}
-                      content={<Image
+                      content={<ImageBackground
                                   style={styles.imageButton}
+                                  imageStyle={styles.imageButton}
                                   source={{uri: this.props.latestImage.uri}}>
                                   <View style={styles.imageButtonText}>
                                     <FontAwesome style={{color: "#FFFFFF"}}>{Icons.th}</FontAwesome>
                                   </View>
-                                </Image>} />
+                                </ImageBackground>} />
                     <Animated.View style={galleryStyle}>
                       <View style={{borderRadius: 17, height: 34, width: 34, backgroundColor: "#48B2E2"}} />
                     </Animated.View>
@@ -137,13 +138,14 @@ class TasvirCamera extends Component {
                 {hasPreviewReel ?
                   <TasvirIconButton
                     onPress={this.props.goToPreview}
-                    content={<Image
+                    content={<ImageBackground
                                 style={styles.imageButton}
+                                imageStyle={styles.imageButton}
                                 source={{uri: (RNFS.DocumentDirectoryPath + '/' + this.props.previewReel[0])}}>
                                 <View style={styles.imageButtonText}>
                                   <Text style={{color: '#FFFFFF', fontWeight: 'bold'}}>{this.props.previewReel.length}</Text>
                                 </View>
-                              </Image>}/>
+                              </ImageBackground>}/>
                 :
                   null
                 }

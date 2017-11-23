@@ -17,11 +17,11 @@ TasvirButton.getDefaultProps = {
   secondary: false
 }
 
-TasvirButton.propTypes = {
-  onPress: React.PropTypes.func.isRequired,
-  text: React.PropTypes.string.isRequired,
-  secondary: React.PropTypes.bool
-}
+// TasvirButton.propTypes = {
+//   onPress: React.PropTypes.func.isRequired,
+//   text: React.PropTypes.string.isRequired,
+//   secondary: React.PropTypes.bool
+// }
 
 const styles = StyleSheet.create({
   button: {

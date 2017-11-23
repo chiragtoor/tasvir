@@ -31,12 +31,12 @@ export default class TasvirToggle extends Component {
   }
 }
 
-TasvirToggle.propTypes = {
-  value: React.PropTypes.bool.isRequired,
-  toggle: React.PropTypes.func.isRequired,
-  message: React.PropTypes.string.isRequired,
-  explanation: React.PropTypes.string.isRequired
-}
+// TasvirToggle.propTypes = {
+//   value: React.PropTypes.bool.isRequired,
+//   toggle: React.PropTypes.func.isRequired,
+//   message: React.PropTypes.string.isRequired,
+//   explanation: React.PropTypes.string.isRequired
+// }
 
 const styles = StyleSheet.create({
   container: {

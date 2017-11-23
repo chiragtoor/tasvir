@@ -16,9 +16,9 @@ export default class TasvirDirections extends Component {
   }
 }
 
-TasvirDirections.propTypes = {
-  directions: React.PropTypes.string.isRequired
-}
+// TasvirDirections.propTypes = {
+//   directions: React.PropTypes.string.isRequired
+// }
 
 const styles = StyleSheet.create({
   tasvirDirections: {
