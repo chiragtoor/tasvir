@@ -70,6 +70,15 @@ class TasvirCamera extends Component {
   }
 
   takePicture = (data) => {
+    Image.getSize(data.path, (width, height) => {
+      console.log(width);
+      console.log(height);
+      if((width / height) > 1) {
+        console.log("LANDSCAPE");
+      } else {
+        console.log("PORTRAIT");
+      }
+    })
     if(this.props.albumId) {
       const path = data.path.split('/Documents/');
       this.addImage(path[1]);
