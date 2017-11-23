@@ -49,6 +49,9 @@
 						"window": true,
 						"chan": false,
 						"socket": false
-				}
+				},
+				"setupFiles": [
+					"./test_setup.js"
+				]
 		}
 }

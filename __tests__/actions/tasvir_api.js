@@ -6,6 +6,7 @@ import nock from 'nock';
 import * as TasvirApi from '../../js/actions/tasvir_api';
 import * as App from '../../js/actions/app';
 import * as Album from '../../js/actions/album';
+import * as AlbumChannel from '../../js/actions/album_channel';
 import * as Actions from '../../js/actions';
 import * as Gallery from '../../js/actions/gallery';
 import MockAsyncStorage from '../../__mocks__/mock_async_storage';
@@ -37,7 +38,7 @@ describe('tasvir_api_actions', () => {
     jest.setMock('AsyncStorage', AsyncStorage);
     // mock joinChannel due to internal phoenix js libraries used that will be
     //  undefined in test environment
-    Album.joinChannel = jest.fn(() => {
+    AlbumChannel.joinChannel = jest.fn(() => {
       return mockAction;
     });
 

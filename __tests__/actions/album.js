@@ -134,6 +134,7 @@ describe('album_actions', () => {
       { type: Actions.LOAD_IMAGES, images: []},
       mockChannelLeaveAction,
       { type: Reel.RESET_REEL },
+      { type: App.SET_GALLERY_STATE, state: App.APP_GALLERY_STATE_LIST },
       { type: NAVIGATION_BACK_ACTION }
     ];
     await store.dispatch(Actions.confirmCloseAlbum());

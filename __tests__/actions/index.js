@@ -2,6 +2,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import * as Actions from '../../js/actions';
 import * as Album from '../../js/actions/album';
+import * as AlbumChannel from '../../js/actions/album_channel';
 import * as App from '../../js/actions/app';
 import * as Reel from '../../js/actions/reel';
 import * as Gallery from '../../js/actions/gallery';
@@ -163,7 +164,7 @@ describe('index_actions', () => {
                                                 albumDate: JSON.stringify(albumDate)});
     jest.setMock('AsyncStorage', AsyncStorage);
     const mockJoinChannel = { type: "MOCK JOIN CHANNEL" };
-    Album.joinChannel  = jest.fn((fun) => {
+    AlbumChannel.joinChannel  = jest.fn((fun) => {
       return mockJoinChannel;
     });
     const mockLoadAlbum = { type: "MOCK LOAD ALBUM" };
