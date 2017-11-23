@@ -63,6 +63,7 @@ export function loadAlbum() {
     .then((responseJson) => {
       if(responseJson.success) {
         dispatch(Album.updateLink(responseJson.link));
+        dispatch(Album.updateAlbumDate(responseJson.album_date));
         for(var i = 0; i < responseJson.photos.length; i++) {
           const photo = responseJson.photos[i];
           // do not want to save own captured pictures or previously saved images,

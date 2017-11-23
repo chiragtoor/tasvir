@@ -21,6 +21,7 @@ class AlbumReel extends Component {
   }
 
   render() {
+    console.log(this.props.images);
     return (
       <View style={styles.container}>
         <ScrollView
@@ -33,7 +34,7 @@ class AlbumReel extends Component {
           {this.props.images.map((image, imageIndex) => {
             return (
               <View key={imageIndex} style={styles.page}>
-                <Image source={{uri: image.uri}} style={styles.page} resizeMode='contain' />
+                <Image source={{uri: image.uri}} style={(image.width / image.height) < 1 ? styles.pagePortrait : styles.pageLandscape} resizeMode='contain' />
                 <View style={{position: 'absolute', left: 0, top: 0, marginLeft: 10, marginTop: 19}}>
                   <TouchableOpacity onPress={() => this.props.closeReel()}>
                     <View style={{borderRadius: 19, height: 38, width: 38, alignItems: 'center', justifyContent: 'center', backgroundColor: "#FFFFFF"}}>
@@ -59,7 +60,12 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1
   },
-  page: {
+  pageLandscape: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    transform: [{rotate: '90deg'}],
+  },
+  pagePortrait: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height
   }

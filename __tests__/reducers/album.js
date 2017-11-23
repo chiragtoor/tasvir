@@ -17,19 +17,6 @@ describe('album_reducer', () => {
     ).toEqual(expectedInitialState);
   });
 
-  it('handles UPDATE_ALBUM_NAME properly', () => {
-    const name = "Album";
-    expect(
-      reducer({}, {
-        type: Actions.UPDATE_ALBUM_NAME,
-        name: name
-      })
-    ).toEqual({
-      ...expectedInitialState,
-      name: name
-    });
-  });
-
   it('handles UPDATE_ALBUM_ID properly', () => {
     const id = "album link"
     expect(
@@ -40,6 +27,19 @@ describe('album_reducer', () => {
     ).toEqual({
       ...expectedInitialState,
       id: id
+    });
+  });
+
+  it('handles UPDATE_ALBUM_NAME properly', () => {
+    const name = "Album";
+    expect(
+      reducer({}, {
+        type: Actions.UPDATE_ALBUM_NAME,
+        name: name
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      name: name
     });
   });
 
@@ -56,28 +56,43 @@ describe('album_reducer', () => {
     });
   });
 
-  it('handles LOAD_DATE properly', () => {
-    const date = "some date"
+  it('handles LOAD_IMAGES properly', () => {
+    const images = [0, 1, 2]
     expect(
       reducer({}, {
-        type: Actions.LOAD_DATE,
-        date
+        type: Actions.LOAD_IMAGES,
+        images
       })
     ).toEqual({
       ...expectedInitialState,
-      albumDate: date
+      images: images
     });
   });
 
-  it('handles RESET_ALBUM properly', () => {
+  it('handles ADD_IMAGE properly', () => {
+    const images = [0, 1, 2];
+    const image = 3;
     expect(
-      reducer({
-        id: "some id",
-        name: "an album",
-        link: "branch link"
-      }, {
-        type: Actions.RESET_ALBUM
+      reducer({ images: images }, {
+        type: Actions.ADD_IMAGE,
+        image
       })
-    ).toEqual(expectedInitialState);
+    ).toEqual({
+      ...expectedInitialState,
+      images: [image, ...images]
+    });
+  });
+
+  it('handles LOAD_ALBUM_DATE properly', () => {
+    const albumDate = "some date"
+    expect(
+      reducer({}, {
+        type: Actions.LOAD_ALBUM_DATE,
+        albumDate
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      albumDate: albumDate
+    });
   });
 });

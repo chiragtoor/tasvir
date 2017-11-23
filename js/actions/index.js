@@ -29,20 +29,22 @@ export function saveImage(imageUrl, loadGallery = true, addToAblum = true) {
   return (dispatch, getState) => {
     const { album: { id } } = getState();
     CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
-      CameraRoll.getPhotos({
-        first: 1,
-        assetType: 'Photos'
-      }).then(roll => {
-        if(roll.edges && roll.edges.length > 0) {
-          const image = roll.edges[0].node.image;
-          if(image.uri === uri) {
-            if(id && addToAblum) dispatch(Album.addImage(uri, image.width, image.height));
-            if(loadGallery) dispatch(Gallery.loadGallery());
-          } else {
-            console.log("NOT SAME IMAGE");
+      if(id && addToAblum) {
+        CameraRoll.getPhotos({
+          first: 1,
+          assetType: 'Photos'
+        }).then(roll => {
+          if(roll.edges && roll.edges.length > 0) {
+            const image = roll.edges[0].node.image;
+            if(image.uri === uri) {
+               dispatch(Album.addImage(uri, image.width, image.height));
+              if(loadGallery) dispatch(Gallery.loadGallery());
+            } else {
+              console.log("NOT SAME IMAGE");
+            }
           }
-        }
-      });
+        });
+      }
     });
   }
 }

@@ -140,7 +140,7 @@ class Gallery extends Component {
   renderAlbumTile = (album, index) => {
     return (
       <View key={index}>
-        <TouchableOpacity onPress={() => this.props.viewAlbum(album)} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
+        <TouchableOpacity onPress={() => this.props.viewAlbum({index: index, ...album})} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
           <View style={{height: 100, width: (WIDTH * 0.3), alignItems: 'center', justifyContent: 'center'}}>
             {album.image ? this.renderImage(album.image) : null}
           </View>
@@ -155,7 +155,7 @@ class Gallery extends Component {
               <Text style={styles.explanation}>
                 {album.albumDate + " - " + album.photoCount + " Photos"}
               </Text>
-              {index == 0 ?
+              {index == -1 ?
                 <Text style={styles.currentAlbum}>
                   {"Currently Active"}
                 </Text>
@@ -199,9 +199,9 @@ class Gallery extends Component {
             source={LOGO}/>
         </View>
         <ScrollView style={{backgroundColor: "#E8E8EE"}}>
-          { currentAlbum ? this.renderAlbumTile(currentAlbum, 0) : null }
-          { albums.map((album, index) => this.renderAlbumTile(album, index + 1)) }
-          <View key={-1}>
+          { currentAlbum ? this.renderAlbumTile(currentAlbum, -1) : null }
+          { albums.map((album, index) => this.renderAlbumTile(album, index)) }
+          <View key={"ALL"}>
             <TouchableOpacity onPress={() => this.props.viewAlbum({name: "All Images", images: this.props.allImages})} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
               <View style={{height: 100, width: (WIDTH * 0.3), alignItems: 'center', justifyContent: 'center'}}>
                 {this.renderImage(this.props.allImagesShow)}
@@ -289,7 +289,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     viewAlbum: (album) => dispatch(Actions.App.galleryViewAlbum(album)),
     listAlbums: () => dispatch(Actions.App.galleryListAlbums()),
-    openAlbum: (album) => dispatch(Actions.App.openAlbum(album)),
+    openAlbum: (album) => dispatch(Actions.Album.openAlbum(album)),
     viewAlbumReel: (index, images) => dispatch(Actions.App.viewAlbumReel(index, images))
   };
 };

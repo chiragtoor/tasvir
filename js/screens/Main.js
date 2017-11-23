@@ -29,6 +29,7 @@ class Main extends Component {
   }
 
   render() {
+    console.log("Main.js, previewReel: ", this.props.previewReel);
     return (
       <View style={styles.container}>
         <Swiper

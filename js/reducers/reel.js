@@ -12,6 +12,9 @@ function previewReel(state = [], action) {
         ...state.slice(0, action.index),
         ...state.slice(action.index + 1)
       ];
+    case Actions.RESET_REEL:
+      console.log("RESETING REEL TO []")
+      return [];
     default:
       return state;
   }

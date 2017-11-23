@@ -186,7 +186,7 @@ const mapDispatchToProps = (dispatch) => {
     albumFormUpdateName: (name) => dispatch(Actions.Album.updateName(name)),
     resetAlbumForm: () => dispatch(Actions.App.resetAlbumForm()),
     createAlbum: () => dispatch(Actions.TasvirApi.createAlbum()),
-    attemptCloseAlbum: () => dispatch(Actions.App.closeAlbum()),
+    attemptCloseAlbum: () => dispatch(Actions.Album.closeAlbum()),
     startAlbumForm: () => dispatch(Actions.App.openAlbumForm())
   };
 };

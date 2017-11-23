@@ -5,8 +5,6 @@ function id(state = null, action) {
   switch(action.type) {
     case Actions.UPDATE_ALBUM_ID:
       return action.id;
-    case Actions.RESET_ALBUM:
-      return null;
     default:
       return state;
   }
@@ -16,8 +14,6 @@ function name(state = null, action) {
   switch(action.type) {
     case Actions.UPDATE_ALBUM_NAME:
       return action.name;
-    case Actions.RESET_ALBUM:
-      return null;
     default:
       return state;
   }
@@ -27,8 +23,6 @@ function link(state = null, action) {
   switch(action.type) {
     case Actions.LOAD_LINK:
       return action.link;
-    case Actions.RESET_ALBUM:
-      return null;
     default:
       return state;
   }
@@ -40,8 +34,6 @@ function images(state = [], action) {
       return action.images;
     case Actions.ADD_IMAGE:
       return [action.image, ...state];
-    case Actions.RESET_ALBUM:
-      return [];
     default:
       return state;
   }
@@ -49,8 +41,8 @@ function images(state = [], action) {
 
 function albumDate(state = null, action) {
   switch(action.type) {
-    case Actions.LOAD_DATE:
-      return action.date;
+    case Actions.LOAD_ALBUM_DATE:
+      return action.albumDate;
     default:
       return state;
   }

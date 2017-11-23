@@ -21,8 +21,7 @@ export const ALBUM_DATE_STORAGE = 'albumDate';
 export const ROUTES = {
   ALBUM_LIST: 'AlbumList',
   MAIN: 'Main',
-  CLOSE_ALBUM: 'CloseAlbum',
-  JOIN_ALBUM: 'JoinAblum',
+  ALBUM_ACTION: 'AlbumAction',
   WALKTHROUGH: 'Walkthrough',
   ALBUM_REEL: 'AlbumReel'
 }
