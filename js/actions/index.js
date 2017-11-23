@@ -80,7 +80,7 @@ export function loadAndDispatchState() {
       }
 
       if(senderId == null) {
-        dispatch(App.updateSenderId(DeviceInfo.getUniqueID(), true));
+        dispatch(App.updateSenderId(DeviceInfo.getUniqueID()));
       } else {
         dispatch(App.updateSenderId(senderId));
       }

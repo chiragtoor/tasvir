@@ -156,7 +156,7 @@ const app = combineReducers({
   confirmationRejectCopy,
   onCompleteWalkthrough,
   albumHistory,
-  galleryState
+  galleryState,
   albumReelIndex,
   albumReelImages,
 });
