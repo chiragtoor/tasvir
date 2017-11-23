@@ -125,7 +125,7 @@ function galleryState(state = Actions.APP_GALLERY_STATE_LIST, action) {
   }
 }
 
-function albumReelIndex(state = 0, action) {
+function albumReelIndex(state = null, action) {
   switch(action.type) {
     case Actions.SET_ALBUM_REEL_INDEX:
       return action.index;
@@ -144,21 +144,21 @@ function albumReelImages(state = [], action) {
 }
 
 const app = combineReducers({
-  albumReelIndex,
-  albumReelImages,
   autoShare,
   senderId,
   savedPhotos,
   imageReceivedFlag,
   albumFormState,
-  albumHistory,
   confirmationAccept,
   confirmationReject,
   confirmationCopy,
   confirmationAcceptCopy,
   confirmationRejectCopy,
   onCompleteWalkthrough,
+  albumHistory,
   galleryState
+  albumReelIndex,
+  albumReelImages,
 });
 
 export default app;

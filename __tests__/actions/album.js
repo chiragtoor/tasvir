@@ -11,40 +11,65 @@ import * as AlbumChannel from '../../js/actions/album_channel';
 import { URL, ALBUMS_ENDPOINT, ALBUM_ID_STORAGE,
          ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE,
          NAVIGATION_BACK_ACTION, NAVIGATION_ACTION,
-         ROUTES } from '../../js/constants';
+         ROUTES, ALBUM_DATE_STORAGE, ALBUM_IMAGES_STORAGE,
+         ALBUM_HISTORY_STORAGE } from '../../js/constants';
 
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares)
 
 describe('album_actions', () => {
-  it('updateId() dipatches UPDATE_ALBUM_ID, updates storage', () => {
+  afterEach(() => {
+    jest.resetModules();
+  });
+
+  it('updateId() dipatches UPDATE_ALBUM_ID, updates storage', async () => {
+    const AsyncStorage = new MockAsyncStorage({});
+    jest.setMock('AsyncStorage', AsyncStorage);
+
     const id = "album_id_hash";
     const expectedAction = { type: Actions.UPDATE_ALBUM_ID, id };
     expect(Actions.updateId(id)).toEqual(expectedAction);
+    await expect(AsyncStorage.getItem(ALBUM_ID_STORAGE)).resolves.toBe(JSON.stringify(id));
   });
 
-  it('updateName() dipatches UPDATE_ALBUM_NAME', () => {
+  it('updateName() dipatches UPDATE_ALBUM_NAME', async () => {
+    const AsyncStorage = new MockAsyncStorage({});
+    jest.setMock('AsyncStorage', AsyncStorage);
+
     const name = "album name";
     const expectedAction = { type: Actions.UPDATE_ALBUM_NAME, name };
     expect(Actions.updateName(name)).toEqual(expectedAction);
+    await expect(AsyncStorage.getItem(ALBUM_NAME_STORAGE)).resolves.toBe(JSON.stringify(name));
   });
 
-  it('updateLink() dipatches LOAD_LINK', () => {
+  it('updateLink() dipatches LOAD_LINK', async () => {
+    const AsyncStorage = new MockAsyncStorage({});
+    jest.setMock('AsyncStorage', AsyncStorage);
+
     const link = "branch link";
     const expectedAction = { type: Actions.LOAD_LINK, link };
     expect(Actions.updateLink(link)).toEqual(expectedAction);
+    await expect(AsyncStorage.getItem(ALBUM_LINK_STORAGE)).resolves.toBe(JSON.stringify(link));
   });
 
-  it('updateAlbumDate() dipatches LOAD_ALBUM_DATE', () => {
+  it('updateAlbumDate() dipatches LOAD_ALBUM_DATE', async () => {
+    const AsyncStorage = new MockAsyncStorage({});
+    jest.setMock('AsyncStorage', AsyncStorage);
+
     const albumDate = "date";
     const expectedAction = { type: Actions.LOAD_ALBUM_DATE, albumDate };
     expect(Actions.updateAlbumDate(albumDate)).toEqual(expectedAction);
+    await expect(AsyncStorage.getItem(ALBUM_DATE_STORAGE)).resolves.toBe(JSON.stringify(albumDate));
   });
 
-  it('loadImages() dipatches LOAD_IMAGES', () => {
+  it('loadImages() dipatches LOAD_IMAGES', async () => {
+    const AsyncStorage = new MockAsyncStorage({});
+    jest.setMock('AsyncStorage', AsyncStorage);
+
     const images = [0, 1, 2, 3];
     const expectedAction = { type: Actions.LOAD_IMAGES, images };
     expect(Actions.loadImages(images)).toEqual(expectedAction);
+    await expect(AsyncStorage.getItem(ALBUM_IMAGES_STORAGE)).resolves.toBe(JSON.stringify(images));
   });
 
   it('addImage() dipatches ADD_IMAGE', () => {
@@ -92,6 +117,8 @@ describe('album_actions', () => {
   });
 
   it('confirmCloseAlbum() closes existing ablum', async () => {
+    const AsyncStorage = new MockAsyncStorage({});
+    jest.setMock('AsyncStorage', AsyncStorage);
     const mockChannelLeaveAction = { type: "MOCK LEAVE CHANNEL" };
     AlbumChannel.leaveChannel = jest.fn(() => {
       return mockChannelLeaveAction;
@@ -111,6 +138,7 @@ describe('album_actions', () => {
     ];
     await store.dispatch(Actions.confirmCloseAlbum());
     expect(store.getActions()).toEqual(expectedActions);
+    await expect(AsyncStorage.getItem(ALBUM_HISTORY_STORAGE)).resolves.toBe(JSON.stringify([album]));
   });
 
   it('openAlbum() dipatches actions to setup open confirmation', async () => {
@@ -139,6 +167,8 @@ describe('album_actions', () => {
   });
 
   it('confirmOpenAlbum() dipatches actions to open album', async () => {
+    const AsyncStorage = new MockAsyncStorage({});
+    jest.setMock('AsyncStorage', AsyncStorage);
     const mockApiAction = { type: "MOCK API CALL" };
     TasvirApi.loadAlbum = jest.fn(() => {
       return mockApiAction;
@@ -161,6 +191,7 @@ describe('album_actions', () => {
     ];
     await store.dispatch(Actions.confirmOpenAlbum(albumToOpen));
     expect(store.getActions()).toEqual(expectedActions);
+    await expect(AsyncStorage.getItem(ALBUM_HISTORY_STORAGE)).resolves.toBe(JSON.stringify([]));
   });
 
   it('confirmOpenAlbum() when already in album closes existing ablum', async () => {
@@ -182,6 +213,25 @@ describe('album_actions', () => {
     ];
     await store.dispatch(Actions.confirmOpenAlbum({ }));
     expectedActions.forEach((action) => expect(store.getActions()).toContainEqual(action));
+  });
+
+  it('confirmOpenAlbum() updates the history properly', async () => {
+    const AsyncStorage = new MockAsyncStorage({});
+    jest.setMock('AsyncStorage', AsyncStorage);
+    let currentHistory = [{ name: "oldAlbum" }, { name: "openAlbum" }, { name: "olderAlbum" }];
+    let store = mockStore({ album: { name: "currentAlbum", id: "XYZ" }, app: { albumHistory: currentHistory }, reel: { previewReel: [] } });
+    await store.dispatch(Actions.confirmOpenAlbum({ index: 1 }));
+    await expect(AsyncStorage.getItem(ALBUM_HISTORY_STORAGE)).resolves.toBe(JSON.stringify([{ name: "currentAlbum", id: "XYZ" }, { name: "oldAlbum" }, { name: "olderAlbum" }]));
+
+    currentHistory = [{ name: "oldAlbum" }, { name: "openAlbum" }, { name: "olderAlbum" }];
+    store = mockStore({ album: { name: "currentAlbum", id: "XYZ" }, app: { albumHistory: currentHistory }, reel: { previewReel: [] } });
+    await store.dispatch(Actions.confirmOpenAlbum({ index: 0 }));
+    await expect(AsyncStorage.getItem(ALBUM_HISTORY_STORAGE)).resolves.toBe(JSON.stringify([{ name: "currentAlbum", id: "XYZ" }, { name: "openAlbum" }, { name: "olderAlbum" }]));
+
+    currentHistory = [{ name: "oldAlbum" }, { name: "openAlbum" }, { name: "olderAlbum" }];
+    store = mockStore({ album: { name: "currentAlbum", id: "XYZ" }, app: { albumHistory: currentHistory }, reel: { previewReel: [] } });
+    await store.dispatch(Actions.confirmOpenAlbum({ index: 2 }));
+    await expect(AsyncStorage.getItem(ALBUM_HISTORY_STORAGE)).resolves.toBe(JSON.stringify([{ name: "currentAlbum", id: "XYZ" }, { name: "oldAlbum" }, { name: "openAlbum" }]));
   });
 
   it('joinAlbum() dipatches actions to setup join confirmation', async () => {
@@ -234,6 +284,8 @@ describe('album_actions', () => {
   });
 
   it('confirmJoinAlbum() when already in album closes existing ablum', async () => {
+    const AsyncStorage = new MockAsyncStorage({});
+    jest.setMock('AsyncStorage', AsyncStorage);
     const mockChannelLeaveAction = { type: "MOCK LEAVE CHANNEL" };
     AlbumChannel.leaveChannel = jest.fn(() => {
       return mockChannelLeaveAction;
@@ -252,6 +304,7 @@ describe('album_actions', () => {
     ];
     await store.dispatch(Actions.confirmJoinAlbum("new_album", "XYZ"));
     expectedActions.forEach((action) => expect(store.getActions()).toContainEqual(action));
+    await expect(AsyncStorage.getItem(ALBUM_HISTORY_STORAGE)).resolves.toBe(JSON.stringify([album]));
   });
 
   it('finishAlbumAction() dipatches a navigate back', () => {

@@ -17,26 +17,15 @@ describe('app_reducer', () => {
     confirmationAcceptCopy: null,
     confirmationRejectCopy: null,
     onCompleteWalkthrough: Actions.DEFAULT_WALKTHROUGH_COMPLETE,
-    galleryState: Actions.APP_GALLERY_STATE_LIST
+    galleryState: Actions.APP_GALLERY_STATE_LIST,
+    albumReelIndex: null,
+    albumReelImages: []
   };
 
   it('initial state is as expected', () => {
     expect(
       reducer(undefined, {})
     ).toEqual(expectedInitialState);
-  });
-
-  it('handles SET_HISTORY properly', () => {
-    const albumHistory = [{id: "old id", name: "old album 1"}, {id: "old id 2", name: "old name 2"}];
-    expect(
-      reducer({ }, {
-        type: Actions.SET_HISTORY,
-        history: albumHistory
-      })
-    ).toEqual({
-      ...expectedInitialState,
-      albumHistory: albumHistory
-    });
   });
 
   it('handles APP_UPDATE_AUTO_SHARE properly', () => {
@@ -135,6 +124,32 @@ describe('app_reducer', () => {
     });
   });
 
+  it('handles CONFIRMATION_SET_CONFIRMATION_ACCEPT properly', () => {
+    const acceptFun = () => 1;
+    expect(
+      reducer({  }, {
+        type: Confirmation.CONFIRMATION_SET_CONFIRMATION_ACCEPT,
+        accept: acceptFun
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      confirmationAccept: acceptFun
+    });
+  });
+
+  it('handles CONFIRMATION_SET_CONFIRMATION_REJECT properly', () => {
+    const rejectFun = () => 1;
+    expect(
+      reducer({  }, {
+        type: Confirmation.CONFIRMATION_SET_CONFIRMATION_REJECT,
+        reject: rejectFun
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      confirmationReject: rejectFun
+    });
+  });
+
   it('handles APP_SET_CONFIRMATION_COPY properly', () => {
     const testCopy = "some confirmation prompt";
     expect(
@@ -174,29 +189,29 @@ describe('app_reducer', () => {
     });
   });
 
-  it('handles CONFIRMATION_SET_CONFIRMATION_ACCEPT properly', () => {
-    const acceptFun = () => 1;
+  it('handles APP_SET_WALKTHROUGH_COMPLETE properly', () => {
+    const complete = () => true;
     expect(
       reducer({  }, {
-        type: Confirmation.CONFIRMATION_SET_CONFIRMATION_ACCEPT,
-        accept: acceptFun
+        type: Actions.APP_SET_WALKTHROUGH_COMPLETE,
+        complete
       })
     ).toEqual({
       ...expectedInitialState,
-      confirmationAccept: acceptFun
+      onCompleteWalkthrough: complete
     });
   });
 
-  it('handles CONFIRMATION_SET_CONFIRMATION_REJECT properly', () => {
-    const rejectFun = () => 1;
+  it('handles SET_HISTORY properly', () => {
+    const albumHistory = [{id: "old id", name: "old album 1"}, {id: "old id 2", name: "old name 2"}];
     expect(
-      reducer({  }, {
-        type: Confirmation.CONFIRMATION_SET_CONFIRMATION_REJECT,
-        reject: rejectFun
+      reducer({ }, {
+        type: Actions.SET_HISTORY,
+        history: albumHistory
       })
     ).toEqual({
       ...expectedInitialState,
-      confirmationReject: rejectFun
+      albumHistory: albumHistory
     });
   });
 
@@ -209,6 +224,32 @@ describe('app_reducer', () => {
     ).toEqual({
       ...expectedInitialState,
       galleryState: Actions.APP_GALLERY_STATE_IMAGES
+    });
+  });
+
+  it('handles SET_ALBUM_REEL_INDEX properly', () => {
+    const index = 5;
+    expect(
+      reducer({  }, {
+        type: Actions.SET_ALBUM_REEL_INDEX,
+        index
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      albumReelIndex: index
+    });
+  });
+
+  it('handles SET_ALBUM_REEL_IMAGES properly', () => {
+    const images = [0, 1, 2, 3];
+    expect(
+      reducer({  }, {
+        type: Actions.SET_ALBUM_REEL_IMAGES,
+        images
+      })
+    ).toEqual({
+      ...expectedInitialState,
+      albumReelImages: images
     });
   });
 });

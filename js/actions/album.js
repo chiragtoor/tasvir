@@ -83,7 +83,6 @@ export function confirmCloseAlbum() {
     const { album: album, app: { albumHistory } } = getState();
     // add the current album to the history since it is closing
     const newHistory = [album, ...albumHistory];
-    Storage.saveAlbumHistory(newHistory);
     dispatch(App.setHistory(newHistory));
     // close the album with the utitlity method
     dispatch(_closeAlbum());
@@ -110,13 +109,11 @@ export function confirmOpenAlbum(openAlbum) {
     // remove the album being opened from the history
     var editableAlbumHistory = getState().app.albumHistory;
     editableAlbumHistory.splice(openAlbum.index, 1);
-    Storage.saveAlbumHistory(editableAlbumHistory);
     dispatch(App.setHistory(editableAlbumHistory));
     // if currently in a album
     if(album.id != null) {
       // add the current album to the history since it is closing
       const newHistory = [album, ...editableAlbumHistory];
-      Storage.saveAlbumHistory(newHistory);
       dispatch(App.setHistory(newHistory));
       // close the album with the utitlity method
       dispatch(_closeAlbum());
