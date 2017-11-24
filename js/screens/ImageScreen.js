@@ -106,7 +106,7 @@ class ImageScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#48B2E2',
+    backgroundColor: '#000000',
   },
   page: {
     width: Dimensions.get('window').width,
