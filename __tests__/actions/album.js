@@ -75,7 +75,7 @@ describe('album_actions', () => {
   it('addImage() dipatches ADD_IMAGE', () => {
     const image = { uri: "uri", width: 16, height: 9 };
     const expectedAction = { type: Actions.ADD_IMAGE, image };
-    expect(Actions.addImage("uri", 16, 9)).toEqual(expectedAction);
+    expect(Actions.addImage(image)).toEqual(expectedAction);
   });
 
   it('reset() dipatches actions to reset current album state', async () => {

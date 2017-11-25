@@ -1,8 +1,10 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import * as Actions from '../../js/actions/app';
+import * as IndexActions from '../../js/actions';
 import * as Album from '../../js/actions/album';
 import * as Gallery from '../../js/actions/gallery';
+import * as Reel from '../../js/actions/reel';
 import * as Confirmation from '../../js/actions/confirmation';
 import * as TasvirApi from '../../js/actions/tasvir_api';
 import MockAsyncStorage from '../../__mocks__/mock_async_storage';
@@ -222,6 +224,38 @@ describe('app_actions', () => {
     ];
 
     await store.dispatch(Actions.viewAlbumReel(index, images));
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  it('capture() dispatches actions to upload if in album and auto-sharing', async () => {
+    const uploadAction = { type: "MOCK UPLOAD IMAGE" };
+    TasvirApi.uploadImage  = jest.fn((image) => {
+      return uploadAction;
+    });
+    const store = mockStore({ album: { id: "test_album" }, app: { autoShare: true } });
+    await store.dispatch(Actions.capture("one", 16, 9));
+    expect(store.getActions()).toEqual([uploadAction]);
+  });
+
+  it('capture() dispatches actions to add to reel if in album and not auto-sharing', async () => {
+    const image = { uri: "one", width: 16, height: 9 };
+    const store = mockStore({ album: { id: "test_album" }, app: { autoShare: false } });
+    const expectedActions = [
+      { type: Reel.REEL_ADD_IMAGE, image: { uri: "RNFS_TEST_MOCK/one", width: 16, height: 9 } }
+    ];
+    await store.dispatch(Actions.capture("one", 16, 9));
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  it('capture() dispatches actions to save image if not in album', async () => {
+    const mockSave = { type: "SAVE_IMAGE" };
+    IndexActions.saveImage = jest.fn((image) => mockSave);
+    const image = { uri: "one", width: 16, height: 9 };
+    const store = mockStore({ album: { }, app: { autoShare: true } });
+    const expectedActions = [
+      mockSave
+    ];
+    await store.dispatch(Actions.capture("one", 16, 9));
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

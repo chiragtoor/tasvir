@@ -28,3 +28,5 @@ export const ROUTES = {
 
 export const NAVIGATION_ACTION = "Navigation/NAVIGATE";
 export const NAVIGATION_BACK_ACTION = "Navigation/BACK";
+export const UPLOAD_ACTION = "NO_REDUCER_STUB_UPLOAD_IMAGE";
+export const COMMIT_ACTION = "NO_REDUCER_STUB_IMAGE_UPLOADED";

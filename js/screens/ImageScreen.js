@@ -28,7 +28,7 @@ class ImageScreen extends Component {
       this.state.pan,
       {toValue: {x:0, y: -1 * Dimensions.get('window').height}, duration: 250}
     ).start(() => {
-      this.props.uploadImage(RNFS.DocumentDirectoryPath + '/' + this.props.data);
+      this.props.uploadImage(this.props.image);
       this.props.onFinish();
     });
   }
@@ -53,7 +53,7 @@ class ImageScreen extends Component {
       this.state.scale,
       {toValue: 0, duration: 250}
     ).start(() => {
-      this.props.saveImage(RNFS.DocumentDirectoryPath + '/' + this.props.data, true, false);
+      this.props.saveImage(this.props.image);
       this.props.onFinish();
     });
   }
@@ -70,7 +70,7 @@ class ImageScreen extends Component {
           {this.state.backIcon}
         </View>
         <Animated.View style={imageStyle}>
-          <Image source={{uri: (RNFS.DocumentDirectoryPath + '/' + this.props.data)}} style={styles.page} resizeMode='contain' />
+          <Image source={{uri: (this.props.image.uri)}} style={styles.page} resizeMode='contain' />
         </Animated.View>
         <View style={{position: 'absolute', flex: 1, width: Dimensions.get('window').width, height: Dimensions.get('window').height, justifyContent: 'space-between', paddingTop: 20, paddingBottom: 20}}>
           <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>

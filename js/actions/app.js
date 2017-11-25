@@ -3,6 +3,7 @@
  */
 import { NavigationActions } from 'react-navigation';
 import thunk from 'redux-thunk';
+var RNFS = require('react-native-fs');
 
 import * as Actions from '../actions';
 import { ROUTES } from '../constants';
@@ -12,6 +13,7 @@ import * as Album from './album';
 import * as Confirmation from './confirmation';
 import * as Gallery from './gallery';
 import * as Reel from './reel';
+import { saveImage } from '../actions';
 
 export const APP_UPDATE_AUTO_SHARE = 'app/APP_UPDATE_AUTO_SHARE';
 export const APP_UPDATE_SENDER_ID = 'app/APP_UPDATE_SENDER_ID';
@@ -138,5 +140,19 @@ export function viewAlbumReel(index, images) {
     dispatch({ type: SET_ALBUM_REEL_INDEX, index });
     dispatch({ type: SET_ALBUM_REEL_IMAGES, images });
     dispatch(NavigationActions.navigate({ routeName: ROUTES.ALBUM_REEL }));
+  }
+}
+
+export function capture(uri, width, height) {
+  return (dispatch, getState) => {
+    const { album: { id }, app: { autoShare } } = getState();
+    const image = { uri: (RNFS.DocumentDirectoryPath + '/' + uri), width: width, height: height };
+    if(id && autoShare) {
+      dispatch(TasvirApi.uploadImage(image));
+    } else if(id) {
+      dispatch(Reel.addImage(image));
+    } else {
+      dispatch(saveImage(image));
+    }
   }
 }

@@ -29,7 +29,6 @@ class Main extends Component {
   }
 
   render() {
-    console.log("Main.js, previewReel: ", this.props.previewReel);
     return (
       <View style={styles.container}>
         <Swiper
@@ -65,10 +64,11 @@ class Main extends Component {
               // because previewReel is rendered after the gallery and camera, +2 to the index
               //  so we scrollTo the correct position in the onFinish action callback
               const currentPage = imageIndex + Actions.PREVIEW_REEL_INDEX;
+              console.log("P_REEL: " + image.uri);
               return (
                 <ImageScreen
-                  key={image}
-                  data={image}
+                  key={image.uri}
+                  image={image}
                   goToCamera={() => this.scrollTo(Actions.CAMERA_INDEX)}
                   onFinish={() => {
                     this.scrollPageProg = () => {

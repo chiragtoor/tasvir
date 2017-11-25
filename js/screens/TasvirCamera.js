@@ -46,7 +46,7 @@ class TasvirCamera extends Component {
     });
   }
 
-  capture = () => {
+  animateCapture = () => {
     Animated.timing(
       this.state.captureFadeAnim, { toValue: 1, duration: 100 }
     ).start(() => {
@@ -54,37 +54,16 @@ class TasvirCamera extends Component {
         this.state.captureFadeAnim, { toValue: 0, duration: 100 }
       ).start();
     });
+  }
+
+  capture = () => {
+    this.animateCapture();
     this.camera.capture()
       .then((data) => {
-        this.takePicture(data);
-      })
-      .catch(err => console.error(err));
-  }
-
-  addImage = (image) => {
-    if(this.props.autoShare) {
-      this.props.uploadImage((RNFS.DocumentDirectoryPath + '/' + image));
-    } else {
-      this.props.addToReel(image);
-    }
-  }
-
-  takePicture = (data) => {
-    Image.getSize(data.path, (width, height) => {
-      console.log(width);
-      console.log(height);
-      if((width / height) > 1) {
-        console.log("LANDSCAPE");
-      } else {
-        console.log("PORTRAIT");
-      }
-    })
-    if(this.props.albumId) {
-      const path = data.path.split('/Documents/');
-      this.addImage(path[1]);
-    } else {
-      this.props.saveImage(data.path, "NO_ALBUM");
-    }
+        Image.getSize(data.path, (width, height) => {
+          this.props.capture(data.path.split('/Documents/')[1], width, height);
+        })
+      }).catch(err => console.error(err));
   }
 
   render() {
@@ -150,7 +129,7 @@ class TasvirCamera extends Component {
                     content={<ImageBackground
                                 style={styles.imageButton}
                                 imageStyle={styles.imageButton}
-                                source={{uri: (RNFS.DocumentDirectoryPath + '/' + this.props.previewReel[0])}}>
+                                source={{uri: this.props.previewReel[0].uri}}>
                                 <View style={styles.imageButtonText}>
                                   <Text style={{color: '#FFFFFF', fontWeight: 'bold'}}>{this.props.previewReel.length}</Text>
                                 </View>
@@ -230,7 +209,8 @@ const mapDispatchToProps = (dispatch) => {
     addToReel: (image) => dispatch(Actions.Reel.addImage(image)),
     uploadImage: (image) => dispatch(Actions.TasvirApi.uploadImage(image)),
     saveImage: (photo, photoId) => dispatch(Actions.saveImage(photo, photoId)),
-    acknowledgeFlagImageReceivedFromChannel: () => dispatch(Actions.App.acknowledgeFlagImageReceivedFromChannel())
+    acknowledgeFlagImageReceivedFromChannel: () => dispatch(Actions.App.acknowledgeFlagImageReceivedFromChannel()),
+    capture: (uri, width, height) => dispatch(Actions.App.capture(uri, width, height))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(TasvirCamera);

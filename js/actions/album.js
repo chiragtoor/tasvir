@@ -48,9 +48,10 @@ export function loadImages(images) {
   return { type: LOAD_IMAGES, images };
 }
 
-export function addImage(image, imageWidth, imageHeight) {
+export function addImage(image) {
   return { type: ADD_IMAGE,
-           image: { uri: image, width: imageWidth, height: imageHeight } };
+           image: { uri: image.uri,
+             width: image.width, height: image.height } };
 }
 
 export function reset() {

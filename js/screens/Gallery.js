@@ -43,6 +43,7 @@ class Gallery extends Component {
     }
 
     const photos = this.formatImages(images);
+    console.log(photos);
 
     return (
       <View style={{flex: 1, backgroundColor: "#48B2E2", paddingTop: 19}}>

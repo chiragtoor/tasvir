@@ -26,28 +26,11 @@ export const GALLERY_INDEX = 0;
 export const CAMERA_INDEX = 1;
 export const PREVIEW_REEL_INDEX = 2;
 
-export function saveImage(imageUrl, loadGallery = true, addToAblum = true) {
+export function saveImage(image) {
   return (dispatch, getState) => {
     const { album: { id } } = getState();
-    CameraRoll.saveToCameraRoll(imageUrl).then((uri) => {
-      if(id && addToAblum) {
-        CameraRoll.getPhotos({
-          first: 1,
-          assetType: 'Photos'
-        }).then(roll => {
-          if(roll.edges && roll.edges.length > 0) {
-            const image = roll.edges[0].node.image;
-            if(image.uri === uri) {
-               dispatch(Album.addImage(uri, image.width, image.height));
-              if(loadGallery) dispatch(Gallery.loadGallery());
-            } else {
-              console.log("NOT SAME IMAGE");
-            }
-          }
-        });
-      } else if(id == null) {
-        dispatch(Gallery.loadGallery());
-      }
+    CameraRoll.saveToCameraRoll(image.uri).then((uri) => {
+      dispatch(Gallery.loadGallery());
     });
   }
 }

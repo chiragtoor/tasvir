@@ -8,7 +8,8 @@ import * as App from './app';
 import * as Reel from './reel';
 
 import * as Storage from '../storage';
-import { URL, ALBUMS_ENDPOINT } from '../../js/constants';
+import { URL, ALBUMS_ENDPOINT,
+         UPLOAD_ACTION, COMMIT_ACTION } from '../../js/constants';
 
 import { saveImage } from '../actions';
 
@@ -84,21 +85,28 @@ export function uploadImage(image) {
   return (dispatch, getState) => {
     const { album: { id }, app: { senderId } } = getState();
 
-    Image.getSize(image, (imageWidth, imageHeight) => {
-      dispatch(saveImage(image, imageWidth, imageHeight));
+      dispatch(saveImage(image));
+      dispatch(Album.addImage(image));
 
       const file = {
-        uri: image,
+        uri: image.uri,
         name: 'photo.jpg',
         type : 'image/jpg'
-      }
+      };
 
-      dispatch({type: 'NO_REDUCER_STUB_UPLOAD_IMAGE', meta: { offline: {
-        effect: { photo: file, sent_by: senderId, id: id, width: imageWidth, height: imageHeight },
-        commit: { type: 'NO_REDUCER_STUB_IMAGE_UPLOADED', meta: {  } },
-      }}});
-    }, (error) => {
-      console.error(error);
-    });
+      dispatch({type: UPLOAD_ACTION,
+                meta: {
+                  offline: {
+                    effect: { photo: file,
+                              sent_by: senderId,
+                              id: id,
+                              width: image.width,
+                              height: image.height },
+                    commit: { type: COMMIT_ACTION,
+                              meta: {  }
+                    },
+                  }
+                }
+              });
   }
 }
