@@ -33,7 +33,7 @@ import AlbumAction from './screens/AlbumAction';
 import Walkthrough from './screens/Walkthrough';
 import AlbumReel from './screens/AlbumReel';
 
-import { loadAndDispatchState, App } from './actions';
+import * as Actions from './actions';
 import * as Storage from './storage';
 
 import { WALKTHROUGH_FLAG_STORAGE, URL, ALBUMS_ENDPOINT, ROUTES } from './constants';
@@ -128,18 +128,18 @@ branch.subscribe(async ({error, params}) => {
   if (params['+clicked_branch_link']) {
     const albumId = params['album_id'];
     const albumName = params['album_name'];
-    if(albumId && albumName) {
+    if(albumId && albumName && albumId != store.getState().album.id) {
       const walkthroughCompleted = await AsyncStorage.getItem(WALKTHROUGH_FLAG_STORAGE);
       if(walkthroughCompleted) {
-        store.dispatch(App.joinAlbum(albumName, albumId));
+        store.dispatch(Actions.Album.joinAlbum(albumName, albumId));
       } else {
-        store.dispatch(App.setWalkthroughComplete(() => App.joinAlbum(albumName, albumId)));
+        store.dispatch(Actions.App.setWalkthroughComplete(() => Actions.Album.joinAlbum(albumName, albumId)));
       }
     }
   }
 });
 
-store.dispatch(loadAndDispatchState());
+store.dispatch(Actions.loadAndDispatchState());
 
 export default class Tasvir extends React.Component {
 

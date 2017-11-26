@@ -71,6 +71,8 @@ export function loadAlbum() {
           // do not want to save own captured pictures or previously saved images,
           //  both these cases will be duplicates in the camera roll
           if(!(senderId === photo.sent_by || savedPhotos.includes(photo.id))) {
+            console.log("HERE LOADING PHOTOS FROM API");
+            console.log(photo);
             dispatch(saveImage(photo.photo, false, true));
             dispatch(App.addSavedPhoto(photo.id));
           }

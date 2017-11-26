@@ -49,9 +49,7 @@ export function loadImages(images) {
 }
 
 export function addImage(image) {
-  return { type: ADD_IMAGE,
-           image: { uri: image.uri,
-             width: image.width, height: image.height } };
+  return { type: ADD_IMAGE, image };
 }
 
 export function reset() {
@@ -159,6 +157,13 @@ export function confirmJoinAlbum(name, id) {
       // close the album with the utitlity method
       dispatch(_closeAlbum());
     }
+    // if album trying to join is from history, just open it
+    for (var i = 0; i < albumHistory.length; i++) {
+      if(id == albumHistory[i].id) {
+        dispatch(confirmOpenAlbum(albumHistory[i]));
+        return;
+      }
+    }
     dispatch(updateId(id));
     dispatch(updateName(name));
     dispatch(TasvirApi.loadAlbum());
@@ -179,8 +184,7 @@ export function _closeAlbum() {
     dispatch(reset());
     dispatch(AlbumChannel.leaveChannel());
      previewReel.forEach((image) => {
-       dispatch(saveImage(RNFS.DocumentDirectoryPath + '/' + image,
-                                  false, false));
+       dispatch(saveImage(image));
      });
      dispatch(Reel.reset());
   }

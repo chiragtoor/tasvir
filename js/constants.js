@@ -1,6 +1,6 @@
 // export const URL_BASE = __DEV__ ? 'https://c3b305e6.ngrok.io/' : 'https://www.tasvirapp.com/';
-export const URL_BASE = 'https://d8ee7f40.ngrok.io/';
-// export const URL_BASE = 'https://www.tasvirapp.com/';
+// export const URL_BASE = 'https://d8ee7f40.ngrok.io/';
+export const URL_BASE = 'https://www.tasvirapp.com/';
 export const URL = URL_BASE + 'api';
 export const SOCKET_URL = URL_BASE + 'socket';
 export const ALBUMS_ENDPOINT = '/albums';

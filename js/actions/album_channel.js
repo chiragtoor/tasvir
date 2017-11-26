@@ -1,8 +1,12 @@
 /*
  * These actions are separated from album here only to make them mockable in jest
  */
+import { CameraRoll } from 'react-native';
 import { Socket } from 'phoenix';
 
+import * as Album from './album';
+import * as App from './app';
+import * as Gallery from './gallery';
 import { SOCKET_URL } from '../constants';
 /*
  * Below we deal with the current phoneix channel subscription so that we can
@@ -29,7 +33,7 @@ export function joinChannel() {
         //  through channel
         if(!(msg.sent_by === senderId)) {
           CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
-            dispatch(addImage(uri));
+            dispatch(Album.addImage({uri: uri, width: msg.width, height: msg.height}));
             // flag the animation on the camera gallery button
             dispatch(App.flagImageReceivedFromChannel());
             dispatch(Gallery.loadGallery());

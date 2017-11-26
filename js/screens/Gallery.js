@@ -98,7 +98,7 @@ class Gallery extends Component {
           })}
         </ScrollView>
         {this.props.viewingAlbum.id && (this.props.currentAlbumId != this.props.viewingAlbum.id) ?
-          <TouchableOpacity onPress={() => this.props.openAlbum(this.props.viewingAlbum)} style={{backgroundColor: "#FF2C55", width: WIDTH, height: 50, borderTopWidth: 5, borderColor: "#48B2E2", alignItems: "center", justifyContent: "center"}}>
+          <TouchableOpacity onPress={() => this.props.openAlbum(this.props.viewingAlbum)} style={{backgroundColor: "#FF2C55", width: WIDTH, height: 65, borderTopWidth: 5, borderColor: "#48B2E2", alignItems: "center", justifyContent: "center"}}>
             <Text style={{color: "#FFF", fontSize: 18, fontWeight: 'bold'}}>Open Album</Text>
           </TouchableOpacity>
         :
