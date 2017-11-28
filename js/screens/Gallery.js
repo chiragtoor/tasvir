@@ -43,7 +43,6 @@ class Gallery extends Component {
     }
 
     const photos = this.formatImages(images);
-    console.log(photos);
 
     return (
       <View style={{flex: 1, backgroundColor: "#48B2E2", paddingTop: 19}}>
@@ -109,30 +108,33 @@ class Gallery extends Component {
   }
 
   renderImage = (image) => {
-    if (image && image.aspectRatio > 1) {
-      return (
-        <Image
-          style={{
-            width:  ((WIDTH * 0.3) * 0.8),
-            height:  (((WIDTH * 0.3) * 0.8) / image.aspectRatio),
-            borderColor: "#48B2E2",
-            borderWidth: 2
-          }}
-          source={{uri: image.uri}}
-          resizeMode='contain' />
-      );
-    } else if(image) {
-      return (
-        <Image
-          style={{
-            width:  (80 * image.aspectRatio),
-            height:  80,
-            borderColor: "#48B2E2",
-            borderWidth: 2
-          }}
-          source={{uri: image.uri}}
-          resizeMode='contain' />
-      );
+    if (image) {
+      const imageAspectRatio = (image.width / image.height);
+      if(imageAspectRatio > 1) {
+        return (
+          <Image
+            style={{
+              width:  ((WIDTH * 0.3) * 0.8),
+              height:  (((WIDTH * 0.3) * 0.8) / imageAspectRatio),
+              borderColor: "#48B2E2",
+              borderWidth: 2
+            }}
+            source={{uri: image.uri}}
+            resizeMode='contain' />
+        );
+      } else {
+        return (
+          <Image
+            style={{
+              width:  (80 * imageAspectRatio),
+              height:  80,
+              borderColor: "#48B2E2",
+              borderWidth: 2
+            }}
+            source={{uri: image.uri}}
+            resizeMode='contain' />
+        );
+      }
     } else {
       return (null);
     }

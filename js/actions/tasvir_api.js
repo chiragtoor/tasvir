@@ -59,7 +59,6 @@ export function createAlbum() {
 export function loadAlbum() {
   return (dispatch, getState) => {
     const {album: { id }, app: { senderId, savedPhotos } } = getState();
-
     return fetch(URL + ALBUMS_ENDPOINT + "/" +  id)
     .then((response) => response.json())
     .then((responseJson) => {
@@ -67,13 +66,13 @@ export function loadAlbum() {
         dispatch(Album.updateLink(responseJson.link));
         dispatch(Album.updateAlbumDate(responseJson.album_date));
         for(var i = 0; i < responseJson.photos.length; i++) {
-          const photo = responseJson.photos[i];
+          const apiPhoto = responseJson.photos[i];
           // do not want to save own captured pictures or previously saved images,
           //  both these cases will be duplicates in the camera roll
-          if(!(senderId === photo.sent_by || savedPhotos.includes(photo.id))) {
-            console.log("HERE LOADING PHOTOS FROM API");
-            console.log(photo);
-            dispatch(saveImage(photo.photo, false, true));
+          if(!(senderId === apiPhoto.sent_by || savedPhotos.includes(apiPhoto.id))) {
+            const photo = { uri: apiPhoto.photo, ...apiPhoto };
+            dispatch(saveImage(photo));
+            dispatch(Album.addImage(photo));
             dispatch(App.addSavedPhoto(photo.id));
           }
         }

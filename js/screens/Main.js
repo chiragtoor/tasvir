@@ -64,7 +64,6 @@ class Main extends Component {
               // because previewReel is rendered after the gallery and camera, +2 to the index
               //  so we scrollTo the correct position in the onFinish action callback
               const currentPage = imageIndex + Actions.PREVIEW_REEL_INDEX;
-              console.log("P_REEL: " + image.uri);
               return (
                 <ImageScreen
                   key={image.uri}

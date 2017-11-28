@@ -109,8 +109,8 @@ describe('tasvir_api_actions', () => {
    * Tests for loading a album
    */
   it('correctly handles a success response when loading an album', async() => {
-    const saveImageMock = (image) => { return { type: "SAVE_IMAGE", uri: image } };
-    Actions.saveImage = jest.fn((uri, loadGallery, addToAlbum) => {
+    const saveImageMock = (image) => { return { type: "SAVE_IMAGE", uri: {...image, uri: image.photo} } };
+    Actions.saveImage = jest.fn((uri) => {
       return saveImageMock(uri);
     });
     const loadGallery = { type: "LOAD GALLERY" };
@@ -138,11 +138,14 @@ describe('tasvir_api_actions', () => {
       { type: Album.LOAD_LINK, link: albumLink },
       { type: Album.LOAD_ALBUM_DATE, albumDate },
       /* due to mock promises, these actions resolve first in the test */
-      saveImageMock("one"),
+      saveImageMock(responsePhotos[0]),
+      { type: Album.ADD_IMAGE, image: {...responsePhotos[0], uri: responsePhotos[0].photo} },
       { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
-      saveImageMock("two"),
+      saveImageMock(responsePhotos[1]),
+      { type: Album.ADD_IMAGE, image: {...responsePhotos[1], uri: responsePhotos[1].photo} },
       { type: App.APP_ADD_SAVED_PHOTO, photo: "two" },
-      saveImageMock("three"),
+      saveImageMock(responsePhotos[2]),
+      { type: Album.ADD_IMAGE, image: {...responsePhotos[2], uri: responsePhotos[2].photo} },
       { type: App.APP_ADD_SAVED_PHOTO, photo: "three" },
       loadGallery
     ];
@@ -153,8 +156,8 @@ describe('tasvir_api_actions', () => {
   });
 
   it('does not save own images when loading an album', async() => {
-    const saveImageMock = (image) => { return { type: "SAVE_IMAGE", uri: image } };
-    Actions.saveImage = jest.fn((uri, loadGallery, addToAlbum) => {
+    const saveImageMock = (image) => { return { type: "SAVE_IMAGE", uri: {...image, uri: image.photo} } };
+    Actions.saveImage = jest.fn((uri) => {
       return saveImageMock(uri);
     });
     const loadGallery = { type: "LOAD GALLERY" };
@@ -179,7 +182,8 @@ describe('tasvir_api_actions', () => {
     const expectedActions = [
       { type: Album.LOAD_LINK, link: albumLink },
       { type: Album.LOAD_ALBUM_DATE, albumDate },
-      saveImageMock("one"),
+      saveImageMock(responsePhotos[0]),
+      { type: Album.ADD_IMAGE, image: {...responsePhotos[0], uri: responsePhotos[0].photo} },
       { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
       loadGallery
     ];
@@ -190,8 +194,8 @@ describe('tasvir_api_actions', () => {
   });
 
   it('does not save own previously loaded images when loading an album', async() => {
-    const saveImageMock = (image) => { return { type: "SAVE_IMAGE", uri: image } };
-    Actions.saveImage = jest.fn((uri, loadGallery, addToAlbum) => {
+    const saveImageMock = (image) => { return { type: "SAVE_IMAGE", uri: {...image, uri: image.photo} } };
+    Actions.saveImage = jest.fn((uri) => {
       return saveImageMock(uri);
     });
     const loadGallery = { type: "LOAD GALLERY" };
@@ -216,9 +220,11 @@ describe('tasvir_api_actions', () => {
       const expectedActions = [
         { type: Album.LOAD_LINK, link: albumLink },
         { type: Album.LOAD_ALBUM_DATE, albumDate },
-        saveImageMock("one"),
+        saveImageMock(responsePhotos[0]),
+        { type: Album.ADD_IMAGE, image: {...responsePhotos[0], uri: responsePhotos[0].photo} },
         { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
-        saveImageMock("two"),
+        saveImageMock(responsePhotos[1]),
+        { type: Album.ADD_IMAGE, image: {...responsePhotos[1], uri: responsePhotos[1].photo} },
         { type: App.APP_ADD_SAVED_PHOTO, photo: "two" },
         loadGallery
       ];

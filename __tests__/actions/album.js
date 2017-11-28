@@ -272,7 +272,7 @@ describe('album_actions', () => {
     });
     const name = "test album";
     const id = "ASDF";
-    const store = mockStore({ album: { }, app: { } });
+    const store = mockStore({ album: { }, app: { albumHistory: [] } });
     const expectedActions = [
       { type: Actions.UPDATE_ALBUM_ID, id },
       { type: Actions.UPDATE_ALBUM_NAME, name },
@@ -306,6 +306,35 @@ describe('album_actions', () => {
     await store.dispatch(Actions.confirmJoinAlbum("new_album", "XYZ"));
     expectedActions.forEach((action) => expect(store.getActions()).toContainEqual(action));
     await expect(AsyncStorage.getItem(ALBUM_HISTORY_STORAGE)).resolves.toBe(JSON.stringify([album]));
+  });
+
+  it('confirmJoinAlbum() opens album if it was already in history', async () => {
+    const AsyncStorage = new MockAsyncStorage({});
+    jest.setMock('AsyncStorage', AsyncStorage);
+    const mockApiAction = { type: "MOCK API CALL" };
+    TasvirApi.loadAlbum = jest.fn(() => {
+      return mockApiAction;
+    });
+    const mockChannelJoinAction = { type: "MOCK JOIN CHANNEL" };
+    AlbumChannel.joinChannel = jest.fn(() => {
+      return mockChannelJoinAction;
+    });
+    const albumToOpen = { id: "old_album", name: "old album", albumDate: "old date", images: [1, 2, 3] };
+    const store = mockStore({ album: { }, app: { albumHistory: [albumToOpen] }, reel: { previewReel: [] } });
+    const expectedActions = [
+      { type: App.SET_HISTORY, history: [] },
+      { type: Actions.UPDATE_ALBUM_ID, id: albumToOpen.id },
+      { type: Actions.UPDATE_ALBUM_NAME, name: albumToOpen.name },
+      { type: Actions.LOAD_ALBUM_DATE, albumDate: albumToOpen.albumDate },
+      { type: Actions.LOAD_IMAGES, images: albumToOpen.images },
+      mockApiAction,
+      mockChannelJoinAction,
+      { type: NAVIGATION_BACK_ACTION }
+    ];
+
+    await store.dispatch(Actions.confirmJoinAlbum("old album", "old_album"));
+    expectedActions.forEach((action) => expect(store.getActions()).toContainEqual(action));
+    await expect(AsyncStorage.getItem(ALBUM_HISTORY_STORAGE)).resolves.toBe(JSON.stringify([]));
   });
 
   it('finishAlbumAction() dipatches a navigate back', () => {

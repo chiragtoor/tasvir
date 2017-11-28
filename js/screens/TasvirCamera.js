@@ -208,7 +208,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addToReel: (image) => dispatch(Actions.Reel.addImage(image)),
     uploadImage: (image) => dispatch(Actions.TasvirApi.uploadImage(image)),
-    saveImage: (photo, photoId) => dispatch(Actions.saveImage(photo, photoId)),
+    saveImage: (photo) => dispatch(Actions.saveImage(photo)),
     acknowledgeFlagImageReceivedFromChannel: () => dispatch(Actions.App.acknowledgeFlagImageReceivedFromChannel()),
     capture: (uri, width, height) => dispatch(Actions.App.capture(uri, width, height))
   };

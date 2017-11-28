@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => {
   return {
     uploadImage: (image) => dispatch(Actions.TasvirApi.uploadImage(image)),
-    saveImage: (photo, loadGallery, addToAblum) => dispatch(Actions.saveImage(photo, loadGallery, addToAblum))
+    saveImage: (photo) => dispatch(Actions.saveImage(photo))
   };
 };
 export default connect(null, mapDispatchToProps)(ImageScreen);

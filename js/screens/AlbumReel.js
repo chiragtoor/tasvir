@@ -21,7 +21,6 @@ class AlbumReel extends Component {
   }
 
   render() {
-    console.log(this.props.images);
     return (
       <View style={styles.container}>
         <ScrollView
