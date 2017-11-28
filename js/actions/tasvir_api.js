@@ -1,5 +1,6 @@
 import { CameraRoll, Image } from 'react-native';
 import { NavigationActions } from 'react-navigation';
+var RNFS = require('react-native-fs');
 
 import * as Album from './album';
 import * as AlbumChannel from './album_channel';
@@ -90,7 +91,7 @@ export function uploadImage(image) {
       dispatch(Album.addImage(image));
 
       const file = {
-        uri: image.uri,
+        uri: (RNFS.DocumentDirectoryPath + '/' + image.uri),
         name: 'photo.jpg',
         type : 'image/jpg'
       };

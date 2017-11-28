@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
+var RNFS = require('react-native-fs');
 
 import ImageScreen from './ImageScreen';
 
@@ -33,7 +34,7 @@ class AlbumReel extends Component {
           {this.props.images.map((image, imageIndex) => {
             return (
               <View key={imageIndex} style={styles.page}>
-                <Image source={{uri: image.uri}} style={styles.image} resizeMode='contain' />
+                <Image source={{uri: (this.props.isFullGallery ? image.uri : (RNFS.DocumentDirectoryPath + '/' + image.uri))}} style={styles.image} resizeMode='contain' />
                 <View style={{position: 'absolute', left: 0, top: 0, marginLeft: 10, marginTop: 19}}>
                   <TouchableOpacity onPress={() => this.props.closeReel()}>
                     <View style={{borderRadius: 19, height: 38, width: 38, alignItems: 'center', justifyContent: 'center', backgroundColor: "#FFFFFF"}}>
@@ -69,7 +70,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     currentIndex: state.app.albumReelIndex,
-    images: state.app.albumReelImages
+    images: state.app.albumReelImages,
+    isFullGallery: state.gallery.viewingAlbum ? state.gallery.viewingAlbum.fullGallery : false
   };
 };
 const mapDispatchToProps = (dispatch) => {

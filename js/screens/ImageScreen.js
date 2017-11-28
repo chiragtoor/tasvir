@@ -70,7 +70,7 @@ class ImageScreen extends Component {
           {this.state.backIcon}
         </View>
         <Animated.View style={imageStyle}>
-          <Image source={{uri: (this.props.image.uri)}} style={styles.page} resizeMode='contain' />
+          <Image source={{uri: (RNFS.DocumentDirectoryPath + '/' + this.props.image.uri)}} style={styles.page} resizeMode='contain' />
         </Animated.View>
         <View style={{position: 'absolute', flex: 1, width: Dimensions.get('window').width, height: Dimensions.get('window').height, justifyContent: 'space-between', paddingTop: 20, paddingBottom: 20}}>
           <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>

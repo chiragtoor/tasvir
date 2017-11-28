@@ -3,6 +3,7 @@ import {View, ScrollView, Dimensions, StyleSheet, Image, Animated, TouchableOpac
         Text } from 'react-native';
 import { connect } from 'react-redux';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
+var RNFS = require('react-native-fs');
 
 import * as Actions from '../actions';
 
@@ -14,7 +15,7 @@ class Gallery extends Component {
   formatImages = (arr) => {
     return arr.map((p) => {
       return {
-        image: p.uri,
+        image: (this.props.viewingAlbum.fullGallery ? p.uri : (RNFS.DocumentDirectoryPath + '/' + p.uri)),
         width: p.width,
         height: p.height,
         aspectRatio: (p.width / p.height)
@@ -107,7 +108,7 @@ class Gallery extends Component {
     );
   }
 
-  renderImage = (image) => {
+  renderImage = (image, appendDir = true) => {
     if (image) {
       const imageAspectRatio = (image.width / image.height);
       if(imageAspectRatio > 1) {
@@ -119,7 +120,7 @@ class Gallery extends Component {
               borderColor: "#48B2E2",
               borderWidth: 2
             }}
-            source={{uri: image.uri}}
+            source={{uri: (appendDir ? (RNFS.DocumentDirectoryPath + '/' + image.uri) : image.uri)}}
             resizeMode='contain' />
         );
       } else {
@@ -131,7 +132,7 @@ class Gallery extends Component {
               borderColor: "#48B2E2",
               borderWidth: 2
             }}
-            source={{uri: image.uri}}
+            source={{uri: (appendDir ? (RNFS.DocumentDirectoryPath + '/' + image.uri) : image.uri)}}
             resizeMode='contain' />
         );
       }
@@ -205,9 +206,9 @@ class Gallery extends Component {
           { currentAlbum ? this.renderAlbumTile(currentAlbum, -1) : null }
           { albums.map((album, index) => this.renderAlbumTile(album, index)) }
           <View key={"ALL"}>
-            <TouchableOpacity onPress={() => this.props.viewAlbum({name: "All Images", images: this.props.allImages})} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
+            <TouchableOpacity onPress={() => this.props.viewAlbum({name: "All Images", images: this.props.allImages, fullGallery: true})} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
               <View style={{height: 100, width: (WIDTH * 0.3), alignItems: 'center', justifyContent: 'center'}}>
-                {this.renderImage(this.props.allImagesShow)}
+                {this.renderImage(this.props.allImagesShow, false)}
               </View>
               <View style={{height: 100, width: (WIDTH * 0.7)}}>
                 <View style={{height: 100, width: (WIDTH * 0.7), alignItems: 'flex-start', justifyContent: 'center', marginBottom: 2, marginLeft: 15}}>

@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {View, Text, Dimensions, StyleSheet, Image, Animated, TouchableOpacity, ImageBackground } from 'react-native';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Camera from 'react-native-camera';
-var RNFS = require('react-native-fs');
 import { connect } from 'react-redux';
+var RNFS = require('react-native-fs');
 
 import * as Actions from '../actions';
 
@@ -129,7 +129,7 @@ class TasvirCamera extends Component {
                     content={<ImageBackground
                                 style={styles.imageButton}
                                 imageStyle={styles.imageButton}
-                                source={{uri: this.props.previewReel[0].uri}}>
+                                source={{uri: (RNFS.DocumentDirectoryPath + '/' + this.props.previewReel[0].uri)}}>
                                 <View style={styles.imageButtonText}>
                                   <Text style={{color: '#FFFFFF', fontWeight: 'bold'}}>{this.props.previewReel.length}</Text>
                                 </View>

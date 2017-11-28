@@ -2,6 +2,7 @@ import { NavigationActions } from 'react-navigation';
 import { AsyncStorage, CameraRoll } from 'react-native';
 import { Socket } from 'phoenix';
 import DeviceInfo from 'react-native-device-info';
+var RNFS = require('react-native-fs');
 
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
          AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, SOCKET_URL,
@@ -29,7 +30,7 @@ export const PREVIEW_REEL_INDEX = 2;
 export function saveImage(image) {
   return (dispatch, getState) => {
     const { album: { id } } = getState();
-    CameraRoll.saveToCameraRoll(image.uri).then((uri) => {
+    CameraRoll.saveToCameraRoll((RNFS.DocumentDirectoryPath + '/' + image.uri)).then((uri) => {
       dispatch(Gallery.loadGallery());
     });
   }

@@ -146,7 +146,7 @@ export function viewAlbumReel(index, images) {
 export function capture(uri, width, height) {
   return (dispatch, getState) => {
     const { album: { id }, app: { autoShare } } = getState();
-    const image = { uri: (RNFS.DocumentDirectoryPath + '/' + uri), width: width, height: height };
+    const image = { uri: uri, width: width, height: height };
     if(id && autoShare) {
       dispatch(TasvirApi.uploadImage(image));
     } else if(id) {
