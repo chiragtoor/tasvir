@@ -241,7 +241,7 @@ describe('app_actions', () => {
     const image = { uri: "one", width: 16, height: 9 };
     const store = mockStore({ album: { id: "test_album" }, app: { autoShare: false } });
     const expectedActions = [
-      { type: Reel.REEL_ADD_IMAGE, image: { uri: "RNFS_TEST_MOCK/one", width: 16, height: 9 } }
+      { type: Reel.REEL_ADD_IMAGE, image: { uri: "one", width: 16, height: 9 } }
     ];
     await store.dispatch(Actions.capture("one", 16, 9));
     expect(store.getActions()).toEqual(expectedActions);

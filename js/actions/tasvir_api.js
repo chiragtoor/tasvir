@@ -72,7 +72,7 @@ export function loadAlbum() {
           //  both these cases will be duplicates in the camera roll
           if(!(senderId === apiPhoto.sent_by || savedPhotos.includes(apiPhoto.id))) {
             const photo = { uri: apiPhoto.photo, ...apiPhoto };
-            dispatch(saveImage(photo));
+            dispatch(saveImage(photo, false));
             dispatch(Album.addImage(photo));
             dispatch(App.addSavedPhoto(photo.id));
           }
