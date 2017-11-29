@@ -34,7 +34,7 @@ class AlbumReel extends Component {
           {this.props.images.map((image, imageIndex) => {
             return (
               <View key={imageIndex} style={styles.page}>
-                <Image source={{uri: (this.props.isFullGallery ? image.uri : (RNFS.DocumentDirectoryPath + '/' + image.uri))}} style={styles.image} resizeMode='contain' />
+                <Image source={{uri: image.uri}} style={styles.image} resizeMode='contain' />
                 <View style={{position: 'absolute', left: 0, top: 0, marginLeft: 10, marginTop: 19}}>
                   <TouchableOpacity onPress={() => this.props.closeReel()}>
                     <View style={{borderRadius: 19, height: 38, width: 38, alignItems: 'center', justifyContent: 'center', backgroundColor: "#FFFFFF"}}>

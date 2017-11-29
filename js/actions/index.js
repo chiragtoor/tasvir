@@ -28,11 +28,12 @@ export const CAMERA_INDEX = 1;
 export const PREVIEW_REEL_INDEX = 2;
 
 export function saveImage(image, appendDir = true) {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     const { album: { id } } = getState();
     const imagePath = appendDir ? (RNFS.DocumentDirectoryPath + '/' + image.uri) : image.uri;
-    CameraRoll.saveToCameraRoll(imagePath).then((uri) => {
+    return CameraRoll.saveToCameraRoll(imagePath).then((uri) => {
       dispatch(Gallery.loadGallery());
+      return uri;
     });
   }
 }

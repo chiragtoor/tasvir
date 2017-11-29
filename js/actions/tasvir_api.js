@@ -84,14 +84,15 @@ export function loadAlbum() {
 }
 
 export function uploadImage(image) {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     const { album: { id }, app: { senderId } } = getState();
 
-      dispatch(saveImage(image));
-      dispatch(Album.addImage(image));
+      const newUri = await dispatch(saveImage(image));
+      const newImage = {...image, uri: newUri};
+      dispatch(Album.addImage(newImage));
 
       const file = {
-        uri: (RNFS.DocumentDirectoryPath + '/' + image.uri),
+        uri: newImage.uri,
         name: 'photo.jpg',
         type : 'image/jpg'
       };
@@ -102,8 +103,8 @@ export function uploadImage(image) {
                     effect: { photo: file,
                               sent_by: senderId,
                               id: id,
-                              width: image.width,
-                              height: image.height },
+                              width: newImage.width,
+                              height: newImage.height },
                     commit: { type: COMMIT_ACTION,
                               meta: {  }
                     },
