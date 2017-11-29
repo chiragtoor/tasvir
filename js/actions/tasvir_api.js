@@ -58,7 +58,7 @@ export function createAlbum() {
 }
 
 export function loadAlbum() {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     const {album: { id }, app: { senderId, savedPhotos } } = getState();
     return fetch(URL + ALBUMS_ENDPOINT + "/" +  id)
     .then((response) => response.json())
@@ -72,12 +72,13 @@ export function loadAlbum() {
           //  both these cases will be duplicates in the camera roll
           if(!(senderId === apiPhoto.sent_by || savedPhotos.includes(apiPhoto.id))) {
             const photo = { uri: apiPhoto.photo, ...apiPhoto };
-            dispatch(saveImage(photo, false));
-            dispatch(Album.addImage(photo));
+            const newUri = await dispatch(saveImage(photo, false));
+            const newPhoto = {...photo, uri: newUri};
+            dispatch(Album.addImage(newPhoto));
             dispatch(App.addSavedPhoto(photo.id));
           }
         }
-        return dispatch(Gallery.loadGallery());;
+        return dispatch(Gallery.loadGallery());
       }
     });
   }
