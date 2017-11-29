@@ -47,7 +47,7 @@ export function loadGallery() {
               width: image.width,
               height: image.height
             }
-          })
+          });
           dispatch(loadImages(images));
         });
       }

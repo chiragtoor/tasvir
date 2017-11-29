@@ -35,6 +35,7 @@ export function joinChannel() {
           CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
             // flag the animation on the camera gallery button
             dispatch(App.flagImageReceivedFromChannel());
+            dispatch(App.addSavedPhoto(msg.id));
             dispatch(Album.addImage({uri: uri, width: msg.width, height: msg.height}));
             dispatch(Gallery.loadGallery());
           });

@@ -12,10 +12,21 @@ const HEIGHT = Dimensions.get('window').height;
 const LOGO = require('../../img/tasvir_logo.png');
 
 class Gallery extends Component {
+
+  getImageUri = (image) => {
+    if(this.props.viewingAlbum.fullGallery) {
+      return image.uri;
+    } else if(image.uri.includes("assets-library://")) {
+      return image.uri;
+    } else {
+      return RNFS.DocumentDirectoryPath + '/' + image.uri;
+    }
+  }
+
   formatImages = (arr) => {
     return arr.map((p) => {
       return {
-        image: (this.props.viewingAlbum.fullGallery ? p.uri : (RNFS.DocumentDirectoryPath + '/' + p.uri)),
+        image: this.getImageUri(p),
         width: p.width,
         height: p.height,
         aspectRatio: (p.width / p.height)
@@ -108,6 +119,14 @@ class Gallery extends Component {
     );
   }
 
+  getAlbumCoverImageUri = (image) => {
+    if(image.uri.includes("assets-library://")) {
+      return image.uri;
+    } else {
+      return RNFS.DocumentDirectoryPath + '/' + image.uri;
+    }
+  }
+
   renderImage = (image, appendDir = true) => {
     if (image) {
       const imageAspectRatio = (image.width / image.height);
@@ -120,7 +139,7 @@ class Gallery extends Component {
               borderColor: "#48B2E2",
               borderWidth: 2
             }}
-            source={{uri: (appendDir ? (RNFS.DocumentDirectoryPath + '/' + image.uri) : image.uri)}}
+            source={{uri: (appendDir ? this.getAlbumCoverImageUri(image) : image.uri)}}
             resizeMode='contain' />
         );
       } else {
@@ -132,7 +151,7 @@ class Gallery extends Component {
               borderColor: "#48B2E2",
               borderWidth: 2
             }}
-            source={{uri: (appendDir ? (RNFS.DocumentDirectoryPath + '/' + image.uri) : image.uri)}}
+            source={{uri: (appendDir ? this.getAlbumCoverImageUri(image) : image.uri)}}
             resizeMode='contain' />
         );
       }
