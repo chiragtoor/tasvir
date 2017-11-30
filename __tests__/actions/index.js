@@ -47,7 +47,6 @@ describe('index_actions', () => {
   it('dispatches SET_HISTORY with the history from storage', async () => {
     const store = mockStore({ });
     const senderId = "DKSN93-ASDFS";
-
     DeviceInfo.getUniqueID = jest.fn(() => {
       return "DKSN93-ASDFS";
     });
@@ -66,27 +65,15 @@ describe('index_actions', () => {
     await expect(AsyncStorage.getItem(SENDER_ID_STORAGE)).resolves.toBe(JSON.stringify(senderId));
   });
 
-  it('dispatches APP_UPDATE_SENDER_ID when senderId exists', async () => {
-    const store = mockStore({});
-    const senderId = "ASIDF-354BAS";
-
-    const AsyncStorage = new MockAsyncStorage({ senderId: JSON.stringify(senderId) });
-    jest.setMock('AsyncStorage', AsyncStorage);
-
-    await store.dispatch(Actions.loadAndDispatchState());
-    expect(store.getActions()).toEqual([
-      { type: App.SET_HISTORY, history: [] },
-      { type: App.APP_UPDATE_SENDER_ID, senderId: senderId },
-      { type: NAVIGATION_ACTION, routeName: ROUTES.WALKTHROUGH }
-    ]);
-  });
-
   it('dispatches APP_LOAD_SAVED_PHOTOS when previous saved photos exist', async () => {
     const store = mockStore({});
-    const senderId = "ASIDF-354BAS";
+    const senderId = "DKSN93-ASDFS";
+    DeviceInfo.getUniqueID = jest.fn(() => {
+      return "DKSN93-ASDFS";
+    });
     const savedPhotos = ["one", "two", "three"];
 
-    const AsyncStorage = new MockAsyncStorage({ savedPhotos: JSON.stringify(savedPhotos), senderId: JSON.stringify(senderId) });
+    const AsyncStorage = new MockAsyncStorage({ savedPhotos: JSON.stringify(savedPhotos) });
     jest.setMock('AsyncStorage', AsyncStorage);
 
     await store.dispatch(Actions.loadAndDispatchState());
@@ -100,9 +87,12 @@ describe('index_actions', () => {
 
   it('dispatches NAVIGATION_ACTION to walkthrough initially', async () => {
     const store = mockStore({});
-    const senderId = "ASIDF-354BAS";
+    const senderId = "DKSN93-ASDFS";
+    DeviceInfo.getUniqueID = jest.fn(() => {
+      return "DKSN93-ASDFS";
+    });
 
-    const AsyncStorage = new MockAsyncStorage({ senderId: JSON.stringify(senderId) });
+    const AsyncStorage = new MockAsyncStorage({ });
     jest.setMock('AsyncStorage', AsyncStorage);
 
     await store.dispatch(Actions.loadAndDispatchState());
@@ -115,9 +105,12 @@ describe('index_actions', () => {
 
   it('dispatches NAVIGATION_ACTION to app if walkthrough completed, loads gallery', async () => {
     const store = mockStore({});
-    const senderId = "ASIDF-354BAS";
+    const senderId = "DKSN93-ASDFS";
+    DeviceInfo.getUniqueID = jest.fn(() => {
+      return "DKSN93-ASDFS";
+    });
 
-    const AsyncStorage = new MockAsyncStorage({ senderId: JSON.stringify(senderId), walkthrough: JSON.stringify(true) });
+    const AsyncStorage = new MockAsyncStorage({ walkthrough: JSON.stringify(true) });
     jest.setMock('AsyncStorage', AsyncStorage);
     const mockGalleryLoadAction = { type: Gallery.LOAD_IMAGES, data: "MOCK LOAD" };
     Gallery.loadGallery  = jest.fn((fun) => {
@@ -135,9 +128,12 @@ describe('index_actions', () => {
 
   it('dispatches APP_UPDATE_AUTO_SHARE if setting is saved to true', async () => {
     const store = mockStore({});
-    const senderId = "ASIDF-354BAS";
+    const senderId = "DKSN93-ASDFS";
+    DeviceInfo.getUniqueID = jest.fn(() => {
+      return "DKSN93-ASDFS";
+    });
 
-    const AsyncStorage = new MockAsyncStorage({ senderId: JSON.stringify(senderId), autoShare: JSON.stringify(true) });
+    const AsyncStorage = new MockAsyncStorage({ autoShare: JSON.stringify(true) });
     jest.setMock('AsyncStorage', AsyncStorage);
 
     await store.dispatch(Actions.loadAndDispatchState());
@@ -155,11 +151,13 @@ describe('index_actions', () => {
     const store = mockStore({album: viewingAlbum});
     const albumId = "some id";
     const albumName = "some name";
-    const senderId = "ASIDF-354BAS";
+    const senderId = "DKSN93-ASDFS";
+    DeviceInfo.getUniqueID = jest.fn(() => {
+      return "DKSN93-ASDFS";
+    });
     const albumDate = "Jan. 10th, 2017";
 
-    const AsyncStorage = new MockAsyncStorage({ senderId: JSON.stringify(senderId),
-                                                albumId: JSON.stringify(albumId),
+    const AsyncStorage = new MockAsyncStorage({ albumId: JSON.stringify(albumId),
                                                 albumName: JSON.stringify(albumName),
                                                 albumDate: JSON.stringify(albumDate)});
     jest.setMock('AsyncStorage', AsyncStorage);
@@ -190,12 +188,14 @@ describe('index_actions', () => {
 
   it('loads preview reel, if in album', async () => {
     const store = mockStore({});
-    const senderId = "ASIDF-354BAS";
+    const senderId = "DKSN93-ASDFS";
+    DeviceInfo.getUniqueID = jest.fn(() => {
+      return "DKSN93-ASDFS";
+    });
     const albumId = "some album id";
     const previewReel = ["one", "three", "two"];
 
-    const AsyncStorage = new MockAsyncStorage({ senderId: JSON.stringify(senderId),
-                                                albumId: JSON.stringify(albumId),
+    const AsyncStorage = new MockAsyncStorage({ albumId: JSON.stringify(albumId),
                                                 previewReel: JSON.stringify(previewReel) });
     jest.setMock('AsyncStorage', AsyncStorage);
 

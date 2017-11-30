@@ -72,15 +72,15 @@ export function loadAlbum() {
         // do not want to save own captured pictures or previously saved images,
         //  both these cases will be duplicates in the camera roll
         if(!(senderId === apiPhoto.sent_by || savedPhotos.includes(apiPhoto.id))) {
-          Mixpanel.trackWithProperties("Image Loaded via API", {
-            "albumId": id, "albumName": name,
-            "photoId": photo.id
-          });
           const photo = { uri: apiPhoto.photo, ...apiPhoto };
           const newUri = await dispatch(saveImage(photo, false));
           const newPhoto = {...photo, uri: newUri};
           dispatch(Album.addImage(newPhoto));
           dispatch(App.addSavedPhoto(photo.id));
+          Mixpanel.trackWithProperties("Image Loaded via API", {
+            "albumId": id, "albumName": name,
+            "photoId": photo.id
+          });
         }
       }
       dispatch(Gallery.loadGallery());
