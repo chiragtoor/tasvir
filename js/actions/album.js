@@ -157,10 +157,11 @@ export function confirmJoinAlbum(name, id) {
       // close the album with the utitlity method
       dispatch(_closeAlbum());
     }
+    const newAlbumHistory = getState().app.albumHistory;
     // if album trying to join is from history, just open it
-    for (var i = 0; i < albumHistory.length; i++) {
-      if(id == albumHistory[i].id) {
-        dispatch(confirmOpenAlbum(albumHistory[i]));
+    for (var i = 0; i < newAlbumHistory.length; i++) {
+      if(id == newAlbumHistory[i].id) {
+        dispatch(confirmOpenAlbum({index: i, ...newAlbumHistory[i]}));
         return;
       }
     }

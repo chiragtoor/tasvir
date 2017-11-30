@@ -117,6 +117,10 @@ describe('tasvir_api_actions', () => {
     Gallery.loadGallery = jest.fn(() => {
       return loadGallery;
     });
+    const addImage = { type: "ADD IMAGE" };
+    Album.addImage = jest.fn((image) => {
+      return addImage;
+    });
     const albumId = "CAafsfs988";
     const albumLink = "album branch link";
     const senderId = "this user";
@@ -139,13 +143,13 @@ describe('tasvir_api_actions', () => {
       { type: Album.LOAD_ALBUM_DATE, albumDate },
       /* due to mock promises, these actions resolve first in the test */
       saveImageMock(responsePhotos[0]),
-      { type: Album.ADD_IMAGE, image: {...responsePhotos[0], uri: responsePhotos[0].photo} },
+      addImage,
       { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
       saveImageMock(responsePhotos[1]),
-      { type: Album.ADD_IMAGE, image: {...responsePhotos[1], uri: responsePhotos[1].photo} },
+      addImage,
       { type: App.APP_ADD_SAVED_PHOTO, photo: "two" },
       saveImageMock(responsePhotos[2]),
-      { type: Album.ADD_IMAGE, image: {...responsePhotos[2], uri: responsePhotos[2].photo} },
+      addImage,
       { type: App.APP_ADD_SAVED_PHOTO, photo: "three" },
       loadGallery
     ];
@@ -163,6 +167,10 @@ describe('tasvir_api_actions', () => {
     const loadGallery = { type: "LOAD GALLERY" };
     Gallery.loadGallery = jest.fn(() => {
       return loadGallery;
+    });
+    const addImage = { type: "ADD IMAGE" };
+    Album.addImage = jest.fn((image) => {
+      return addImage;
     });
     const albumId = "CAafsfs988";
     const albumLink = "album branch link";
@@ -183,7 +191,7 @@ describe('tasvir_api_actions', () => {
       { type: Album.LOAD_LINK, link: albumLink },
       { type: Album.LOAD_ALBUM_DATE, albumDate },
       saveImageMock(responsePhotos[0]),
-      { type: Album.ADD_IMAGE, image: {...responsePhotos[0], uri: responsePhotos[0].photo} },
+      addImage,
       { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
       loadGallery
     ];
@@ -201,6 +209,10 @@ describe('tasvir_api_actions', () => {
     const loadGallery = { type: "LOAD GALLERY" };
     Gallery.loadGallery = jest.fn(() => {
       return loadGallery;
+    });
+    const addImage = { type: "ADD IMAGE" };
+    Album.addImage = jest.fn((image) => {
+      return addImage;
     });
     const albumId = "CAafsfs988";
     const albumLink = "album branch link";
@@ -221,10 +233,10 @@ describe('tasvir_api_actions', () => {
         { type: Album.LOAD_LINK, link: albumLink },
         { type: Album.LOAD_ALBUM_DATE, albumDate },
         saveImageMock(responsePhotos[0]),
-        { type: Album.ADD_IMAGE, image: {...responsePhotos[0], uri: responsePhotos[0].photo} },
+        addImage,
         { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
         saveImageMock(responsePhotos[1]),
-        { type: Album.ADD_IMAGE, image: {...responsePhotos[1], uri: responsePhotos[1].photo} },
+        addImage,
         { type: App.APP_ADD_SAVED_PHOTO, photo: "two" },
         loadGallery
       ];

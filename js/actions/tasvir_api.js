@@ -60,27 +60,25 @@ export function createAlbum() {
 export function loadAlbum() {
   return async (dispatch, getState) => {
     const {album: { id }, app: { senderId, savedPhotos } } = getState();
-    return fetch(URL + ALBUMS_ENDPOINT + "/" +  id)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      if(responseJson.success) {
-        dispatch(Album.updateLink(responseJson.link));
-        dispatch(Album.updateAlbumDate(responseJson.album_date));
-        for(var i = 0; i < responseJson.photos.length; i++) {
-          const apiPhoto = responseJson.photos[i];
-          // do not want to save own captured pictures or previously saved images,
-          //  both these cases will be duplicates in the camera roll
-          if(!(senderId === apiPhoto.sent_by || savedPhotos.includes(apiPhoto.id))) {
-            const photo = { uri: apiPhoto.photo, ...apiPhoto };
-            const newUri = await dispatch(saveImage(photo, false));
-            const newPhoto = {...photo, uri: newUri};
-            dispatch(Album.addImage(newPhoto));
-            dispatch(App.addSavedPhoto(photo.id));
-          }
+    const response = await fetch(URL + ALBUMS_ENDPOINT + "/" +  id);
+    const responseJson = await response.json();
+    if(responseJson.success) {
+      dispatch(Album.updateLink(responseJson.link));
+      dispatch(Album.updateAlbumDate(responseJson.album_date));
+      for(var i = 0; i < responseJson.photos.length; i++) {
+        const apiPhoto = responseJson.photos[i];
+        // do not want to save own captured pictures or previously saved images,
+        //  both these cases will be duplicates in the camera roll
+        if(!(senderId === apiPhoto.sent_by || savedPhotos.includes(apiPhoto.id))) {
+          const photo = { uri: apiPhoto.photo, ...apiPhoto };
+          const newUri = await dispatch(saveImage(photo, false));
+          const newPhoto = {...photo, uri: newUri};
+          dispatch(Album.addImage(newPhoto));
+          dispatch(App.addSavedPhoto(photo.id));
         }
-        return dispatch(Gallery.loadGallery());
       }
-    });
+      dispatch(Gallery.loadGallery());
+    }
   }
 }
 
