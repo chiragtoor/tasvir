@@ -127,6 +127,7 @@ export function confirmOpenAlbum(openAlbum) {
     dispatch(updateName(openAlbum.name));
     dispatch(updateAlbumDate(openAlbum.albumDate));
     dispatch(loadImages(openAlbum.images));
+    Mixpanel.trackWithProperties("Re-Opened Album", {"albumId": openAlbum.id, "albumName": openAlbum.name});
     // load a new share link and any images added since album was closed via
     //  the API
     dispatch(TasvirApi.loadAlbum());
@@ -164,12 +165,14 @@ export function confirmJoinAlbum(name, id) {
     // if album trying to join is from history, just open it
     for (var i = 0; i < newAlbumHistory.length; i++) {
       if(id == newAlbumHistory[i].id) {
+        Mixpanel.trackWithProperties("Joined Album", {"albumId": id, "albumName": name, "inHistory": true});
         dispatch(confirmOpenAlbum({index: i, ...newAlbumHistory[i]}));
         return;
       }
     }
     dispatch(updateId(id));
     dispatch(updateName(name));
+    Mixpanel.trackWithProperties("Joined Album", {"albumId": id, "albumName": name});
     dispatch(TasvirApi.loadAlbum());
     dispatch(AlbumChannel.joinChannel());
     dispatch(finishAlbumAction());
