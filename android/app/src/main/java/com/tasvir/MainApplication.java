@@ -3,6 +3,7 @@ package com.tasvir;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.kevinejohn.RNMixpanel.RNMixpanel;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import io.branch.rnbranch.RNBranchPackage;
 import com.rnfs.RNFSPackage;
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNMixpanel(),
             new RNDeviceInfo(),
             new RNBranchPackage(),
             new RNFSPackage(),
