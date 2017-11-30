@@ -4,6 +4,7 @@
 import { NavigationActions } from 'react-navigation';
 import thunk from 'redux-thunk';
 var RNFS = require('react-native-fs');
+var Mixpanel = require('react-native-mixpanel');
 
 import * as Actions from '../actions';
 import { ROUTES } from '../constants';
@@ -120,6 +121,7 @@ export function completeWalkthrough() {
     const { app: { onCompleteWalkthrough } } = getState();
     dispatch(Gallery.loadGallery());
     Storage.walkthroughCompleted();
+    Mixpanel.track("Completed Walkthrough");
     dispatch(onCompleteWalkthrough());
   }
 }
@@ -145,13 +147,19 @@ export function viewAlbumReel(index, images) {
 
 export function capture(uri, width, height) {
   return (dispatch, getState) => {
-    const { album: { id }, app: { autoShare } } = getState();
+    const { album: { id, name }, app: { autoShare } } = getState();
     const image = { uri: uri, width: width, height: height };
     if(id && autoShare) {
+      Mixpanel.trackWithProperties("Image Captured In Album", {
+        "albumId": id, "albumName": name,
+        "autoShared": autoShare
+      });
       dispatch(TasvirApi.uploadImage(image));
     } else if(id) {
+      Mixpanel.track("Image Captured To Preview");
       dispatch(Reel.addImage(image));
     } else {
+      Mixpanel.track("Image Captured No Album")
       dispatch(saveImage(image));
     }
   }

@@ -9,6 +9,7 @@ import {
   Share
 } from 'react-native';
 import { connect } from 'react-redux';
+var Mixpanel = require('react-native-mixpanel');
 
 import TasvirToggle from '../components/TasvirToggle';
 import TasvirButton from '../components/TasvirButton';
@@ -36,6 +37,7 @@ class Menu extends Component {
   }
 
   shareAlbum = () => {
+    Mixpanel.trackWithProperties("Share Dialog", {"albumId": this.props.albumId, "albumName": this.props.albumName});
     Share.share({url: this.props.albumLink,
       title: ("Get pictures for: " + this.props.albumName)}, {});
   }
@@ -79,6 +81,12 @@ class Menu extends Component {
     );
   }
 
+  autoShareToggle = (autoShare) => {
+    this.props.toggleAutoShare(autoShare);
+    Mixpanel.track("AutoShare Toggled");
+    Mixpanel.set({"$autoSharing": autoShare});
+  }
+
   render() {
     return (
       <View style={styles.menu}>
@@ -89,7 +97,7 @@ class Menu extends Component {
         <View style={styles.menuOptions}>
           <TasvirToggle
             value={this.props.autoShare}
-            toggle={(value) => this.props.toggleAutoShare(value)}
+            toggle={(value) => this.autoShareToggle(value)}
             message={'Auto Share'}
             explanation={'Automatically share pictures on capture'} />
         </View>

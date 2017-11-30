@@ -1,6 +1,6 @@
 import { CameraRoll, Image } from 'react-native';
 import { NavigationActions } from 'react-navigation';
-var RNFS = require('react-native-fs');
+var Mixpanel = require('react-native-mixpanel');
 
 import * as Album from './album';
 import * as AlbumChannel from './album_channel';
@@ -24,6 +24,7 @@ function getHeaders() {
 export function createAlbum() {
   return (dispatch, getState) => {
     const { album: { name } } = getState();
+    Mixpanel.trackWithProperties("Creating Album", {"albumName": name});
     return fetch(URL + ALBUMS_ENDPOINT, {
       method: 'POST',
       headers: getHeaders(),
@@ -39,6 +40,7 @@ export function createAlbum() {
         Storage.saveAlbumName(name);
         dispatch(Album.updateId(responseJson.album));
         Storage.saveAlbumId(responseJson.album);
+        Mixpanel.trackWithProperties("Created Album", {"albumId": responseJson.album, "albumName": name});
         dispatch(Album.updateLink(responseJson.link));
         Storage.saveAlbumLink(responseJson.link);
         dispatch(Album.updateAlbumDate(responseJson.album_date));
@@ -59,7 +61,7 @@ export function createAlbum() {
 
 export function loadAlbum() {
   return async (dispatch, getState) => {
-    const {album: { id }, app: { senderId, savedPhotos } } = getState();
+    const {album: { id, name }, app: { senderId, savedPhotos } } = getState();
     const response = await fetch(URL + ALBUMS_ENDPOINT + "/" +  id);
     const responseJson = await response.json();
     if(responseJson.success) {
@@ -70,6 +72,10 @@ export function loadAlbum() {
         // do not want to save own captured pictures or previously saved images,
         //  both these cases will be duplicates in the camera roll
         if(!(senderId === apiPhoto.sent_by || savedPhotos.includes(apiPhoto.id))) {
+          Mixpanel.trackWithProperties("Image Loaded via API", {
+            "albumId": id, "albumName": name,
+            "photoId": photo.id
+          });
           const photo = { uri: apiPhoto.photo, ...apiPhoto };
           const newUri = await dispatch(saveImage(photo, false));
           const newPhoto = {...photo, uri: newUri};
@@ -84,11 +90,13 @@ export function loadAlbum() {
 
 export function uploadImage(image) {
   return async (dispatch, getState) => {
-    const { album: { id }, app: { senderId } } = getState();
+    const { album: { id }, app: { senderId, autoShare } } = getState();
 
       const newUri = await dispatch(saveImage(image));
       const newImage = {...image, uri: newUri};
       dispatch(Album.addImage(newImage));
+
+      Mixpanel.trackWithProperties("Uploading Image", {"albumId": id, "autoShared": autoShare});
 
       const file = {
         uri: newImage.uri,

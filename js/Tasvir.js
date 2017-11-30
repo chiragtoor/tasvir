@@ -10,6 +10,14 @@ import { StackNavigator, addNavigationHelpers } from 'react-navigation';
 import branch from 'react-native-branch';
 import BackgroundFetch from "react-native-background-fetch";
 import request from 'superagent';
+var Mixpanel = require('react-native-mixpanel');
+
+/* Setup Mixpanel */
+if(__DEV__) {
+  Mixpanel.sharedInstanceWithToken('b167786a4d7866d010361cd98608f7e1');
+} else {
+  Mixpanel.sharedInstanceWithToken('c2f7e0d0d37fd6339608943158f233bf');
+}
 
 /*
  * in order to be able to navigate from actions we need to hook
@@ -131,8 +139,10 @@ branch.subscribe(async ({error, params}) => {
     if(albumId && albumName && albumId != store.getState().album.id) {
       const walkthroughCompleted = await AsyncStorage.getItem(WALKTHROUGH_FLAG_STORAGE);
       if(walkthroughCompleted) {
+        Mixpanel.track("Album Link Opened");
         store.dispatch(Actions.Album.joinAlbum(albumName, albumId));
       } else {
+        Mixpanel.setOnce({"$referredUser": true, "$referringAlbumId": albumId, "$referringAlbum": albumName});
         store.dispatch(Actions.App.setWalkthroughComplete(() => Actions.Album.joinAlbum(albumName, albumId)));
       }
     }

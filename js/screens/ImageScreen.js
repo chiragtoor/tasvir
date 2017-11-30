@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {View, Text, Dimensions, StyleSheet, Image, Animated, TouchableOpacity} from 'react-native';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
-var RNFS = require('react-native-fs');
 import { connect } from 'react-redux';
+var RNFS = require('react-native-fs');
+var Mixpanel = require('react-native-mixpanel');
 
 import * as Actions from '../actions';
 
@@ -30,6 +31,7 @@ class ImageScreen extends Component {
     ).start(() => {
       this.props.uploadImage(this.props.image);
       this.props.onFinish();
+      Mixpanel.track("Preview Image Shared");
     });
   }
 
@@ -42,6 +44,7 @@ class ImageScreen extends Component {
       {toValue: {x:0, y: Dimensions.get('window').height}, duration: 250}
     ).start(() => {
       this.props.onFinish();
+      Mixpanel.track("Preview Image Deleted");
     });
   }
 
@@ -55,6 +58,7 @@ class ImageScreen extends Component {
     ).start(() => {
       this.props.saveImage(this.props.image);
       this.props.onFinish();
+      Mixpanel.track("Preview Image Saved");
     });
   }
 

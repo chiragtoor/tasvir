@@ -3,6 +3,7 @@ import { AsyncStorage, CameraRoll } from 'react-native';
 import { Socket } from 'phoenix';
 import DeviceInfo from 'react-native-device-info';
 var RNFS = require('react-native-fs');
+var Mixpanel = require('react-native-mixpanel');
 
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
          AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, SOCKET_URL,
@@ -57,7 +58,6 @@ export function loadAndDispatchState() {
       const albumId = getValue(value, ALBUM_ID_STORAGE);
       const autoShare = getValue(value, AUTO_SHARE_STORAGE);
       const previewReel = getValue(value, PREVIEW_REEL_STORAGE);
-      const senderId = getValue(value, SENDER_ID_STORAGE);
       const savedPhotos = getValue(value, SAVED_PHOTOS_STORAGE);
       const albumImages = getValue(value, ALBUM_IMAGES_STORAGE);
       const albumHistory = getValue(value, ALBUM_HISTORY_STORAGE);
@@ -68,11 +68,10 @@ export function loadAndDispatchState() {
         dispatch(App.setHistory([]));
       }
 
-      if(senderId == null) {
-        dispatch(App.updateSenderId(DeviceInfo.getUniqueID()));
-      } else {
-        dispatch(App.updateSenderId(senderId));
-      }
+      const senderId = DeviceInfo.getUniqueID();
+      Mixpanel.identify(senderId);
+      dispatch(App.updateSenderId(senderId));
+
       if(savedPhotos) dispatch(App.loadSavedPhotos(savedPhotos));
       if (autoShare) dispatch(App.updateAutoShare(autoShare));
 

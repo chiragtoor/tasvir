@@ -4,3 +4,9 @@ jest.mock('react-native-fs', () => ({
   ExternalStorageDirectoryPath: 'package-path',
   DocumentDirectoryPath: 'RNFS_TEST_MOCK'
 }));
+
+jest.mock('react-native-mixpanel', () => ({
+  track: jest.fn((tag) => Promise.resolve()),
+  trackWithProperties: jest.fn((tag, properties) => Promise.resolve()),
+  identify: jest.fn((id) => Promise.resolve())
+}));

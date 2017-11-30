@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
-var RNFS = require('react-native-fs');
+var Mixpanel = require('react-native-mixpanel');
 
 import ImageScreen from './ImageScreen';
 
@@ -18,6 +18,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 class AlbumReel extends Component {
   componentDidMount() {
+    Mixpanel.track("Viewing Album Reel");
     this.ref.scrollTo({x: (SCREEN_WIDTH * this.props.currentIndex), y: 0, animated: false});
   }
 

@@ -10,8 +10,8 @@ import * as Storage from '../storage';
 import * as AlbumChannel from './album_channel';
 import { saveImage } from './index';
 import { ROUTES } from '../constants';
+var Mixpanel = require('react-native-mixpanel');
 
-var RNFS = require('react-native-fs');
 /*
  * Below actions deal with the state of the current ablum
  */
@@ -82,6 +82,7 @@ export function reset() {
 export function confirmCloseAlbum() {
   return (dispatch, getState) => {
     const { album: album, app: { albumHistory } } = getState();
+    Mixpanel.trackWithProperties("Album Closed", {"albumId": album.id});
     // add the current album to the history since it is closing
     const newHistory = [album, ...albumHistory];
     dispatch(App.setHistory(newHistory));
@@ -118,6 +119,7 @@ export function confirmOpenAlbum(openAlbum) {
       const newHistory = [album, ...editableAlbumHistory];
       dispatch(App.setHistory(newHistory));
       // close the album with the utitlity method
+      Mixpanel.trackWithProperties("Album Closed", {"albumId": album.id});
       dispatch(_closeAlbum());
     }
     // load the album being opened to the current album state
@@ -155,6 +157,7 @@ export function confirmJoinAlbum(name, id) {
       const newHistory = [album, ...albumHistory];
       dispatch(App.setHistory(newHistory));
       // close the album with the utitlity method
+      Mixpanel.trackWithProperties("Album Closed", {"albumId": album.id});
       dispatch(_closeAlbum());
     }
     const newAlbumHistory = getState().app.albumHistory;

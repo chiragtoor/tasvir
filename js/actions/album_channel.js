@@ -3,6 +3,7 @@
  */
 import { CameraRoll } from 'react-native';
 import { Socket } from 'phoenix';
+var Mixpanel = require('react-native-mixpanel');
 
 import * as Album from './album';
 import * as App from './app';
@@ -22,7 +23,7 @@ let channel = null;
 
 export function joinChannel() {
   return (dispatch, getState) => {
-    const { album: { id }, app: { senderId } } = getState();
+    const { album: { id, name }, app: { senderId } } = getState();
     if(id != null) {
       socket.connect();
       channel = socket.channel(CHANNEL_PREFACE + id, {});
@@ -33,6 +34,10 @@ export function joinChannel() {
         //  through channel
         if(!(msg.sent_by === senderId)) {
           CameraRoll.saveToCameraRoll(msg.photo).then((uri) => {
+            Mixpanel.trackWithProperties("Image Received In Channel", {
+              "albumId": id, "albumName": name,
+              "photoId": msg.id
+            });
             // flag the animation on the camera gallery button
             dispatch(App.flagImageReceivedFromChannel());
             dispatch(App.addSavedPhoto(msg.id));
