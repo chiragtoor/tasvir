@@ -15,7 +15,7 @@ var Mixpanel = require('react-native-mixpanel');
 if(__DEV__) {
   Mixpanel.sharedInstanceWithToken('b167786a4d7866d010361cd98608f7e1');
 } else {
-  Mixpanel.sharedInstanceWithToken('c2f7e0d0d37fd6339608943158f233bf');
+  Mixpanel.sharedInstanceWithToken('4d4d1309c81c11d2c31adfe3b773a821');
 }
 
 /*
