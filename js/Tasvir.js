@@ -8,7 +8,6 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { StackNavigator, addNavigationHelpers, NavigationActions } from 'react-navigation';
 import branch from 'react-native-branch';
-import BackgroundFetch from "react-native-background-fetch";
 import request from 'superagent';
 var Mixpanel = require('react-native-mixpanel');
 
