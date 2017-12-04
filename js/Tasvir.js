@@ -6,7 +6,7 @@ import { offline } from 'redux-offline';
 import offlineConfig from 'redux-offline/lib/defaults';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-import { StackNavigator, addNavigationHelpers } from 'react-navigation';
+import { StackNavigator, addNavigationHelpers, NavigationActions } from 'react-navigation';
 import branch from 'react-native-branch';
 import BackgroundFetch from "react-native-background-fetch";
 import request from 'superagent';
@@ -142,8 +142,11 @@ branch.subscribe(async ({error, params}) => {
         Mixpanel.track("Album Link Opened");
         store.dispatch(Actions.Album.joinAlbum(albumName, albumId));
       } else {
-        Mixpanel.setOnce({"$referredUser": true, "$referringAlbumId": albumId, "$referringAlbum": albumName});
-        store.dispatch(Actions.App.setWalkthroughComplete(() => Actions.Album.joinAlbum(albumName, albumId)));
+        Mixpanel.setOnce({"referredUser": true, "referringAlbumId": albumId, "referringAlbum": albumName});
+        store.dispatch(Actions.App.setWalkthroughComplete(() => (dispatch) => {
+          dispatch(NavigationActions.navigate({ routeName: ROUTES.MAIN }));
+          dispatch(Actions.Album.joinAlbum(albumName, albumId));
+        }));
       }
     }
   }
@@ -152,21 +155,6 @@ branch.subscribe(async ({error, params}) => {
 store.dispatch(Actions.loadAndDispatchState());
 
 export default class Tasvir extends React.Component {
-
-  // componentDidMount() {
-  //   BackgroundFetch.configure({
-  //     stopOnTerminate: false
-  //   }, function() {
-  //     console.log("[Tasvir] Received background-fetch event");
-  //
-  //     // To signal completion of your task to iOS, you must call #finish!
-  //     // If you fail to do this, iOS can kill your app.
-  //     BackgroundFetch.finish();
-  //   }, function(error) {
-  //     console.log("[Tasvir] RNBackgroundFetch failed to start");
-  //   });
-  // }
-
   render() {
     return (
       <Provider store={store}>

@@ -84,7 +84,7 @@ class Menu extends Component {
   autoShareToggle = (autoShare) => {
     this.props.toggleAutoShare(autoShare);
     Mixpanel.track("AutoShare Toggled");
-    Mixpanel.set({"$autoSharing": autoShare});
+    Mixpanel.set({"autoSharing": autoShare});
   }
 
   render() {
