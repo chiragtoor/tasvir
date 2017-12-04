@@ -82,7 +82,6 @@ export function reset() {
 export function confirmCloseAlbum() {
   return (dispatch, getState) => {
     const { album: album, app: { albumHistory } } = getState();
-    Mixpanel.trackWithProperties("Album Closed", {"albumId": album.id});
     // add the current album to the history since it is closing
     const newHistory = [album, ...albumHistory];
     dispatch(App.setHistory(newHistory));
@@ -106,7 +105,7 @@ export function openAlbum(album) {
   }
 }
 
-export function confirmOpenAlbum(openAlbum) {
+export function confirmOpenAlbum(openAlbum, logEvent = true) {
   return (dispatch, getState) => {
     const { album: album } = getState();
     // remove the album being opened from the history
@@ -119,15 +118,16 @@ export function confirmOpenAlbum(openAlbum) {
       const newHistory = [album, ...editableAlbumHistory];
       dispatch(App.setHistory(newHistory));
       // close the album with the utitlity method
-      Mixpanel.trackWithProperties("Album Closed", {"albumId": album.id});
-      dispatch(_closeAlbum());
+      dispatch(_closeAlbum(true));
     }
     // load the album being opened to the current album state
     dispatch(updateId(openAlbum.id));
     dispatch(updateName(openAlbum.name));
     dispatch(updateAlbumDate(openAlbum.albumDate));
     dispatch(loadImages(openAlbum.images));
-    Mixpanel.trackWithProperties("Re-Opened Album", {"albumId": openAlbum.id, "albumName": openAlbum.name});
+    if(logEvent) {
+      Mixpanel.trackWithProperties("Re-Opened Album", {"albumId": openAlbum.id, "albumName": openAlbum.name});
+    }
     // load a new share link and any images added since album was closed via
     //  the API
     dispatch(TasvirApi.loadAlbum());
@@ -158,15 +158,14 @@ export function confirmJoinAlbum(name, id) {
       const newHistory = [album, ...albumHistory];
       dispatch(App.setHistory(newHistory));
       // close the album with the utitlity method
-      Mixpanel.trackWithProperties("Album Closed", {"albumId": album.id});
-      dispatch(_closeAlbum());
+      dispatch(_closeAlbum(true));
     }
     const newAlbumHistory = getState().app.albumHistory;
     // if album trying to join is from history, just open it
     for (var i = 0; i < newAlbumHistory.length; i++) {
       if(id == newAlbumHistory[i].id) {
         Mixpanel.trackWithProperties("Joined Album", {"albumId": id, "albumName": name, "inHistory": true});
-        dispatch(confirmOpenAlbum({index: i, ...newAlbumHistory[i]}));
+        dispatch(confirmOpenAlbum({index: i, ...newAlbumHistory[i]}, false));
         return;
       }
     }
@@ -185,9 +184,14 @@ export function finishAlbumAction() {
 // _closeAlbum is not directly called, it is used internally in other album
 //  actions to handle closing of the current album, which is done on all album
 //  action accepts
-export function _closeAlbum() {
+export function _closeAlbum(logViaOpen = false) {
   return (dispatch, getState) => {
-    const { reel: { previewReel } } = getState();
+    const { reel: { previewReel }, album: { id, name } } = getState();
+    if(logViaOpen) {
+      Mixpanel.trackWithProperties("Album Closed", {"albumId": id, "albumName": name, "viaOpenAlbum": true});
+    } else {
+      Mixpanel.trackWithProperties("Album Closed", {"albumId": id, "albumName": name});
+    }
     dispatch(reset());
     dispatch(AlbumChannel.leaveChannel());
      previewReel.forEach((image) => {

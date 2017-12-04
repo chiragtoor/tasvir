@@ -151,12 +151,13 @@ export function capture(uri, width, height) {
     const image = { uri: uri, width: width, height: height };
     if(id && autoShare) {
       Mixpanel.trackWithProperties("Image Captured In Album", {
-        "albumId": id, "albumName": name,
-        "autoShared": autoShare
+        "albumId": id, "albumName": name
       });
       dispatch(TasvirApi.uploadImage(image));
     } else if(id) {
-      Mixpanel.track("Image Captured To Preview");
+      Mixpanel.trackWithProperties("Image Captured To Preview", {
+        "albumId": id, "albumName": name
+      });
       dispatch(Reel.addImage(image));
     } else {
       Mixpanel.track("Image Captured No Album")

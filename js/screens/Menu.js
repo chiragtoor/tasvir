@@ -42,6 +42,8 @@ class Menu extends Component {
       title: ("Get pictures for: " + this.props.albumName)}, {}).then((response) => {
         if(response.action === 'sharedAction') {
           Mixpanel.trackWithProperties("Shared Link", {"albumId": this.props.albumId, "albumName": this.props.albumName});
+        } else {
+          Mixpanel.trackWithProperties("Share Album Cancelled", {"albumId": this.props.albumId, "albumName": this.props.albumName});
         }
       });
   }

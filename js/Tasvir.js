@@ -138,7 +138,7 @@ branch.subscribe(async ({error, params}) => {
     if(albumId && albumName && albumId != store.getState().album.id) {
       const walkthroughCompleted = await AsyncStorage.getItem(WALKTHROUGH_FLAG_STORAGE);
       if(walkthroughCompleted) {
-        Mixpanel.track("Album Link Opened");
+        Mixpanel.trackWithProperties("Album Link Opened", {"albumId": albumId, "albumName": albumName});
         store.dispatch(Actions.Album.joinAlbum(albumName, albumId));
       } else {
         Mixpanel.setOnce({"referredUser": true, "referringAlbumId": albumId, "referringAlbum": albumName});
