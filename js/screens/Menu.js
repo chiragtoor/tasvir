@@ -39,7 +39,7 @@ class Menu extends Component {
   shareAlbum = () => {
     Mixpanel.trackWithProperties("Share Dialog", {"albumId": this.props.albumId, "albumName": this.props.albumName});
     Share.share({url: this.props.albumLink,
-      title: ("Get pictures for: " + this.props.albumName)}, {}).then((response) => {
+      message: (this.props.albumName + " Pictures:")}, {}).then((response) => {
         if(response.action === 'sharedAction') {
           Mixpanel.trackWithProperties("Shared Link", {"albumId": this.props.albumId, "albumName": this.props.albumName});
         } else {
