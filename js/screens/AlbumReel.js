@@ -24,6 +24,11 @@ class AlbumReel extends Component {
     this.ref.scrollTo({x: (SCREEN_WIDTH * this.props.currentIndex), y: 0, animated: false});
   }
 
+  addToAlbum = (image) => {
+    Mixpanel.track("Added to Album from Gallery Images");
+    this.props.addToAblum(image);
+  }
+
   renderTag = (image) => {
     if(this.props.isFullGallery && this.props.inAlbum) {
       if(this.props.currentAlbumImages.includes(image.uri)) {
@@ -38,17 +43,12 @@ class AlbumReel extends Component {
         return (
           <TouchableOpacity
             style={{width: SCREEN_WIDTH, height: 50, position: 'absolute', left: 0, top: (SCREEN_HEIGHT - 50), backgroundColor: "#FF2C55", alignItems: "center", justifyContent: "center"}}
-            onPress={() => this.addToAlbum()}>
+            onPress={() => this.addToAlbum(image)}>
             <Text style={{color: "#FFF", fontSize: 18, fontWeight: 'bold'}}>Add To Album</Text>
           </TouchableOpacity>
         );
       }
     }
-  }
-
-  addToAblum = () => {
-    Mixpanel.track("Added to Album from Gallery Images");
-    this.props.addToAblum(image);
   }
 
   render() {
