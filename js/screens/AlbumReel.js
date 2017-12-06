@@ -25,23 +25,30 @@ class AlbumReel extends Component {
   }
 
   renderTag = (image) => {
-    if(this.props.isFullGallery && !this.props.currentAlbumImages.includes(image.uri)) {
-      return (
-        <TouchableOpacity
-          style={{width: SCREEN_WIDTH, height: 50, position: 'absolute', left: 0, top: (SCREEN_HEIGHT - 50), backgroundColor: "#FF2C55", alignItems: "center", justifyContent: "center"}}
-          onPress={() => this.props.addToAblum(image)}>
-          <Text style={{color: "#FFF", fontSize: 18, fontWeight: 'bold'}}>Add To Album</Text>
-        </TouchableOpacity>
-      );
-    } else if(this.props.currentAlbumImages.includes(image.uri)) {
-      return (
-        <View style={{width: SCREEN_WIDTH, height: 30, position: 'absolute', left: 0, top: (SCREEN_HEIGHT - 30), alignItems: "center", justifyContent: "center"}}>
-          <Text style={{color: "#48B2E2", fontSize: 18, fontWeight: 'bold',
-                        backgroundColor: "#00000000", textShadowColor: "#FFF",
-                        textShadowRadius: 2}}>In current Album</Text>
-        </View>
-      );
+    if(this.props.isFullGallery && this.props.inAlbum) {
+      if(this.props.currentAlbumImages.includes(image.uri)) {
+        return (
+          <View style={{width: SCREEN_WIDTH, height: 30, position: 'absolute', left: 0, top: (SCREEN_HEIGHT - 30), alignItems: "center", justifyContent: "center"}}>
+            <Text style={{color: "#48B2E2", fontSize: 18, fontWeight: 'bold',
+                          backgroundColor: "#00000000", textShadowColor: "#FFF",
+                          textShadowRadius: 2}}>In current Album</Text>
+          </View>
+        );
+      } else {
+        return (
+          <TouchableOpacity
+            style={{width: SCREEN_WIDTH, height: 50, position: 'absolute', left: 0, top: (SCREEN_HEIGHT - 50), backgroundColor: "#FF2C55", alignItems: "center", justifyContent: "center"}}
+            onPress={() => this.addToAlbum()}>
+            <Text style={{color: "#FFF", fontSize: 18, fontWeight: 'bold'}}>Add To Album</Text>
+          </TouchableOpacity>
+        );
+      }
     }
+  }
+
+  addToAblum = () => {
+    Mixpanel.track("Added to Album from Gallery Images");
+    this.props.addToAblum(image);
   }
 
   render() {
@@ -93,7 +100,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    currentAlbumImages: state.album.images ? state.album.images.map((image) => image.uri) : [],
+    currentAlbumImages: state.album.images.map((image) => image.uri),
+    inAlbum: state.album.id !== null,
     currentIndex: state.app.albumReelIndex,
     images: state.app.albumReelImages,
     isFullGallery: state.gallery.viewingAlbum ? state.gallery.viewingAlbum.fullGallery : false
