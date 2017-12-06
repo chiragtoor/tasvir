@@ -4,12 +4,13 @@ import { Socket } from 'phoenix';
 import DeviceInfo from 'react-native-device-info';
 var RNFS = require('react-native-fs');
 var Mixpanel = require('react-native-mixpanel');
+import Permissions from 'react-native-permissions';
 
 import { PREVIEW_REEL_STORAGE, ALBUM_ID_STORAGE, ALBUM_NAME_STORAGE,
          AUTO_SHARE_STORAGE, WALKTHROUGH_FLAG_STORAGE, URL, SOCKET_URL,
          ALBUMS_ENDPOINT, SAVED_PHOTOS_STORAGE, SENDER_ID_STORAGE,
          ROUTES, ALBUM_IMAGES_STORAGE, ALBUM_HISTORY_STORAGE,
-         ALBUM_DATE_STORAGE } from '../constants';
+         ALBUM_DATE_STORAGE, WALKTHROUGH } from '../constants';
 
 import * as Reel from './reel';
 import * as Album from './album';
@@ -61,6 +62,7 @@ export function loadAndDispatchState() {
       const savedPhotos = getValue(value, SAVED_PHOTOS_STORAGE);
       const albumImages = getValue(value, ALBUM_IMAGES_STORAGE);
       const albumHistory = getValue(value, ALBUM_HISTORY_STORAGE);
+      const walkthroughValue = getValue(value, WALKTHROUGH_FLAG_STORAGE);
 
       if(albumHistory) {
         dispatch(App.setHistory(albumHistory));
@@ -86,9 +88,25 @@ export function loadAndDispatchState() {
         dispatch(AlbumChannel.joinChannel());
       }
 
-      if(getValue(value, WALKTHROUGH_FLAG_STORAGE)) {
+      if(walkthroughValue === WALKTHROUGH.COMPLETE) {
         dispatch(Gallery.loadGallery());
         dispatch(NavigationActions.navigate({ routeName: ROUTES.MAIN }));
+      } else if(walkthroughValue === WALKTHROUGH.PERMISSION_NEEDED) {
+        // check if permissions fulfilled now
+        Permissions.request('photo').then(response => {
+          if(response === 'authorized') {
+            Permissions.request('camera').then(response => {
+              if(response === 'authorized') {
+                dispatch(App.completeWalkthrough());
+              } else {
+                dispatch(NavigationActions.navigate({ routeName: ROUTES.PERMISSION_REQUIRED }));
+              }
+            });
+          } else {
+            dispatch(NavigationActions.navigate({ routeName: ROUTES.PERMISSION_REQUIRED }));
+          }
+        });
+        dispatch(NavigationActions.navigate({ routeName: ROUTES.WALKTHROUGH }));
       } else {
         dispatch(NavigationActions.navigate({ routeName: ROUTES.WALKTHROUGH }));
       }

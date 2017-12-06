@@ -18,30 +18,7 @@ import TasvirButton from '../components/TasvirButton';
 
 const LOGO = require('../../img/tasvir_logo.png');
 
-class Walkthrough extends Component {
-
-  done = () => {
-    Permissions.request('photo').then(response => {
-      if(response === 'authorized') {
-        Permissions.request('camera').then(response => {
-          if(response === 'authorized') {
-            this.props.completeWalkthrough();
-          } else {
-            this.props.permissionDenied();
-          }
-        });
-      } else {
-        Permissions.request('camera').then(response => {
-          if(response === 'authorized') {
-            this.props.permissionDenied();
-          } else {
-            this.props.permissionDenied();
-          }
-        });
-      }
-    });
-  }
-
+class PermissionRequired extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -50,26 +27,18 @@ class Walkthrough extends Component {
             source={LOGO}/>
         </View>
         <View style={styles.page}>
-          <View>
-            <Text style={styles.font}>
-              Welcome to Tasvir!
-            </Text>
-            <Text style={styles.font}>
-              The easiest way to share your photos, just create an album and share a link!
-            </Text>
-          </View>
           <Text style={styles.font}>
-            Swipe left to view all your albums and images.
+            For Tasvir to work it needs access to both your Camera and Photos.
           </Text>
           <Text style={styles.font}>
-            Swipe right to preview your picturs: share to album (<FontAwesome style={{color: "#FFFFFF"}}>{Icons.cloudUpload}</FontAwesome>), save for yourself (<FontAwesome style={{color: "#FFFFFF"}}>{Icons.download}</FontAwesome>), or delete (<FontAwesome style={{color: "#FFFFFF"}}>{Icons.trash}</FontAwesome>).
+            None of your photos are sent anywhere unless you say so, and the Camera access is only so you can easily take pictures for the albums your sharing with.
           </Text>
           <Text style={styles.font}>
-            Swipe up to get to the menu and create an album.
+            Please allow access to these permissions in your settings to continue.
           </Text>
           <TasvirButton
             secondary={true}
-            onPress={() => this.done()}
+            onPress={() => Permissions.openSettings()}
             text={'Okay'} />
         </View>
       </View>
@@ -114,4 +83,4 @@ const mapDispatchToProps = (dispatch) => {
     permissionDenied: () => dispatch(App.permissionDenied())
   };
 };
-export default connect(null, mapDispatchToProps)(Walkthrough);
+export default connect(null, mapDispatchToProps)(PermissionRequired);

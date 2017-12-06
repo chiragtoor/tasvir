@@ -92,6 +92,11 @@ class TasvirCamera extends Component {
                   onPress={() => this.flipCamera()}
                   content={<Image style={{flex: 1, width: 20, resizeMode: 'contain'}} source={require('../../img/camera_flip_icon.png')}/>} />
               </View>
+              <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
+                <TasvirIconButton
+                  onPress={() => this.props.goToHelp()}
+                  content={<FontAwesome style={{color: "#FFFFFF", fontSize: 18}}>{Icons.question}</FontAwesome>} />
+              </View>
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
@@ -210,7 +215,8 @@ const mapDispatchToProps = (dispatch) => {
     uploadImage: (image) => dispatch(Actions.TasvirApi.uploadImage(image)),
     saveImage: (photo) => dispatch(Actions.saveImage(photo)),
     acknowledgeFlagImageReceivedFromChannel: () => dispatch(Actions.App.acknowledgeFlagImageReceivedFromChannel()),
-    capture: (uri, width, height) => dispatch(Actions.App.capture(uri, width, height))
+    capture: (uri, width, height) => dispatch(Actions.App.capture(uri, width, height)),
+    goToHelp: () => dispatch(Actions.App.goToHelp())
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(TasvirCamera);

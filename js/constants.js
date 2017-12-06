@@ -1,6 +1,6 @@
 let URL_BASE = 'https://www.tasvirapp.com/';
 if(__DEV__) {
-  URL_BASE = 'https://693c73d2.ngrok.io/';
+  URL_BASE = 'https://5e1b6ab4.ngrok.io/';
 }
 export const URL = URL_BASE + 'api';
 export const SOCKET_URL = URL_BASE + 'socket';
@@ -24,8 +24,15 @@ export const ROUTES = {
   MAIN: 'Main',
   ALBUM_ACTION: 'AlbumAction',
   WALKTHROUGH: 'Walkthrough',
-  ALBUM_REEL: 'AlbumReel'
-}
+  ALBUM_REEL: 'AlbumReel',
+  HELP: 'Help',
+  PERMISSION_REQUIRED: 'PermissionRequired'
+};
+
+export const WALKTHROUGH = {
+  COMPLETE: 1,
+  PERMISSION_NEEDED: 2
+};
 
 export const NAVIGATION_ACTION = "Navigation/NAVIGATE";
 export const NAVIGATION_BACK_ACTION = "Navigation/BACK";

@@ -18,30 +18,7 @@ import TasvirButton from '../components/TasvirButton';
 
 const LOGO = require('../../img/tasvir_logo.png');
 
-class Walkthrough extends Component {
-
-  done = () => {
-    Permissions.request('photo').then(response => {
-      if(response === 'authorized') {
-        Permissions.request('camera').then(response => {
-          if(response === 'authorized') {
-            this.props.completeWalkthrough();
-          } else {
-            this.props.permissionDenied();
-          }
-        });
-      } else {
-        Permissions.request('camera').then(response => {
-          if(response === 'authorized') {
-            this.props.permissionDenied();
-          } else {
-            this.props.permissionDenied();
-          }
-        });
-      }
-    });
-  }
-
+class Help extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -50,14 +27,6 @@ class Walkthrough extends Component {
             source={LOGO}/>
         </View>
         <View style={styles.page}>
-          <View>
-            <Text style={styles.font}>
-              Welcome to Tasvir!
-            </Text>
-            <Text style={styles.font}>
-              The easiest way to share your photos, just create an album and share a link!
-            </Text>
-          </View>
           <Text style={styles.font}>
             Swipe left to view all your albums and images.
           </Text>
@@ -67,9 +36,17 @@ class Walkthrough extends Component {
           <Text style={styles.font}>
             Swipe up to get to the menu and create an album.
           </Text>
+            <View>
+              <Text style={styles.font}>
+                Share an album link and your friends will have access to all the pictures in that album.
+              </Text>
+              <Text style={styles.font}>
+                They can even add their own images.
+              </Text>
+            </View>
           <TasvirButton
             secondary={true}
-            onPress={() => this.done()}
+            onPress={() => this.props.dismissHelp()}
             text={'Okay'} />
         </View>
       </View>
@@ -110,8 +87,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    completeWalkthrough: () => dispatch(App.completeWalkthrough()),
-    permissionDenied: () => dispatch(App.permissionDenied())
+    dismissHelp: () => dispatch(App.dismissHelp())
   };
 };
-export default connect(null, mapDispatchToProps)(Walkthrough);
+export default connect(null, mapDispatchToProps)(Help);

@@ -39,6 +39,8 @@ import Main from './screens/Main';
 import AlbumAction from './screens/AlbumAction';
 import Walkthrough from './screens/Walkthrough';
 import AlbumReel from './screens/AlbumReel';
+import Help from './screens/Help';
+import PermissionRequired from './screens/PermissionRequired';
 
 import * as Actions from './actions';
 import * as Storage from './storage';
@@ -54,7 +56,9 @@ const TasvirNavigator = StackNavigator({
   Main: { screen: Main },
   AlbumAction: { screen: AlbumAction },
   Walkthrough: { screen: Walkthrough },
-  AlbumReel: { screen: AlbumReel }
+  AlbumReel: { screen: AlbumReel },
+  Help: { screen: Help },
+  PermissionRequired: { screen: PermissionRequired }
 }, {
   // on iOS screens coming from bottom up look better, no effect on Android
   mode: 'modal',

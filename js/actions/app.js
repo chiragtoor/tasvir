@@ -119,10 +119,10 @@ export function setWalkthroughComplete(complete) {
 export function completeWalkthrough() {
   return (dispatch, getState) => {
     const { app: { onCompleteWalkthrough } } = getState();
-    dispatch(Gallery.loadGallery());
     Storage.walkthroughCompleted();
     Mixpanel.track("Completed Walkthrough");
     dispatch(onCompleteWalkthrough());
+    dispatch(Gallery.loadGallery());
   }
 }
 
@@ -163,5 +163,24 @@ export function capture(uri, width, height) {
       Mixpanel.track("Image Captured No Album")
       dispatch(saveImage(image));
     }
+  }
+}
+
+export function goToHelp() {
+  return (dispatch) => {
+    dispatch(NavigationActions.navigate({ routeName: ROUTES.HELP }));
+  }
+}
+
+export function dismissHelp() {
+  return (dispatch) => {
+    dispatch(NavigationActions.back({}));
+  }
+}
+
+export function permissionDenied() {
+  return (dispatch) => {
+    Storage.walkthroughCompletedWithoutPermission();
+    dispatch(NavigationActions.navigate({ routeName: ROUTES.PERMISSION_REQUIRED }));
   }
 }

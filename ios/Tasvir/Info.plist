@@ -52,11 +52,11 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>Tasvir does not use this permission</string>
 	<key>NSCameraUsageDescription</key>
-	<string>To take and add pictures to your albums</string>
+	<string>So you can take your own pictures easily through the app.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>To add album images to your photos</string>
+	<string>To add images you and your friends take to your albums and photo gallery.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Tasvir does not use this permission</string>
 	<key>UIAppFonts</key>
