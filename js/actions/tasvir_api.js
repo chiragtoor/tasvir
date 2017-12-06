@@ -88,12 +88,16 @@ export function loadAlbum() {
   }
 }
 
-export function uploadImage(image) {
+export function uploadImage(image, saveFlag = true) {
   return async (dispatch, getState) => {
     const { album: { id }, app: { senderId, autoShare } } = getState();
 
-      const newUri = await dispatch(saveImage(image));
-      const newImage = {...image, uri: newUri};
+      let newImage = image;
+      if(saveFlag) {
+        const newUri = await dispatch(saveImage(image));
+        newImage = {...image, uri: newUri};
+      }
+
       dispatch(Album.addImage(newImage));
 
       Mixpanel.trackWithProperties("Uploading Image", {"albumId": id, "autoShared": autoShare});
