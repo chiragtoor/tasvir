@@ -160,7 +160,7 @@ export function capture(uri, width, height) {
       });
       dispatch(Reel.addImage(image));
     } else {
-      Mixpanel.track("Image Captured No Album")
+      Mixpanel.track("Image Captured No Album");
       dispatch(saveImage(image));
     }
   }
@@ -168,6 +168,7 @@ export function capture(uri, width, height) {
 
 export function goToHelp() {
   return (dispatch) => {
+    Mixpanel.track("Viewed Help Screen");
     dispatch(NavigationActions.navigate({ routeName: ROUTES.HELP }));
   }
 }
