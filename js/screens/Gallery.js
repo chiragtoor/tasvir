@@ -38,6 +38,14 @@ class Gallery extends Component {
     });
   }
 
+  checkScroll = ({layoutMeasurement, contentOffset, contentSize}) => {
+    if(layoutMeasurement.height + contentOffset.y >= contentSize.height - 200) {
+      this.props.loadMoreGallery();
+    } else {
+      console.log("KEEP GOING");
+    }
+  }
+
   renderImages = () => {
     var images = this.props.viewingAlbum.images;
     if(this.props.viewingAlbum.id === this.props.currentAlbumId) {
@@ -64,7 +72,8 @@ class Gallery extends Component {
         :
           null
         }
-        <ScrollView style={{flex: 1, width: WIDTH}}>
+        <ScrollView style={{flex: 1, width: WIDTH}}
+          onScroll={({nativeEvent}) => this.checkScroll(nativeEvent)}>
           {photos.map((p, i) => {
             return (
               <View key={i} style={{flex: 1, flexDirection: 'row', width: WIDTH}}>
@@ -295,7 +304,8 @@ const mapDispatchToProps = (dispatch) => {
     viewAlbum: (album) => dispatch(Actions.App.galleryViewAlbum(album)),
     listAlbums: () => dispatch(Actions.App.galleryListAlbums()),
     openAlbum: (album) => dispatch(Actions.Album.openAlbum(album)),
-    viewAlbumReel: (index, images) => dispatch(Actions.App.viewAlbumReel(index, images))
+    viewAlbumReel: (index, images) => dispatch(Actions.App.viewAlbumReel(index, images)),
+    loadMoreGallery: () => dispatch(Actions.Gallery.loadMoreGallery())
   };
 };
 

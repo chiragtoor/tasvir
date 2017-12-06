@@ -37,9 +37,12 @@ export function loadGallery() {
         const buttonImage = roll.edges[0].node.image;
         dispatch(setGalleryButtonImage({uri: buttonImage.uri, width: buttonImage.width, height: buttonImage.height}));
         return CameraRoll.getPhotos({
-          first: 100,
+          first: 20,
           assetType: 'Photos'
         }).then(roll => {
+          if(roll.page_info.has_next_page) {
+            dispatch(setCursor(roll.page_info.end_cursor));
+          }
           const images = roll.edges.map((data) => {
             const image = data.node.image;
             return {
@@ -51,6 +54,32 @@ export function loadGallery() {
           dispatch(loadImages(images));
         });
       }
+    });
+  }
+}
+
+export function loadMoreGallery() {
+  return (dispatch, getState) => {
+    const { gallery: { cursor, viewingAlbum: { images } } } = getState();
+    return CameraRoll.getPhotos({
+      first: 20,
+      assetType: 'Photos',
+      after: cursor
+    }).then(roll => {
+      if(roll.page_info.has_next_page) {
+        dispatch(setCursor(roll.page_info.end_cursor));
+      }
+      const newImages = roll.edges.map((data) => {
+        const image = data.node.image;
+        return {
+          uri: image.uri,
+          width: image.width,
+          height: image.height
+        }
+      });
+      // dispatch(addImages(newImages));
+      const viewImages = [...images, ...newImages];
+      dispatch(viewAlbum({name: "All Images", images: viewImages, fullGallery: true}))
     });
   }
 }
