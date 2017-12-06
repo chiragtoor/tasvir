@@ -14,7 +14,8 @@ import DeviceInfo from 'react-native-device-info';
 
 import { AUTO_SHARE_STORAGE, SENDER_ID_STORAGE,
          NAVIGATION_ACTION, NAVIGATION_BACK_ACTION, ALBUM_ID_STORAGE,
-         ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE, ROUTES } from '../../js/constants';
+         ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE, ROUTES,
+         WALKTHROUGH } from '../../js/constants';
 
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares);
@@ -110,7 +111,7 @@ describe('index_actions', () => {
       return "DKSN93-ASDFS";
     });
 
-    const AsyncStorage = new MockAsyncStorage({ walkthrough: JSON.stringify(true) });
+    const AsyncStorage = new MockAsyncStorage({ walkthrough: JSON.stringify(WALKTHROUGH.COMPLETE) });
     jest.setMock('AsyncStorage', AsyncStorage);
     const mockGalleryLoadAction = { type: Gallery.LOAD_IMAGES, data: "MOCK LOAD" };
     Gallery.loadGallery  = jest.fn((fun) => {

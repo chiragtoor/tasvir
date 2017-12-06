@@ -12,7 +12,7 @@ import MockAsyncStorage from '../../__mocks__/mock_async_storage';
 import { AUTO_SHARE_STORAGE, SENDER_ID_STORAGE, ALBUM_HISTORY_STORAGE,
          NAVIGATION_ACTION, NAVIGATION_BACK_ACTION, ALBUM_ID_STORAGE,
          ALBUM_NAME_STORAGE, ALBUM_LINK_STORAGE, ROUTES,
-         WALKTHROUGH_FLAG_STORAGE } from '../../js/constants';
+         WALKTHROUGH_FLAG_STORAGE, WALKTHROUGH } from '../../js/constants';
 
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares);
@@ -178,13 +178,14 @@ describe('app_actions', () => {
 
     const store = mockStore({ app: { onCompleteWalkthrough: complete } });
     const expectedActions = [
-      mockGalleryLoad,
       action,
+      mockGalleryLoad
     ];
 
     await store.dispatch(Actions.completeWalkthrough());
     expect(store.getActions()).toEqual(expectedActions);
-    await expect(AsyncStorage.getItem(WALKTHROUGH_FLAG_STORAGE)).resolves.toBe(JSON.stringify(true));
+    await expect(AsyncStorage.getItem(WALKTHROUGH_FLAG_STORAGE)).
+      resolves.toBe(JSON.stringify(WALKTHROUGH.COMPLETE));
   });
 
   it('galleryListAlbums() dispatches SET_GALLERY_STATE', () => {
