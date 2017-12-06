@@ -11,6 +11,7 @@ import {
 import { connect } from 'react-redux';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Permissions from 'react-native-permissions';
+var Mixpanel = require('react-native-mixpanel');
 
 import * as App from '../actions/app';
 
@@ -27,14 +28,17 @@ class Walkthrough extends Component {
           if(response === 'authorized') {
             this.props.completeWalkthrough();
           } else {
+            Mixpanel.track("Camera Permission Rejected");
             this.props.permissionDenied();
           }
         });
       } else {
+        Mixpanel.track("Photo Permission Rejected");
         Permissions.request('camera').then(response => {
           if(response === 'authorized') {
             this.props.permissionDenied();
           } else {
+            Mixpanel.track("Camera Permission Rejected");
             this.props.permissionDenied();
           }
         });

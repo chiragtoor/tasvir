@@ -11,6 +11,7 @@ import {
 import { connect } from 'react-redux';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Permissions from 'react-native-permissions';
+var Mixpanel = require('react-native-mixpanel');
 
 import * as App from '../actions/app';
 
@@ -19,6 +20,11 @@ import TasvirButton from '../components/TasvirButton';
 const LOGO = require('../../img/tasvir_logo.png');
 
 class PermissionRequired extends Component {
+  okay = () => {
+    Mixpanel.track("Opened Settings for Permissions");
+    Permissions.openSettings();
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -38,7 +44,7 @@ class PermissionRequired extends Component {
           </Text>
           <TasvirButton
             secondary={true}
-            onPress={() => Permissions.openSettings()}
+            onPress={() => this.okay()}
             text={'Okay'} />
         </View>
       </View>
