@@ -133,7 +133,7 @@ export function galleryListAlbums() {
 export function galleryViewAlbum(album) {
   return (dispatch) => {
     dispatch(Gallery.viewAlbum(album));
-    dispatch({ type: SET_GALLERY_STATE, state: APP_GALLERY_STATE_IMAGES });
+    dispatch(NavigationActions.navigate({ routeName: ROUTES.VIEW_ALBUM }));
   }
 }
 

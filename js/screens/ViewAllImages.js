@@ -3,7 +3,6 @@ import {View, FlatList, Dimensions, StyleSheet, Image, Animated, TouchableOpacit
         Text, CameraRoll } from 'react-native';
 import { connect } from 'react-redux';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
-var RNFS = require('react-native-fs');
 
 import * as Actions from '../actions';
 import { formatImages } from '../utils/photos';
