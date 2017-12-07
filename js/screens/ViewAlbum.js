@@ -11,7 +11,7 @@ const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 const LOGO = require('../../img/tasvir_logo.png');
 
-class Gallery extends Component {
+class ViewAlbum extends Component {
 
   formatImages = (arr) => {
     return arr.map((p) => {
@@ -216,7 +216,7 @@ class Gallery extends Component {
           { currentAlbum ? this.renderAlbumTile(currentAlbum, -1) : null }
           { albums.map((album, index) => this.renderAlbumTile(album, index)) }
           <View key={"ALL"}>
-            <TouchableOpacity onPress={() => this.props.viewAllImages()} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
+            <TouchableOpacity onPress={() => this.props.viewAlbum({name: "All Images", images: this.props.allImages, fullGallery: true})} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
               <View style={{height: 100, width: (WIDTH * 0.3), alignItems: 'center', justifyContent: 'center'}}>
                 {this.renderImage(this.props.allImagesShow, false)}
               </View>
@@ -305,8 +305,7 @@ const mapDispatchToProps = (dispatch) => {
     listAlbums: () => dispatch(Actions.App.galleryListAlbums()),
     openAlbum: (album) => dispatch(Actions.Album.openAlbum(album)),
     viewAlbumReel: (index, images) => dispatch(Actions.App.viewAlbumReel(index, images)),
-    loadMoreGallery: () => dispatch(Actions.Gallery.loadMoreGallery()),
-    viewAllImages: () => dispatch(Actions.App.viewAllImages())
+    loadMoreGallery: () => dispatch(Actions.Gallery.loadMoreGallery())
   };
 };
 
@@ -321,4 +320,4 @@ const mapStateToProps = (state) => {
     allImagesShow: state.gallery.buttonImage
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Gallery);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewAlbum);

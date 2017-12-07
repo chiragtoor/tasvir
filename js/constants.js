@@ -26,7 +26,9 @@ export const ROUTES = {
   WALKTHROUGH: 'Walkthrough',
   ALBUM_REEL: 'AlbumReel',
   HELP: 'Help',
-  PERMISSION_REQUIRED: 'PermissionRequired'
+  PERMISSION_REQUIRED: 'PermissionRequired',
+  VIEW_ALBUM: 'ViewAlbum',
+  VIEW_ALL_IMAGES: 'ViewAllImages'
 };
 
 export const WALKTHROUGH = {

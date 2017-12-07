@@ -185,3 +185,15 @@ export function permissionDenied() {
     dispatch(NavigationActions.navigate({ routeName: ROUTES.PERMISSION_REQUIRED }));
   }
 }
+
+export function viewAllImages() {
+  return (dispatch) => {
+    dispatch(NavigationActions.navigate({ routeName: ROUTES.VIEW_ALL_IMAGES }));
+  }
+}
+
+export function dismiss() {
+  return (dispatch) => {
+    dispatch(NavigationActions.back({}));
+  }
+}

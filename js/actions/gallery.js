@@ -77,7 +77,6 @@ export function loadMoreGallery() {
           height: image.height
         }
       });
-      // dispatch(addImages(newImages));
       const viewImages = [...images, ...newImages];
       dispatch(viewAlbum({name: "All Images", images: viewImages, fullGallery: true}))
     });
