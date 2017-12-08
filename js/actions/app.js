@@ -39,6 +39,11 @@ export const APP_ALBUM_FORM_STATE_OPEN = 1;
 // states for the gallery
 export const APP_GALLERY_STATE_LIST = 0;
 export const APP_GALLERY_STATE_IMAGES = 1;
+// states for help screens
+export const SET_HELP_SCREEN_STATE = 'app/SET_HELP_SCREEN_STATE';
+export const CAMERA_HELP_SCREEN = 0;
+export const ALL_IMAGES_HELP_SCREEN = 1;
+export const PREVIEW_HELP_SCREEN = 2;
 
 export function updateAutoShare(autoShare) {
   Storage.saveAutoShare(autoShare);
@@ -166,9 +171,26 @@ export function capture(uri, width, height) {
   }
 }
 
-export function goToHelp() {
+export function goToCameraHelp() {
   return (dispatch) => {
-    Mixpanel.track("Viewed Help Screen");
+    Mixpanel.track("Viewed Camera Help Screen");
+    dispatch({ type: SET_HELP_SCREEN_STATE, helpScreenState: CAMERA_HELP_SCREEN });
+    dispatch(NavigationActions.navigate({ routeName: ROUTES.HELP }));
+  }
+}
+
+export function goToAllImagesHelp() {
+  return (dispatch) => {
+    Mixpanel.track("Viewed AllImages Help Screen");
+    dispatch({ type: SET_HELP_SCREEN_STATE, helpScreenState: ALL_IMAGES_HELP_SCREEN });
+    dispatch(NavigationActions.navigate({ routeName: ROUTES.HELP }));
+  }
+}
+
+export function goToPreviewHelp() {
+  return (dispatch) => {
+    Mixpanel.track("Viewed Preview Help Screen");
+    dispatch({ type: SET_HELP_SCREEN_STATE, helpScreenState: PREVIEW_HELP_SCREEN });
     dispatch(NavigationActions.navigate({ routeName: ROUTES.HELP }));
   }
 }

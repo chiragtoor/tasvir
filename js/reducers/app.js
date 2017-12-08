@@ -143,6 +143,15 @@ function albumReelImages(state = [], action) {
   }
 }
 
+function helpScreenState(state = null, action) {
+  switch(action.type) {
+    case Actions.SET_HELP_SCREEN_STATE:
+      return action.helpScreenState;
+    default:
+      return state;
+  }
+}
+
 const app = combineReducers({
   autoShare,
   senderId,
@@ -159,6 +168,7 @@ const app = combineReducers({
   galleryState,
   albumReelIndex,
   albumReelImages,
+  helpScreenState
 });
 
 export default app;

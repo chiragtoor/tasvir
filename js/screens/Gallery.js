@@ -214,7 +214,6 @@ class Gallery extends Component {
         </View>
         <ScrollView style={{backgroundColor: "#E8E8EE"}}>
           { currentAlbum ? this.renderAlbumTile(currentAlbum, -1) : null }
-          { albums.map((album, index) => this.renderAlbumTile(album, index)) }
           <View key={"ALL"}>
             <TouchableOpacity onPress={() => this.props.viewAllImages()} style={{height: 100, backgroundColor: "#FFF", flexDirection: 'row'}}>
               <View style={{height: 100, width: (WIDTH * 0.3), alignItems: 'center', justifyContent: 'center'}}>
@@ -230,6 +229,7 @@ class Gallery extends Component {
             </TouchableOpacity>
             <View style={styles.menuDivider} />
           </View>
+          { albums.map((album, index) => this.renderAlbumTile(album, index)) }
         </ScrollView>
       </View>
     );

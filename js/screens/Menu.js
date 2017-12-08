@@ -6,7 +6,8 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Share
+  Share,
+  Text
 } from 'react-native';
 import { connect } from 'react-redux';
 var Mixpanel = require('react-native-mixpanel');
@@ -21,13 +22,21 @@ class Menu extends Component {
 
   albumMenu = () => {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <TasvirDirections directions={"Current Album: " + this.props.albumName} />
-        <View style={styles.margin} />
+      <View style={{flex: 1, justifyContent: 'space-around', alignItems: 'center'}}>
+        <View>
+          <TasvirDirections directions={"Current Album: " + this.props.albumName} />
+          <View style={{marginLeft: 20, marginRight: 20}}>
+            <Text style={styles.explanation}>
+              Share an album link to give friends access to all the pictures in this album, no app required. They can add their own pictures by downloading Tasvir from this link.
+            </Text>
+          </View>
+        </View>
         <TasvirButton
           onPress={() => this.shareAlbum()}
-          text={'Share Album'} />
-        <View style={styles.margin} />
+          text={'Share Album Link'} />
+        <TasvirButton
+          onPress={() => this.props.viewAllImages()}
+          text={'Add Image from Gallery'} />
         <TasvirButton
           secondary={true}
           onPress={() => this.props.attemptCloseAlbum()}
@@ -105,7 +114,7 @@ class Menu extends Component {
             value={this.props.autoShare}
             toggle={(value) => this.autoShareToggle(value)}
             message={'Auto Share'}
-            explanation={'Automatically share pictures on capture'} />
+            explanation={'Share photos on capture without previewing'} />
         </View>
         <View style={styles.menuDivider} />
         {this.props.albumId == null ?
@@ -141,8 +150,7 @@ const styles = StyleSheet.create({
   },
   menuDivider: {
     height: 1,
-    backgroundColor: '#EFEFEF',
-    marginTop: 10
+    backgroundColor: '#EFEFEF'
   },
   groupNameInput: {
     flex: 1,
@@ -178,7 +186,12 @@ const styles = StyleSheet.create({
   groupName: {
     fontSize: 20,
     color: '#4A4A4A'
-  }
+  },
+  explanation: {
+    fontSize: 12,
+    color: '#9B9B9B',
+    textAlign: 'center'
+  },
 });
 
 
@@ -201,7 +214,8 @@ const mapDispatchToProps = (dispatch) => {
     resetAlbumForm: () => dispatch(Actions.App.resetAlbumForm()),
     createAlbum: () => dispatch(Actions.TasvirApi.createAlbum()),
     attemptCloseAlbum: () => dispatch(Actions.Album.closeAlbum()),
-    startAlbumForm: () => dispatch(Actions.App.openAlbumForm())
+    startAlbumForm: () => dispatch(Actions.App.openAlbumForm()),
+    viewAllImages: () => dispatch(Actions.App.viewAllImages())
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);

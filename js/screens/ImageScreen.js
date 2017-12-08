@@ -23,7 +23,7 @@ class ImageScreen extends Component {
 
   shareAction = () => {
     this.setState({
-      backIcon: <FontAwesome style={{color: "#FFFFFF", fontSize: 60}}>{Icons.cloudUpload}</FontAwesome>
+      backIcon: <FontAwesome style={{color: "#FFFFFF", fontSize: 60}}>{Icons.plus}</FontAwesome>
     });
     Animated.timing(
       this.state.pan,
@@ -66,7 +66,7 @@ class ImageScreen extends Component {
     let {pan, scale} = this.state;
     let [translateX, translateY] = [pan.x, pan.y];
     let rotate = '0deg';
-    let imageStyle = {transform: [{translateY}, {rotate}, {scale}]};
+    let imageStyle = {transform: [{translateY}, {rotate}, {scale}], backgroundColor: "#000000"};
 
     return (
       <View style={styles.container}>
@@ -83,6 +83,11 @@ class ImageScreen extends Component {
                 onPress={this.props.goToCamera}
                 content={<FontAwesome style={{color: "#FFFFFF"}}>{Icons.camera}</FontAwesome>} />
             </View>
+            <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
+              <TasvirIconButton
+                onPress={() => this.props.help()}
+                content={<FontAwesome style={{color: "#FFFFFF"}}>{Icons.question}</FontAwesome>} />
+            </View>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
@@ -98,7 +103,7 @@ class ImageScreen extends Component {
             <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
               <TasvirIconButton
                 onPress={this.shareAction}
-                content={<FontAwesome style={{color: "#FFFFFF"}}>{Icons.cloudUpload}</FontAwesome>} />
+                content={<FontAwesome style={{color: "#FFFFFF"}}>{Icons.plus}</FontAwesome>} />
             </View>
           </View>
         </View>
@@ -110,7 +115,7 @@ class ImageScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: '#48B2E2',
   },
   page: {
     width: Dimensions.get('window').width,
@@ -145,7 +150,8 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => {
   return {
     uploadImage: (image) => dispatch(Actions.TasvirApi.uploadImage(image)),
-    saveImage: (photo) => dispatch(Actions.saveImage(photo))
+    saveImage: (photo) => dispatch(Actions.saveImage(photo)),
+    help: () => dispatch(Actions.App.goToPreviewHelp())
   };
 };
 export default connect(null, mapDispatchToProps)(ImageScreen);

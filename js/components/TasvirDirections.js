@@ -16,16 +16,11 @@ export default class TasvirDirections extends Component {
   }
 }
 
-// TasvirDirections.propTypes = {
-//   directions: React.PropTypes.string.isRequired
-// }
-
 const styles = StyleSheet.create({
   tasvirDirections: {
     fontSize: 22,
     color: '#4A4A4A',
     fontWeight: '400',
-    marginTop: 20,
     textAlign: 'center'
   }
 });

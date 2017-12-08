@@ -96,8 +96,10 @@ export function uploadImage(image, saveFlag = true) {
       if(saveFlag) {
         const newUri = await dispatch(saveImage(image));
         newImage = {...image, uri: newUri};
+      } else {
+        dispatch(Gallery.setGalleryButtonImage(newImage));
       }
-
+      console.log("ADDING IMAGE: ", image);
       dispatch(Album.addImage(newImage));
 
       Mixpanel.trackWithProperties("Uploading Image", {"albumId": id, "autoShared": autoShare});
@@ -107,7 +109,6 @@ export function uploadImage(image, saveFlag = true) {
         name: 'photo.jpg',
         type : 'image/jpg'
       };
-
       dispatch({type: UPLOAD_ACTION,
                 meta: {
                   offline: {

@@ -100,7 +100,7 @@ class TasvirCamera extends Component {
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20}}>
-                {this.props.hasGalleryImages ?
+                {this.props.latestImage ?
                   <View style={{width: 38, height: 38}}>
                     <TasvirIconButton
                       style={{zIndex: 0}}
@@ -204,7 +204,6 @@ const mapStateToProps = (state) => {
   previewReel: state.reel.previewReel,
   autoShare: state.app.autoShare,
   // photos state
-  hasGalleryImages: (state.gallery.images.length > 0),
   latestImage: state.gallery.buttonImage,
   imageReceivedFlag: state.app.imageReceivedFlag
   };
@@ -216,7 +215,7 @@ const mapDispatchToProps = (dispatch) => {
     saveImage: (photo) => dispatch(Actions.saveImage(photo)),
     acknowledgeFlagImageReceivedFromChannel: () => dispatch(Actions.App.acknowledgeFlagImageReceivedFromChannel()),
     capture: (uri, width, height) => dispatch(Actions.App.capture(uri, width, height)),
-    goToHelp: () => dispatch(Actions.App.goToHelp())
+    goToHelp: () => dispatch(Actions.App.goToCameraHelp())
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(TasvirCamera);

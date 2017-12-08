@@ -3,6 +3,7 @@ import {View, FlatList, Dimensions, StyleSheet, Image, Animated, TouchableOpacit
         Text, CameraRoll } from 'react-native';
 import { connect } from 'react-redux';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
+var Mixpanel = require('react-native-mixpanel');
 
 import * as Actions from '../actions';
 import { formatImages } from '../utils/photos';
@@ -12,7 +13,6 @@ const HEIGHT = Dimensions.get('window').height;
 const LOGO = require('../../img/tasvir_logo.png');
 
 class ViewAllImages extends Component {
-
   constructor(props) {
     super(props);
 
@@ -41,6 +41,8 @@ class ViewAllImages extends Component {
         const image = data.node.image;
         return {
           uri: image.uri,
+          width: image.width,
+          height: image.height,
           aspectRatio: (image.width / image.height)
         }
       });
@@ -66,32 +68,54 @@ class ViewAllImages extends Component {
     }
   }
 
+  addToAlbum = (image) => {
+    Mixpanel.track("Added to Album from Gallery Images");
+    this.props.addToAblum(image);
+  }
+
+  renderImage = (image) => {
+    var renderTag = false;
+    if(this.props.inAlbum && !this.props.currentAlbumImages.includes(image.uri)) {
+      renderTag = true;
+    }
+    return (
+      <TouchableOpacity onPress={() => false}>
+        <Image
+          style={{
+            width:  image.displayWidth,
+            height:  image.displayHeight,
+            borderColor: "#48B2E2",
+            borderWidth: 2
+          }}
+          source={{uri: image.uri}}
+          resizeMode='contain' />
+        {renderTag ?
+          <View style={{position: 'absolute', top: 2, left: 2, width: (image.displayWidth - 2), height: (image.displayHeight - 2), justifyContent: 'flex-end', paddingRight: 10, paddingBottom: 10}}>
+            <TouchableOpacity style={{alignItems: 'flex-end'}} onPress={() => this.addToAlbum(image)}>
+              <View style={{borderRadius: 19, height: 38, width: 38, alignItems: 'center', justifyContent: 'center', backgroundColor: "#FFFFFF"}}>
+                <View style={{alignItems: 'center',justifyContent: 'center',borderRadius: 16, height: 32,width: 32,backgroundColor: "#48B2E2"}}>
+                  <FontAwesome style={{color: "#FFFFFF"}}>{Icons.plus}</FontAwesome>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+        :
+        <View style={{position: 'absolute', top: 2, left: 2, width: (image.displayWidth - 2), height: (image.displayHeight - 2), justifyContent: 'flex-end', paddingRight: 10, paddingBottom: 10}}>
+          <TouchableOpacity style={{alignItems: 'flex-end'}} onPress={() => this.addToAlbum(image)}>
+            <FontAwesome style={{color: "#48B2E2"}}>{Icons.check}</FontAwesome>
+          </TouchableOpacity>
+        </View>
+        }
+      </TouchableOpacity>
+    )
+  }
+
   renderItem = (data, i) => {
     return (
       <View key={i} style={{flex: 1, flexDirection: 'row', width: WIDTH}}>
-        <TouchableOpacity onPress={() => false}>
-          <Image
-            style={{
-              width:  data.item[0].width,
-              height:  data.item[0].height,
-              borderColor: "#48B2E2",
-              borderWidth: 5
-            }}
-            source={{uri: data.item[0].uri}}
-            resizeMode='contain' />
-        </TouchableOpacity>
+        {this.renderImage(data.item[0])}
         {data.item[1] != null ?
-          <TouchableOpacity onPress={() => false}>
-            <Image
-              style={{
-                width:  data.item[1].width,
-                height:  data.item[1].height,
-                borderColor: "#48B2E2",
-                borderWidth: 5
-              }}
-              source={{uri: data.item[1].uri}}
-              resizeMode='contain' />
-          </TouchableOpacity>
+          this.renderImage(data.item[1])
         :
           false
         }
@@ -111,9 +135,20 @@ class ViewAllImages extends Component {
               </View>
             </View>
           </TouchableOpacity>
-          <Text style={{flex: 1, textAlign: 'center', paddingRight: 38, alignItems: 'center', color: "#FFF", textDecorationLine: 'underline', fontSize: 25, fontWeight: 'bold'}}>
+          <Text style={this.props.inAlbum ? styles.centerRightButton : styles.centerNoRightButton}>
             All Images
           </Text>
+          {this.props.inAlbum ?
+            <TouchableOpacity onPress={() => this.props.help()} style={{alignItems: 'flex-end'}}>
+              <View style={{borderRadius: 19, height: 38, width: 38, alignItems: 'center', justifyContent: 'center', backgroundColor: "#FFFFFF"}}>
+                <View style={{alignItems: 'center', justifyContent: 'center', borderRadius: 16, height: 32,width: 32,backgroundColor: "#48B2E2"}}>
+                  <FontAwesome style={{color: "#FFFFFF"}}>{Icons.question}</FontAwesome>
+                </View>
+              </View>
+            </TouchableOpacity>
+          :
+            null
+          }
         </View>
         <FlatList
           style={{flex: 1}}
@@ -127,15 +162,39 @@ class ViewAllImages extends Component {
 }
 
 const styles = StyleSheet.create({
+  centerNoRightButton: {
+    flex: 1,
+    textAlign: 'center',
+    paddingRight: 38,
+    alignItems: 'center',
+    color: "#FFF",
+    textDecorationLine: 'underline',
+    fontSize: 25,
+    fontWeight: 'bold'
+  },
+  centerRightButton: {
+    flex: 1,
+    textAlign: 'center',
+    alignItems: 'center',
+    color: "#FFF",
+    textDecorationLine: 'underline',
+    fontSize: 25,
+    fontWeight: 'bold'
+  }
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dismiss: () => dispatch(Actions.App.dismiss())
+    dismiss: () => dispatch(Actions.App.dismiss()),
+    addToAblum: (image) => dispatch(Actions.TasvirApi.uploadImage(image, false)),
+    help: () => dispatch(Actions.App.goToAllImagesHelp())
   };
 };
 
 const mapStateToProps = (state) => {
-  return { };
+  return {
+    inAlbum: state.album.id !== null,
+    currentAlbumImages: state.album.images.map((image) => image.uri)
+  };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ViewAllImages);

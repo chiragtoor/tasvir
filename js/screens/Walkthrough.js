@@ -63,13 +63,13 @@ class Walkthrough extends Component {
             </Text>
           </View>
           <Text style={styles.font}>
-            Swipe left to view all your albums and images.
-          </Text>
-          <Text style={styles.font}>
-            Swipe right to preview your picturs: share to album (<FontAwesome style={{color: "#FFFFFF"}}>{Icons.cloudUpload}</FontAwesome>), save for yourself (<FontAwesome style={{color: "#FFFFFF"}}>{Icons.download}</FontAwesome>), or delete (<FontAwesome style={{color: "#FFFFFF"}}>{Icons.trash}</FontAwesome>).
+            Manage your albums and images to the left, preview photos before they are shared to the right.
           </Text>
           <Text style={styles.font}>
             Swipe up to get to the menu and create an album.
+          </Text>
+          <Text style={styles.font}>
+            Hit the <FontAwesome style={{color: "#FFFFFF"}}>{Icons.question}</FontAwesome> anytime for help.
           </Text>
           <TasvirButton
             secondary={true}

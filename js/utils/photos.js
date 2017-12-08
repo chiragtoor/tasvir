@@ -8,10 +8,10 @@ export function formatImages(photos, width) {
       const totalAR = p[0].aspectRatio + p[1].aspectRatio;
       const widthOne = (p[0].aspectRatio / totalAR) * width;
       const widthTwo = (p[1].aspectRatio / totalAR) * width;
-      return [{...p[0], width: widthOne, height: (widthOne / p[0].aspectRatio)},
-              {...p[1], width: widthTwo, height: (widthTwo / p[1].aspectRatio)}];
+      return [{...p[0], displayWidth: widthOne, displayHeight: (widthOne / p[0].aspectRatio)},
+              {...p[1], displayWidth: widthTwo, displayHeight: (widthTwo / p[1].aspectRatio)}];
     } else {
-      return [{...p[0], width: (width / 2), height: ((width / 2) / p[0].aspectRatio)}];
+      return [{...p[0], displayWidth: (width / 2), displayHeight: ((width / 2) / p[0].aspectRatio)}];
     }
   });
 }

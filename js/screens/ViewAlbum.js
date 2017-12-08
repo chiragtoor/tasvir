@@ -12,32 +12,27 @@ const HEIGHT = Dimensions.get('window').height;
 const LOGO = require('../../img/tasvir_logo.png');
 
 class ViewAlbum extends Component {
-  renderItem = (data, i) => {
+  renderImage = (image, index) => {
     return (
-      <View key={i} style={{flex: 1, flexDirection: 'row', width: WIDTH}}>
-        <TouchableOpacity onPress={() => false}>
-          <Image
-            style={{
-              width:  data.item[0].width,
-              height:  data.item[0].height,
-              borderColor: "#48B2E2",
-              borderWidth: 5
-            }}
-            source={{uri: data.item[0].uri}}
-            resizeMode='contain' />
-        </TouchableOpacity>
+      <TouchableOpacity onPress={() => this.props.viewAlbumReel(index, this.props.viewingAlbum.images)}>
+        <Image
+          style={{
+            width:  image.displayWidth,
+            height:  image.displayHeight,
+            borderColor: "#48B2E2",
+            borderWidth: 2
+          }}
+          source={{uri: image.uri}}
+          resizeMode='contain' />
+      </TouchableOpacity>
+    )
+  }
+  renderItem = (data) => {
+    return (
+      <View style={{flex: 1, flexDirection: 'row', width: WIDTH}}>
+        {this.renderImage(data.item[0], (data.index * 2))}
         {data.item[1] != null ?
-          <TouchableOpacity onPress={() => false}>
-            <Image
-              style={{
-                width:  data.item[1].width,
-                height:  data.item[1].height,
-                borderColor: "#48B2E2",
-                borderWidth: 5
-              }}
-              source={{uri: data.item[1].uri}}
-              resizeMode='contain' />
-          </TouchableOpacity>
+          this.renderImage(data.item[0], (data.index * 2 + 1))
         :
           false
         }
@@ -49,6 +44,8 @@ class ViewAlbum extends Component {
     const images = this.props.viewingAlbum.images.map((image) => {
       return {
         ...image,
+        width: image.width,
+        height: image.height,
         aspectRatio: (image.width / image.height)
       }
     })
@@ -90,6 +87,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => {
   return {
     dismiss: () => dispatch(Actions.App.dismiss()),
+    viewAlbumReel: (index, images) => dispatch(Actions.App.viewAlbumReel(index, images)),
     openAlbum: (album) => dispatch(Actions.Album.openAlbum(album))
   };
 };
