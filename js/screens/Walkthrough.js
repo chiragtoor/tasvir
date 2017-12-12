@@ -63,7 +63,7 @@ class Walkthrough extends Component {
             </Text>
           </View>
           <Text style={styles.font}>
-            Manage your albums and images to the left, preview photos before they are shared to the right.
+            Manage your albums and images to the left. Preview photos before they are shared to the right.
           </Text>
           <Text style={styles.font}>
             Swipe up to get to the menu and create an album.
