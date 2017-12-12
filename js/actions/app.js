@@ -201,7 +201,6 @@ export function dismiss() {
 
 export function viewImage(image) {
   return (dispatch) => {
-    Mixpanel.track("Viewing Image");
     dispatch({ type: SET_ALBUM_IMAGE, image });
     dispatch(NavigationActions.navigate({ routeName: ROUTES.VIEW_IMAGE }));
   }

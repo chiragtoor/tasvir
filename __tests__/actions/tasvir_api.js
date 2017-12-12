@@ -142,15 +142,15 @@ describe('tasvir_api_actions', () => {
       { type: Album.LOAD_LINK, link: albumLink },
       { type: Album.LOAD_ALBUM_DATE, albumDate },
       /* due to mock promises, these actions resolve first in the test */
-      saveImageMock(responsePhotos[0]),
-      addImage,
-      { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
-      saveImageMock(responsePhotos[1]),
-      addImage,
-      { type: App.APP_ADD_SAVED_PHOTO, photo: "two" },
       saveImageMock(responsePhotos[2]),
       addImage,
       { type: App.APP_ADD_SAVED_PHOTO, photo: "three" },
+      saveImageMock(responsePhotos[1]),
+      addImage,
+      { type: App.APP_ADD_SAVED_PHOTO, photo: "two" },
+      saveImageMock(responsePhotos[0]),
+      addImage,
+      { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
       loadGallery
     ];
 
@@ -232,12 +232,12 @@ describe('tasvir_api_actions', () => {
       const expectedActions = [
         { type: Album.LOAD_LINK, link: albumLink },
         { type: Album.LOAD_ALBUM_DATE, albumDate },
-        saveImageMock(responsePhotos[0]),
-        addImage,
-        { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
         saveImageMock(responsePhotos[1]),
         addImage,
         { type: App.APP_ADD_SAVED_PHOTO, photo: "two" },
+        saveImageMock(responsePhotos[0]),
+        addImage,
+        { type: App.APP_ADD_SAVED_PHOTO, photo: "one" },
         loadGallery
       ];
 

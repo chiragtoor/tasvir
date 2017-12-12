@@ -37,7 +37,7 @@ class PermissionRequired extends Component {
             For Tasvir to work it needs access to both your Camera and Photos.
           </Text>
           <Text style={styles.font}>
-            None of your photos are sent anywhere unless you say so, and the Camera access is only so you can easily take pictures for the albums your sharing with.
+            None of your photos are sent anywhere unless you say so, and the Camera access is only so you can easily take pictures for the albums you are sharing with.
           </Text>
           <Text style={styles.font}>
             Please allow access to these permissions in your settings to continue.
