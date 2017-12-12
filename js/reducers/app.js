@@ -152,6 +152,15 @@ function helpScreenState(state = null, action) {
   }
 }
 
+function albumImage(state = null, action) {
+  switch(action.type) {
+    case Actions.SET_ALBUM_IMAGE:
+      return action.image;
+    default:
+      return state;
+  }
+}
+
 const app = combineReducers({
   autoShare,
   senderId,
@@ -166,8 +175,7 @@ const app = combineReducers({
   onCompleteWalkthrough,
   albumHistory,
   galleryState,
-  albumReelIndex,
-  albumReelImages,
+  albumImage,
   helpScreenState
 });
 

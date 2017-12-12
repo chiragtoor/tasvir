@@ -31,8 +31,7 @@ export const APP_SET_CONFIRMATION_REJECT_COPY = 'app/APP_SET_CONFIRMATION_REJECT
 export const APP_SET_WALKTHROUGH_COMPLETE = 'app/APP_SET_WALKTHROUGH_COMPLETE';
 export const SET_HISTORY = 'app/SET_HISTORY';
 export const SET_GALLERY_STATE = 'app/SET_GALLERY_STATE';
-export const SET_ALBUM_REEL_INDEX = 'app/SET_ALBUM_REEL_INDEX';
-export const SET_ALBUM_REEL_IMAGES = 'app/SET_ALBUM_REEL_IMAGES';
+export const SET_ALBUM_IMAGE = 'app/SET_ALBUM_IMAGE';
 // form states for the album form
 export const APP_ALBUM_FORM_STATE_INIT = 0;
 export const APP_ALBUM_FORM_STATE_OPEN = 1;
@@ -217,5 +216,13 @@ export function viewAllImages() {
 export function dismiss() {
   return (dispatch) => {
     dispatch(NavigationActions.back({}));
+  }
+}
+
+export function viewImage(image) {
+  return (dispatch) => {
+    Mixpanel.track("Viewing Image");
+    dispatch({ type: SET_ALBUM_IMAGE, image });
+    dispatch(NavigationActions.navigate({ routeName: ROUTES.VIEW_IMAGE }));
   }
 }

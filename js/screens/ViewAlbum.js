@@ -12,9 +12,9 @@ const HEIGHT = Dimensions.get('window').height;
 const LOGO = require('../../img/tasvir_logo.png');
 
 class ViewAlbum extends Component {
-  renderImage = (image, index) => {
+  renderImage = (image) => {
     return (
-      <TouchableOpacity onPress={() => this.props.viewAlbumReel(index, this.props.viewingAlbum.images)}>
+      <TouchableOpacity onPress={() => this.props.viewImage(image)}>
         <Image
           style={{
             width:  image.displayWidth,
@@ -30,9 +30,9 @@ class ViewAlbum extends Component {
   renderItem = (data) => {
     return (
       <View style={{flex: 1, flexDirection: 'row', width: WIDTH}}>
-        {this.renderImage(data.item[0], (data.index * 2))}
+        {this.renderImage(data.item[0])}
         {data.item[1] != null ?
-          this.renderImage(data.item[0], (data.index * 2 + 1))
+          this.renderImage(data.item[1])
         :
           false
         }
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => {
   return {
     dismiss: () => dispatch(Actions.App.dismiss()),
-    viewAlbumReel: (index, images) => dispatch(Actions.App.viewAlbumReel(index, images)),
+    viewImage: (image) => dispatch(Actions.App.viewImage(image)),
     openAlbum: (album) => dispatch(Actions.Album.openAlbum(album))
   };
 };

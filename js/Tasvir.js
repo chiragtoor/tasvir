@@ -38,7 +38,7 @@ import Splash from './screens/Splash';
 import Main from './screens/Main';
 import AlbumAction from './screens/AlbumAction';
 import Walkthrough from './screens/Walkthrough';
-import AlbumReel from './screens/AlbumReel';
+import AlbumImage from './screens/AlbumImage';
 import Help from './screens/Help';
 import PermissionRequired from './screens/PermissionRequired';
 import ViewAlbum from './screens/ViewAlbum';
@@ -58,7 +58,7 @@ const TasvirNavigator = StackNavigator({
   Main: { screen: Main },
   AlbumAction: { screen: AlbumAction },
   Walkthrough: { screen: Walkthrough },
-  AlbumReel: { screen: AlbumReel },
+  AlbumImage: { screen: AlbumImage },
   Help: { screen: Help },
   PermissionRequired: { screen: PermissionRequired },
   ViewAlbum: { screen: ViewAlbum },

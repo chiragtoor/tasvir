@@ -73,23 +73,10 @@ class ViewAllImages extends Component {
     this.props.addToAblum(image);
   }
 
-  renderImage = (image) => {
-    var renderTag = false;
-    if(this.props.inAlbum && !this.props.currentAlbumImages.includes(image.uri)) {
-      renderTag = true;
-    }
-    return (
-      <TouchableOpacity onPress={() => false}>
-        <Image
-          style={{
-            width:  image.displayWidth,
-            height:  image.displayHeight,
-            borderColor: "#48B2E2",
-            borderWidth: 2
-          }}
-          source={{uri: image.uri}}
-          resizeMode='contain' />
-        {renderTag ?
+  renderTag = (image) => {
+    if(this.props.inAlbum) {
+      if(!this.props.currentAlbumImages.includes(image.uri)) {
+        return (
           <View style={{position: 'absolute', top: 2, left: 2, width: (image.displayWidth - 2), height: (image.displayHeight - 2), justifyContent: 'flex-end', paddingRight: 10, paddingBottom: 10}}>
             <TouchableOpacity style={{alignItems: 'flex-end'}} onPress={() => this.addToAlbum(image)}>
               <View style={{borderRadius: 19, height: 38, width: 38, alignItems: 'center', justifyContent: 'center', backgroundColor: "#FFFFFF"}}>
@@ -99,13 +86,38 @@ class ViewAllImages extends Component {
               </View>
             </TouchableOpacity>
           </View>
-        :
-        <View style={{position: 'absolute', top: 2, left: 2, width: (image.displayWidth - 2), height: (image.displayHeight - 2), justifyContent: 'flex-end', paddingRight: 10, paddingBottom: 10}}>
-          <TouchableOpacity style={{alignItems: 'flex-end'}} onPress={() => this.addToAlbum(image)}>
-            <FontAwesome style={{color: "#48B2E2"}}>{Icons.check}</FontAwesome>
-          </TouchableOpacity>
-        </View>
-        }
+        );
+      } else {
+        return (
+          <View style={{position: 'absolute', top: 2, left: 2, width: (image.displayWidth - 2), height: (image.displayHeight - 2), justifyContent: 'flex-end', paddingRight: 10, paddingBottom: 10}}>
+            <View style={{alignItems: 'flex-end'}}>
+              <FontAwesome style={{color: "#48B2E2"}}>{Icons.check}</FontAwesome>
+            </View>
+          </View>
+        );
+      }
+    } else {
+      return (null);
+    }
+  }
+
+  renderImage = (image) => {
+    var renderTag = false;
+    if(this.props.inAlbum && !this.props.currentAlbumImages.includes(image.uri)) {
+      renderTag = true;
+    }
+    return (
+      <TouchableOpacity onPress={() => this.props.viewImage(image)}>
+        <Image
+          style={{
+            width:  image.displayWidth,
+            height:  image.displayHeight,
+            borderColor: "#48B2E2",
+            borderWidth: 2
+          }}
+          source={{uri: image.uri}}
+          resizeMode='contain' />
+        {this.renderTag(image)}
       </TouchableOpacity>
     )
   }
@@ -187,6 +199,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dismiss: () => dispatch(Actions.App.dismiss()),
     addToAblum: (image) => dispatch(Actions.TasvirApi.uploadImage(image, false)),
+    viewImage: (image) => dispatch(Actions.App.viewImage(image)),
     help: () => dispatch(Actions.App.goToAllImagesHelp())
   };
 };

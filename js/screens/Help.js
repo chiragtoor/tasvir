@@ -72,7 +72,7 @@ class Help extends Component {
           Save the image to only your phone (do not add to album) with  <FontAwesome style={{color: "#FFFFFF"}}>{Icons.download}</FontAwesome>
         </Text>
         <Text style={styles.font}>
-          Delete the image with delete  <FontAwesome style={{color: "#FFFFFF"}}>{Icons.trash}</FontAwesome>
+          Delete the image with  <FontAwesome style={{color: "#FFFFFF"}}>{Icons.trash}</FontAwesome>
         </Text>
         <TasvirButton
           secondary={true}

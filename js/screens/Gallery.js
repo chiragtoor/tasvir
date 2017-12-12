@@ -12,112 +12,6 @@ const HEIGHT = Dimensions.get('window').height;
 const LOGO = require('../../img/tasvir_logo.png');
 
 class Gallery extends Component {
-
-  formatImages = (arr) => {
-    return arr.map((p) => {
-      return {
-        image: p.uri,
-        width: p.width,
-        height: p.height,
-        aspectRatio: (p.width / p.height)
-      }
-    }).reduce(function(result, value, index, array) {
-      if (index % 2 === 0)
-        result.push(array.slice(index, index + 2));
-      return result;
-    }, []).map((p) => {
-      if(p[0] != null && p[1] != null) {
-        const totalAR = p[0].aspectRatio + p[1].aspectRatio;
-        const widthOne = (p[0].aspectRatio / totalAR) * WIDTH;
-        const widthTwo = (p[1].aspectRatio / totalAR) * WIDTH;
-        return [{...p[0], width: widthOne, height: (widthOne / p[0].aspectRatio)},
-                {...p[1], width: widthTwo, height: (widthTwo / p[1].aspectRatio)}];
-      } else {
-        return [{...p[0], width: (WIDTH / 2), height: ((WIDTH / 2) / p[0].aspectRatio)}];
-      }
-    });
-  }
-
-  checkScroll = ({layoutMeasurement, contentOffset, contentSize}) => {
-    if(layoutMeasurement.height + contentOffset.y >= contentSize.height - 200) {
-      this.props.loadMoreGallery();
-    } else {
-      console.log("KEEP GOING");
-    }
-  }
-
-  renderImages = () => {
-    var images = this.props.viewingAlbum.images;
-    if(this.props.viewingAlbum.id === this.props.currentAlbumId) {
-      images = this.props.currentAlbum.images;
-    }
-
-    const photos = this.formatImages(images);
-
-    return (
-      <View style={{flex: 1, backgroundColor: "#48B2E2", paddingTop: 19}}>
-        {this.props.viewingAlbum ?
-          <View style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 10, paddingRight: 10, marginBottom: 5}}>
-            <TouchableOpacity onPress={() => this.props.listAlbums()} style={{alignItems: 'flex-start'}}>
-              <View style={{borderRadius: 19, height: 38, width: 38, alignItems: 'center', justifyContent: 'center', backgroundColor: "#FFFFFF"}}>
-                <View style={{alignItems: 'center',justifyContent: 'center',borderRadius: 16, height: 32,width: 32,backgroundColor: "#FF2C55"}}>
-                  <FontAwesome style={{color: "#FFFFFF"}}>{Icons.times}</FontAwesome>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <Text style={{flex: 1, textAlign: 'center', paddingRight: 38, alignItems: 'center', color: "#FFF", textDecorationLine: 'underline', fontSize: 25, fontWeight: 'bold'}}>
-              {this.props.viewingAlbum.name}
-            </Text>
-          </View>
-        :
-          null
-        }
-        <ScrollView style={{flex: 1, width: WIDTH}}
-          onScroll={({nativeEvent}) => this.checkScroll(nativeEvent)}>
-          {photos.map((p, i) => {
-            return (
-              <View key={i} style={{flex: 1, flexDirection: 'row', width: WIDTH}}>
-                <TouchableOpacity onPress={() => this.props.viewAlbumReel((i * 2), images)}>
-                  <Image
-                    style={{
-                      width:  p[0].width,
-                      height:  p[0].height,
-                      borderColor: "#48B2E2",
-                      borderWidth: 5
-                    }}
-                    source={{uri: p[0].image}}
-                    resizeMode='contain' />
-                </TouchableOpacity>
-                {p[1] != null ?
-                  <TouchableOpacity onPress={() => this.props.viewAlbumReel((i * 2) + 1, images)}>
-                    <Image
-                      style={{
-                        width:  p[1].width,
-                        height:  p[1].height,
-                        borderColor: "#48B2E2",
-                        borderWidth: 5
-                      }}
-                      source={{uri: p[1].image}}
-                      resizeMode='contain' />
-                  </TouchableOpacity>
-                :
-                  false
-                }
-              </View>
-            );
-          })}
-        </ScrollView>
-        {this.props.viewingAlbum.id && (this.props.currentAlbumId != this.props.viewingAlbum.id) ?
-          <TouchableOpacity onPress={() => this.props.openAlbum(this.props.viewingAlbum)} style={{backgroundColor: "#FF2C55", width: WIDTH, height: 55, borderTopWidth: 5, borderColor: "#48B2E2", alignItems: "center", justifyContent: "center"}}>
-            <Text style={{color: "#FFF", fontSize: 18, fontWeight: 'bold'}}>Re-Open Album</Text>
-          </TouchableOpacity>
-        :
-          null
-        }
-      </View>
-    );
-  }
-
   renderImage = (image, appendDir = true) => {
     if (image) {
       const imageAspectRatio = (image.width / image.height);
@@ -202,10 +96,9 @@ class Gallery extends Component {
     }
   }
 
-  renderAlbumList = () => {
+  render() {
     const albums = this.props.albumHistory.map((album) => this.formatAlbum(album));
     const currentAlbum = this.props.currentAlbum ? this.formatAlbum(this.props.currentAlbum) : null;
-
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -233,14 +126,6 @@ class Gallery extends Component {
         </ScrollView>
       </View>
     );
-  }
-
-  render() {
-    if(this.props.inListMode) {
-      return this.renderAlbumList();
-    } else {
-      return this.renderImages();
-    }
   }
 }
 
@@ -312,7 +197,6 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
   return {
-    inListMode: state.app.galleryState == Actions.App.APP_GALLERY_STATE_LIST,
     currentAlbum: state.album.id ? state.album : null,
     currentAlbumId: state.album.id ? state.album.id : null,
     viewingAlbum: state.gallery.viewingAlbum,

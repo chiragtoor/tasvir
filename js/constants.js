@@ -28,7 +28,8 @@ export const ROUTES = {
   HELP: 'Help',
   PERMISSION_REQUIRED: 'PermissionRequired',
   VIEW_ALBUM: 'ViewAlbum',
-  VIEW_ALL_IMAGES: 'ViewAllImages'
+  VIEW_ALL_IMAGES: 'ViewAllImages',
+  VIEW_IMAGE: 'AlbumImage'
 };
 
 export const WALKTHROUGH = {
