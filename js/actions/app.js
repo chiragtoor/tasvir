@@ -130,22 +130,10 @@ export function completeWalkthrough() {
   }
 }
 
-export function galleryListAlbums() {
-  return { type: SET_GALLERY_STATE, state: APP_GALLERY_STATE_LIST };
-}
-
 export function galleryViewAlbum(album) {
   return (dispatch) => {
     dispatch(Gallery.viewAlbum(album));
     dispatch(NavigationActions.navigate({ routeName: ROUTES.VIEW_ALBUM }));
-  }
-}
-
-export function viewAlbumReel(index, images) {
-  return (dispatch) => {
-    dispatch({ type: SET_ALBUM_REEL_INDEX, index });
-    dispatch({ type: SET_ALBUM_REEL_IMAGES, images });
-    dispatch(NavigationActions.navigate({ routeName: ROUTES.ALBUM_REEL }));
   }
 }
 
@@ -191,12 +179,6 @@ export function goToPreviewHelp() {
     Mixpanel.track("Viewed Preview Help Screen");
     dispatch({ type: SET_HELP_SCREEN_STATE, helpScreenState: PREVIEW_HELP_SCREEN });
     dispatch(NavigationActions.navigate({ routeName: ROUTES.HELP }));
-  }
-}
-
-export function dismissHelp() {
-  return (dispatch) => {
-    dispatch(NavigationActions.back({}));
   }
 }
 

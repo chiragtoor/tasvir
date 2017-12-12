@@ -87,7 +87,6 @@ export function confirmCloseAlbum() {
     dispatch(App.setHistory(newHistory));
     // close the album with the utitlity method
     dispatch(_closeAlbum());
-    dispatch(App.galleryListAlbums());
     dispatch(finishAlbumAction());
   }
 }

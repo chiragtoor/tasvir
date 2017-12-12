@@ -188,13 +188,6 @@ describe('app_actions', () => {
       resolves.toBe(JSON.stringify(WALKTHROUGH.COMPLETE));
   });
 
-  it('galleryListAlbums() dispatches SET_GALLERY_STATE', () => {
-    expect(Actions.galleryListAlbums()).toEqual({
-      type: Actions.SET_GALLERY_STATE,
-      state: Actions.APP_GALLERY_STATE_LIST
-    });
-  });
-
   it('galleryViewAlbum() dispatches SET_GALLERY_STATE and views album', async () => {
     const mockViewAlbum = { type: "MOCK VIEW ALBUM" };
     Gallery.viewAlbum = jest.fn((album) => {
@@ -203,28 +196,10 @@ describe('app_actions', () => {
     const store = mockStore({ });
     const expectedActions = [
       mockViewAlbum,
-      { type: Actions.SET_GALLERY_STATE, state: Actions.APP_GALLERY_STATE_IMAGES }
+      { type: NAVIGATION_ACTION, routeName: ROUTES.VIEW_ALBUM }
     ];
 
     await store.dispatch(Actions.galleryViewAlbum({ }));
-    expect(store.getActions()).toEqual(expectedActions);
-  });
-
-  it('viewAlbumReel() dispatches actions to view a album at a index', async () => {
-    const mockViewAlbum = { type: "MOCK VIEW ALBUM" };
-    Gallery.viewAlbum = jest.fn((album) => {
-      return mockViewAlbum;
-    });
-    const index = 5;
-    const images = [0, 1, 2, 3, 4, 5, 6];
-    const store = mockStore({ });
-    const expectedActions = [
-      { type: Actions.SET_ALBUM_REEL_INDEX, index },
-      { type: Actions.SET_ALBUM_REEL_IMAGES, images },
-      { type: NAVIGATION_ACTION, routeName: ROUTES.ALBUM_REEL }
-    ];
-
-    await store.dispatch(Actions.viewAlbumReel(index, images));
     expect(store.getActions()).toEqual(expectedActions);
   });
 

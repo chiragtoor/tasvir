@@ -187,9 +187,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => {
   return {
     viewAlbum: (album) => dispatch(Actions.App.galleryViewAlbum(album)),
-    listAlbums: () => dispatch(Actions.App.galleryListAlbums()),
     openAlbum: (album) => dispatch(Actions.Album.openAlbum(album)),
-    viewAlbumReel: (index, images) => dispatch(Actions.App.viewAlbumReel(index, images)),
     loadMoreGallery: () => dispatch(Actions.Gallery.loadMoreGallery()),
     viewAllImages: () => dispatch(Actions.App.viewAllImages())
   };

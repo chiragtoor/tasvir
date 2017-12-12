@@ -18,8 +18,8 @@ describe('app_reducer', () => {
     confirmationRejectCopy: null,
     onCompleteWalkthrough: Actions.DEFAULT_WALKTHROUGH_COMPLETE,
     galleryState: Actions.APP_GALLERY_STATE_LIST,
-    albumReelIndex: null,
-    albumReelImages: []
+    albumImage: null,
+    helpScreenState: null
   };
 
   it('initial state is as expected', () => {
@@ -212,44 +212,6 @@ describe('app_reducer', () => {
     ).toEqual({
       ...expectedInitialState,
       albumHistory: albumHistory
-    });
-  });
-
-  it('handles SET_GALLERY_STATE properly', () => {
-    expect(
-      reducer({  }, {
-        type: Actions.SET_GALLERY_STATE,
-        state: Actions.APP_GALLERY_STATE_IMAGES
-      })
-    ).toEqual({
-      ...expectedInitialState,
-      galleryState: Actions.APP_GALLERY_STATE_IMAGES
-    });
-  });
-
-  it('handles SET_ALBUM_REEL_INDEX properly', () => {
-    const index = 5;
-    expect(
-      reducer({  }, {
-        type: Actions.SET_ALBUM_REEL_INDEX,
-        index
-      })
-    ).toEqual({
-      ...expectedInitialState,
-      albumReelIndex: index
-    });
-  });
-
-  it('handles SET_ALBUM_REEL_IMAGES properly', () => {
-    const images = [0, 1, 2, 3];
-    expect(
-      reducer({  }, {
-        type: Actions.SET_ALBUM_REEL_IMAGES,
-        images
-      })
-    ).toEqual({
-      ...expectedInitialState,
-      albumReelImages: images
     });
   });
 });

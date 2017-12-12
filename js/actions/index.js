@@ -82,7 +82,6 @@ export function loadAndDispatchState() {
         dispatch(Album.updateName(getValue(value, ALBUM_NAME_STORAGE)));
         dispatch(Album.updateAlbumDate(getValue(value, ALBUM_DATE_STORAGE)));
         if(albumImages) dispatch(Album.loadImages(albumImages));
-        dispatch(App.galleryViewAlbum(getState().album));
         if(previewReel) dispatch(Reel.loadPreviewReel(previewReel));
         dispatch(Reel.updateCurrentIndex(CAMERA_INDEX));
         dispatch(AlbumChannel.joinChannel());
