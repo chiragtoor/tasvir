@@ -67,7 +67,7 @@ export function loadAlbum() {
     if(responseJson.success) {
       dispatch(Album.updateLink(responseJson.link));
       dispatch(Album.updateAlbumDate(responseJson.album_date));
-      for(var i = 0; i < responseJson.photos.length; i++) {
+      for(var i = responseJson.photos.length - 1; i < 0; i--) {
         const apiPhoto = responseJson.photos[i];
         // do not want to save own captured pictures or previously saved images,
         //  both these cases will be duplicates in the camera roll
