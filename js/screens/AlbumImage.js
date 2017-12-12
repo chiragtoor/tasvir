@@ -69,7 +69,7 @@ class AlbumImage extends Component {
   }
 
   renderTag = (image) => {
-    if(this.props.inAlbum) {
+    if(this.props.inAlbum && this.props.viewingAllImages) {
       if(!this.props.currentAlbumImages.includes(image.uri)) {
         return (
           <View style={{justifyContent: 'flex-end', paddingRight: 10, paddingBottom: 10, alignItems: 'flex-end'}}>
@@ -131,7 +131,8 @@ const mapStateToProps = (state) => {
   return {
     currentAlbumImages: state.album.images.map((image) => image.uri),
     inAlbum: state.album.id !== null,
-    image: state.app.albumImage
+    image: state.app.albumImage,
+    viewingAllImages: state.app.viewingAllImages
   };
 };
 const mapDispatchToProps = (dispatch) => {

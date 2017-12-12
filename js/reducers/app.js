@@ -125,24 +125,6 @@ function galleryState(state = Actions.APP_GALLERY_STATE_LIST, action) {
   }
 }
 
-function albumReelIndex(state = null, action) {
-  switch(action.type) {
-    case Actions.SET_ALBUM_REEL_INDEX:
-      return action.index;
-    default:
-      return state;
-  }
-}
-
-function albumReelImages(state = [], action) {
-  switch(action.type) {
-    case Actions.SET_ALBUM_REEL_IMAGES:
-      return action.images;
-    default:
-      return state;
-  }
-}
-
 function helpScreenState(state = null, action) {
   switch(action.type) {
     case Actions.SET_HELP_SCREEN_STATE:
@@ -156,6 +138,17 @@ function albumImage(state = null, action) {
   switch(action.type) {
     case Actions.SET_ALBUM_IMAGE:
       return action.image;
+    default:
+      return state;
+  }
+}
+
+function viewingAllImages(state = false, action) {
+  switch(action.type) {
+    case Actions.SET_VIEWING_ALL_IMAGES:
+      return true;
+      case Actions.SET_VIEWING_ALBUM:
+        return false;
     default:
       return state;
   }
@@ -176,7 +169,8 @@ const app = combineReducers({
   albumHistory,
   galleryState,
   albumImage,
-  helpScreenState
+  helpScreenState,
+  viewingAllImages
 });
 
 export default app;

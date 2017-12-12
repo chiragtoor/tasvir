@@ -24,7 +24,6 @@ export const ROUTES = {
   MAIN: 'Main',
   ALBUM_ACTION: 'AlbumAction',
   WALKTHROUGH: 'Walkthrough',
-  ALBUM_REEL: 'AlbumReel',
   HELP: 'Help',
   PERMISSION_REQUIRED: 'PermissionRequired',
   VIEW_ALBUM: 'ViewAlbum',

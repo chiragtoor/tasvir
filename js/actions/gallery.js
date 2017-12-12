@@ -15,14 +15,6 @@ export function viewAlbum(album) {
   return { type: SET_VIEWING_ALBUM, album };
 }
 
-export function addImages(images) {
-  return {type: ADD_IMAGES, images };
-}
-
-export function setCursor(cursor) {
-  return {type: SET_IMAGE_CURSOR, cursor};
-}
-
 export function setGalleryButtonImage(image) {
   return {type: SET_GALLERY_BUTTON_IMAGE, image};
 }

@@ -43,6 +43,8 @@ export const SET_HELP_SCREEN_STATE = 'app/SET_HELP_SCREEN_STATE';
 export const CAMERA_HELP_SCREEN = 0;
 export const ALL_IMAGES_HELP_SCREEN = 1;
 export const PREVIEW_HELP_SCREEN = 2;
+export const SET_VIEWING_ALL_IMAGES = 'app/SET_VIEWING_ALL_IMAGES';
+export const SET_VIEWING_ALBUM = 'app/SET_VIEWING_ALBUM';
 
 export function updateAutoShare(autoShare) {
   Storage.saveAutoShare(autoShare);
@@ -109,12 +111,6 @@ export function confirmationReject() {
   }
 }
 
-export function closeAlbumReel() {
-  return (dispatch) => {
-    dispatch(NavigationActions.back({}));
-  }
-}
-
 export const DEFAULT_WALKTHROUGH_COMPLETE = () => NavigationActions.navigate({ routeName: ROUTES.MAIN });
 export function setWalkthroughComplete(complete) {
   return { type: APP_SET_WALKTHROUGH_COMPLETE, complete };
@@ -132,6 +128,7 @@ export function completeWalkthrough() {
 
 export function galleryViewAlbum(album) {
   return (dispatch) => {
+    dispatch({ type: SET_VIEWING_ALBUM });
     dispatch(Gallery.viewAlbum(album));
     dispatch(NavigationActions.navigate({ routeName: ROUTES.VIEW_ALBUM }));
   }
@@ -191,6 +188,7 @@ export function permissionDenied() {
 
 export function viewAllImages() {
   return (dispatch) => {
+    dispatch({ type: SET_VIEWING_ALL_IMAGES });
     dispatch(NavigationActions.navigate({ routeName: ROUTES.VIEW_ALL_IMAGES }));
   }
 }

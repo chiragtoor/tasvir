@@ -99,7 +99,6 @@ export function uploadImage(image, saveFlag = true) {
       } else {
         dispatch(Gallery.setGalleryButtonImage(newImage));
       }
-      console.log("ADDING IMAGE: ", image);
       dispatch(Album.addImage(newImage));
 
       Mixpanel.trackWithProperties("Uploading Image", {"albumId": id, "autoShared": autoShare});

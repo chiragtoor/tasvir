@@ -19,7 +19,8 @@ describe('app_reducer', () => {
     onCompleteWalkthrough: Actions.DEFAULT_WALKTHROUGH_COMPLETE,
     galleryState: Actions.APP_GALLERY_STATE_LIST,
     albumImage: null,
-    helpScreenState: null
+    helpScreenState: null,
+    viewingAllImages: false
   };
 
   it('initial state is as expected', () => {

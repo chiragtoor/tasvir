@@ -148,15 +148,6 @@ describe('app_actions', () => {
     expect(store.getActions()).toEqual([action]);
   });
 
-  it('closeAlbumReel() dipatches a navigation back action', async () => {
-    const store = mockStore({ });
-    const expectedActions = [
-      { type: NAVIGATION_BACK_ACTION }
-    ];
-    await store.dispatch(Actions.closeAlbumReel());
-    expect(store.getActions()).toEqual(expectedActions);
-  });
-
   it('setWalkthroughComplete() dispatches APP_SET_WALKTHROUGH_COMPLETE', () => {
     const complete = (() => true);
     const expectedAction = {
@@ -195,6 +186,7 @@ describe('app_actions', () => {
     });
     const store = mockStore({ });
     const expectedActions = [
+      { type: Actions.SET_VIEWING_ALBUM },
       mockViewAlbum,
       { type: NAVIGATION_ACTION, routeName: ROUTES.VIEW_ALBUM }
     ];
